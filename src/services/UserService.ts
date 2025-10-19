@@ -17,11 +17,9 @@ export class UserService {
       throw new Error('Email inválido');
     }
 
-    // Criar novo usuário
     const user = new User(name, email);
     this.users.push(user);
 
-    console.log('Usuário criado:', user.toJSON());
     return user;
   }
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro de Usuário - MVC</title>
+  <title>Cadastro de Usuário</title>
   <style>
     * {
       margin: 0;
@@ -83,8 +83,10 @@
       box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
     }
 
-    button:active {
-      transform: translateY(0);
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
     .result {
@@ -106,16 +108,6 @@
       border: 2px solid #f5c6cb;
       color: #721c24;
       display: block;
-    }
-
-    .result h2 {
-      margin-bottom: 10px;
-      font-size: 20px;
-    }
-
-    .result p {
-      margin: 5px 0;
-      font-size: 16px;
     }
 
     .user-info {
@@ -142,25 +134,10 @@
         <input type="email" id="email" name="email" placeholder="seu@email.com" required>
       </div>
 
-      <button type="submit">✓ Aceitar e Criar Usuário</button>
+      <button type="submit" id="submitBtn">✓ Aceitar e Criar Usuário</button>
     </form>
 
     <div id="result" class="result"></div>
   </div>
-
-  <script>
-    // Verificar se o script carregou
-    console.log('HTML carregado com sucesso!');
-    
-    // Tentar carregar o renderer
-    try {
-      const path = require('path');
-      const rendererPath = path.join(__dirname, '../../dist/renderer.js');
-      console.log('Tentando carregar renderer de:', rendererPath);
-      require(rendererPath);
-    } catch (error) {
-      console.error('Erro ao carregar renderer:', error);
-    }
-  </script>
 </body>
 </html>

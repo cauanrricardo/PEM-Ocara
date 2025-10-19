@@ -1,14 +1,15 @@
 {
   "name": "electron-mvc-app",
   "version": "1.0.0",
-  "description": "Aplicação Electron com TypeScript e padrão MVC",
+  "description": "Aplicação Electron SEGURA com TypeScript e padrão MVC",
   "main": "dist/main.js",
   "scripts": {
     "build": "tsc",
     "start": "npm run build && electron .",
-    "dev": "tsc && electron ."
+    "dev": "tsc && electron .",
+    "clean": "rm -rf dist"
   },
-  "keywords": ["electron", "typescript", "mvc"],
+  "keywords": ["electron", "typescript", "mvc", "secure"],
   "author": "Joao-Vitor-Rd",
   "license": "MIT",
   "devDependencies": {
