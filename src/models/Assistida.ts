@@ -1,3 +1,5 @@
+import { Caso } from "./Caso";
+
 export class Assistida {
     private protocolo: number;
     private nome: string;
@@ -13,6 +15,7 @@ export class Assistida {
     private limitacaoFisica: string;
     private numeroCadastroSocial: string;
     private temDependentes: boolean;
+    private casos: Caso[] = [];
 
     constructor(
         protocolo: number,
@@ -136,7 +139,12 @@ export class Assistida {
         this.temDependentes = value;
     }
 
+    private setCasos(value: Caso[]): void {
+        this.casos = value;
+    }
 
-
+    private addCaso(caso: Caso): void {
+        this.casos.push(caso);
+    }
     
 }
