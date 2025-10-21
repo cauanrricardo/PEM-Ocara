@@ -119,7 +119,7 @@ function createMainWindow() {
   windowManager.createWindow('main', {
     width: 900,
     height: 700,
-    htmlFile: 'index.html',
+    htmlFile: 'tela-inicial.html',
     preloadFile: 'preload.js'
   });
 }

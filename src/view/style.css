@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap');
 
-/* --- Reset Básico e Configuração Geral --- */
 html,
 body {
     font-family: 'Poppins', sans-serif;
@@ -17,7 +16,7 @@ body {
     height: 100vh;
 }
 
-/* --- Barra Lateral / Sidebar (CSS CORRIGIDO E FINAL) --- */
+/* --- Barra Lateral / Sidebar ============) --- */
 .sidebar {
     width: 480px;
     background-color: #63468C;
@@ -63,7 +62,7 @@ body {
     /* Centraliza a lista na vertical */
 }
 
-/* MUDANÇA CRÍTICA AQUI */
+
 .sidebar-nav ul {
     list-style: none;
     padding: 0;
@@ -86,7 +85,7 @@ body {
     color: #FFFFFF;
     font-size: 32px;
     font-weight: 500;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.050em;
     padding: 15px 40px;
     border-radius: 50px;
     transition: background-color 0.2s ease-in-out;
@@ -107,7 +106,7 @@ body {
     flex-shrink: 0;
 }
 
-/* --- Área de Conteúdo Principal --- */
+
 .main-content {
     flex-grow: 1;
     overflow-y: auto;
@@ -115,10 +114,15 @@ body {
     justify-content: flex-start;
 }
 
-/* ================================================ */
-/* --- SEU CÓDIGO DA TELA INICIAL (INTOCADO) --- */
-/* ================================================ */
+.icone-rede-apoio {
+    transform: scale(1.4);
+}
 
+
+
+
+
+/*COMECA A TELA INICIAL ==========*/
 .container-geral {
     width: 100%;
     max-width: 960px;
