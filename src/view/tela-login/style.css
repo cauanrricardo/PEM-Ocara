@@ -28,16 +28,17 @@ body {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 20px 20px 130px 20px; /* reserva espaço inferior para o footer e centraliza a imagem visualmente */
   background: transparent;
 }
 
 #logo-pem-ocara {
   width: 578px;
   height: 543px;
-  max-width: calc(100% - 40px); /* mantém responsivo em telas menores */
-  max-height: calc(100vh - 80px);
+  max-width: calc(100% - 40px);
+  max-height: calc(100vh - 260px); /* considera padding-bottom reservado e footer */
   object-fit: contain;
+  
   display: block;
   margin: 0 auto;
 }
@@ -45,18 +46,28 @@ body {
 .title {
   display: flex;
   flex-direction: column;
-  gap: 12px; 
-  margin: 50px 50px 0 50px; 
+  gap: 24px;
+  margin: 50px 50px 100px 50px; 
 }
 
 .title h1{
   font-size: 48px;
   font-weight: 600;
+  margin: 0;
 }
 
 .title h2{
   font-size: 24px;
   font-weight: 500;
+  margin: 0;
+}
+
+.caixas {
+  display: flex;
+  flex-direction: column;
+  gap: 50px; /* agora separa os itens por 50px verticalmente */
+  align-items: flex-start; /* alinhar conteúdo ao início para casar com .title */
+  margin: 40px 50px 0 50px; /* alinhar horizontalmente com .title (50px das laterais) */
 }
 
 .caixas h4 {
@@ -64,16 +75,7 @@ body {
   font-weight: 600;
 }
 
-.caixas {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  margin-top: 40px;
-}
-
-.caixa-email,
-.caixa-senha {
+.caixa-email,.caixa-senha {
   width: 664px;
   max-width: calc(100% - 40px);
   height: 68px;
@@ -81,9 +83,31 @@ body {
   background: #FFFFFF;
   display: flex;
   align-items: center;
-  padding: 0 16px;
+  padding-left: 24px; /* input começa no início da caixa */
+  position: relative; /* referência para o h4 absoluto */
+  padding-right: 16px; /* espaço padrão à direita */
   border: 3px solid rgba(0,0,0,0.1);
   border-radius: 8px;
+}
+
+.caixa-email { margin-bottom: 50px; }
+
+@media (max-width: 900px) {
+  .caixa-email,
+  .caixa-senha {
+    width: calc(100% - 40px);
+    max-width: none;
+  }
+
+  .caixa-email h4,
+  .caixa-senha h4 {
+    left: 10px;
+    top: -48px;
+  }
+}
+
+.caixa-senha {
+  padding-right: 64px; /* espaço maior para o ícone 40x40 */
 }
 
 .caixa-email input,
@@ -95,18 +119,47 @@ body {
   background: transparent;
   color: #838383;
   font-size: 20px;
+  padding-left: 0;
+}
+
+.caixa-email h4,
+.caixa-senha h4 {
+  position: absolute;
+  top: -48px;
+  left: 0;
+  margin: 0;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1;
 }
 
 .password-icon {
-  color: rgba(255,255,255,0.8);
-  margin-left: 8px;
+  position: absolute;
+  right: 24px; /* 24px do final da caixa */
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0,0,0,0.6); /* contraste com fundo branco da caixa */
   cursor: pointer;
+  width: 40px;
+  height: 40px;
+  font-size: 28px; /* aumenta o tamanho do ícone visualmente */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* estado ativado do ícone (quando a senha está visível) */
+.password-icon.active {
+  color: #838383; /* cor primária para indicar ativo */
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,0.05));
 }
 
 .button {
+  position: static; /* manter no fluxo para alinhamento consistente */
+  margin: 24px 50px 0 50px; /* mesmo X das caixas (50px das laterais) */
   display: flex;
-  justify-content: center;
-  margin-top: 24px;
+  justify-content: flex-start;
 }
 
 .button button {
@@ -132,8 +185,10 @@ body {
 .card-2 footer {
   position: absolute;
   bottom: 25px;
-  left: 50px;
-  right: 50px;
+  left: 50%;
+  transform: translateX(-50%); /* centraliza horizontalmente */
+  width: calc(100% - 100px); /* mantém 50px de margem lateral */
+  max-width: 800px;
   height: 80px;
   display: flex;
   align-items: center;
