@@ -1,53 +1,57 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="globals.css" />
-    <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
-    <div class="login-FINALIZADA">
-      <div class="menu">
-        <div class="caixa">
-          <div class="div">
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="style.css"/>
+    <title>PEM-Ocara</title>
+</head>
+
+<body>
+    <div class="card">
+        <div class="caixa-maior">
             <div class="title">
-              <div class="text-wrapper">Entrar</div>
-              <div class="text-wrapper-2">Seja bem vindo novamente!</div>
+                <h1>Entrar</h1>
+                <h2>Seja bem vindo novamente!</h2>
             </div>
+
             <div class="caixas">
-              <div class="frame">
-                <div class="caixa-2">
-                  <div class="text-wrapper-3">E-mail</div>
-                  <div class="rectangle"></div>
-                  <div class="text-wrapper-4">Digite seu email aqui</div>
+                <div class="caixa-email">
+                    <h4>E-mail</h4>
+                    <label for="email"></label>
+                    <input type="email" id="email" name="email" placeholder="Digite seu email aqui">
                 </div>
-                <div class="caixa-2">
-                  <div class="rectangle"></div>
-                  <div class="vector-wrapper"><img class="vector" src="img/vector.svg" /></div>
-                  <div class="text-wrapper-5">Digite sua senha aqui</div>
-                  <div class="text-wrapper-3">Senha</div>
+
+                <div class="caixa-senha">
+                    <h4>Senha</h4>
+                    <label for="senha"></label>
+                    <input type="password" id="senha" name="senha" placeholder="Digite sua senha aqui">
+                    <span class="material-symbols-outlined password-icon">
+                        visibility
+                    </span>
                 </div>
-              </div>
             </div>
-          </div>
-          <button class="button">
-            <div class="rectangle-2"></div>
-            <div class="text-wrapper-6">Entrar</div>
-          </button>
         </div>
-      </div>
-      <div class="logo">
-        <div class="caixa-3"></div>
-        <img class="gemini-generated" src="img/gemini-generated-image-2z1p902z1p902z1p-1.png" />
-        <div class="rodap">
-          <img class="logo-ocara" src="img/logo-ocara-1.png" />
-          <p class="avenida-coronel-jo-o">
-            Avenida Coronel João Felipe, Centro, CEP: 62755-000, Ocara - CE<br />pemocara@gmail.com
-          </p>
-          <img class="braso-ocara-CE" src="img/bras-o-ocara-CE-1.png" />
+
+        <div class="button">
+            <button type="button" onclick="alert('Entrando')">Entrar</button>
         </div>
-      </div>
     </div>
-  </body>
+
+    <div class="card-2">
+        <img src="imgs/IMG_1471.PNG" alt="Logo-PEM-Ocara" id="logo-pem-ocara">
+
+        <footer>
+            <img src="imgs/logo-ocara.png" alt="Logo-PEM-Ocara id="logo-ocara">
+                <p>Avendida Coronel João Felipe, Centro, CEP:
+                    <br>
+                    62755-000, Ocara - CE
+                    <br>
+                    pemocara@gmail.com
+                </p>
+            <img src="imgs/Brasão_Ocara_(CE).png" alt="Logo-PEM-Ocara" id="Brasão_Ocara_">
+        </footer>
+    </div>
+</body>
 </html>
