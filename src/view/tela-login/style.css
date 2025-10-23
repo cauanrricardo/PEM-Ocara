@@ -47,7 +47,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  /* reduzir margin-left para aproximar o título mais para a esquerda (alinhamento com as caixas) */
   margin: 50px 50px 100px 30px;
 }
 
@@ -68,8 +67,6 @@ body {
   flex-direction: column;
   gap: 50px;
   align-items: flex-start;
-  /* reduzir a margem horizontal para 30px; combinado com o padding:20px do .card
-     resulta em 50px entre a borda do card e as caixas */
   margin: 150px 30px 0 30px;
 }
 
@@ -79,9 +76,6 @@ body {
 }
 
 .caixa-email,.caixa-senha {
-  /* usar largura fluida para preencher o container .caixas
-     assim as caixas ficarão a 50px das bordas do .card (20px padding + 30px margin)
-     mantendo a mesma posição vertical */
   width: 100%;
   max-width: none;
   height: 68px;
@@ -111,8 +105,6 @@ body {
     top: -48px;
   }
 
-  /* ajustar o título no layout mobile para continuar alinhado com o h4
-     20px (padding do .card) + 30px (margin do .caixas) + 3px (borda) + 10px (left do h4 em mobile) = 63px */
   .title {
     margin-left: 40px;
   }
@@ -134,7 +126,6 @@ body {
   padding-left: 0;
 }
 
-/* garantir box-sizing consistente para inputs e botão */
 .caixa-email input,
 .caixa-senha input,
 .button button {
@@ -175,11 +166,9 @@ body {
 }
 
 .button {
-  /* restaurar posição vertical original do botão, mas manter alinhamento
-     horizontal com as caixas usando left/right */
   position: absolute;
   bottom: 112px;
-  left: 50px; /* garantir 50px das bordas do .card */
+  left: 50px;
   right: 50px;
   width: auto;
   display: flex;
