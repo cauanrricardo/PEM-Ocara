@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tela de Assistidas</title>
+    <style>
+        /* Estilos gerais */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Fundo leve para o corpo */
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Alinha no topo */
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container do Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr); /* Duas colunas de tamanho igual */
+            gap: 20px; /* Espaço entre os cartões */
+            max-width: 800px; /* Largura máxima para centralizar e agrupar */
+            width: 100%;
+        }
+
+        /* Estilo do Cartão */
+        .card {
+            background-color: #A980D4; /* Cor roxa dos cartões */
+            color: white;
+            padding: 20px;
+            border-radius: 15px; /* Cantos arredondados */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para dar profundidade */
+            text-align: center;
+            min-height: 100px; /* Altura mínima para o conteúdo */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s; /* Efeito hover */
+        }
+
+        .card:hover {
+            transform: translateY(-2px); /* Pequeno levantamento ao passar o mouse */
+        }
+
+        /* Estilo do ID/Rótulo Principal */
+        .card-id {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 5px; /* Espaço entre ID e Nome */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4); /* Sombra para destacar o texto */
+        }
+
+        /* Estilo do Nome/Descrição */
+        .card-name {
+            font-size: 14px;
+            font-weight: 300; /* Leve para o nome */
+        }
+
+        /* Estilo especial para o rótulo (primeiro cartão) */
+        .card.label .card-id {
+             font-size: 24px;
+             font-weight: bold;
+        }
+
+        .card.label .card-name {
+            font-size: 16px;
+            font-weight: normal; /* Normal para o rótulo */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="grid-container">
+
+        <div class="card label">
+            <div class="card-id">ID Assistida</div>
+            <div class="card-name">Nome Assistida</div>
+        </div>
+
+        <div class="card">
+            <div class="card-id">093CD47</div>
+            <div class="card-name">Maria do Rosário Sousa Vieira</div>
+        </div>
+
+        <div class="card">
+            <div class="card-id">895D42G</div>
+            <div class="card-name">Luisa Santos da Silva</div>
+        </div>
+
+        <div class="card">
+            <div class="card-id">R2H761B</div>
+            <div class="card-name">Hilda Pereira Emília de Carvalho</div>
+        </div>
+
+        <div class="card">
+            <div class="card-id">6D100P2</div>
+            <div class="card-name">Josefa Maria de Sá</div>
+        </div>
+
+        <div class="card">
+            <div class="card-id">715F367</div>
+            <div class="card-name">Ana Alice Souza Fernandez</div>
+        </div>
+
+    </div>
+
+</body>
+</html>

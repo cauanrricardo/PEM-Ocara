@@ -1,57 +1,55 @@
+const form = document.getElementById('userForm') as HTMLFormElement;
+const resultDiv = document.getElementById('result') as HTMLDivElement;
+const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
+const listarUser = document.getElementById('getAll') as HTMLButtonElement;
 
-  const form = document.getElementById('userForm') as HTMLFormElement;
-  const resultDiv = document.getElementById('result') as HTMLDivElement;
-  const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
-  const listarUser = document.getElementById('getAll') as HTMLButtonElement;
 
+listarUser.addEventListener('click', async (event) => {
+  event.preventDefault();
 
-  listarUser.addEventListener('click', async (event) => {
-    event.preventDefault();
+  try {
+    const result = await window.api.getUsers()
 
-    try {
-      const result = await window.api.getUsers()
+      if (result.success && Array.isArray(result.users)) {
+          resultDiv.className = 'result success';
+          const allUsersHtml = result.users.map(user => `
+              <div class="user-info-item">
+                  <p><strong>ID:</strong> ${user.id}</p>
+                  <p><strong>Nome:</strong> ${user.name}</p>
+                  <p><strong>E-mail:</strong> ${user.email}</p>
+                  <hr>
+              </div>
+          `).join('');
 
-        if (result.success && Array.isArray(result.users)) {
-            resultDiv.className = 'result success';
-            const allUsersHtml = result.users.map(user => `
-                <div class="user-info-item">
-                    <p><strong>ID:</strong> ${user.id}</p>
-                    <p><strong>Nome:</strong> ${user.name}</p>
-                    <p><strong>E-mail:</strong> ${user.email}</p>
-                    <hr>
-                </div>
-            `).join('');
+          resultDiv.innerHTML = `
+              <h2>✅ Lista de Usuários</h2>
+              ${allUsersHtml}
+          `;
+      }
 
-            resultDiv.innerHTML = `
-                <h2>✅ Lista de Usuários</h2>
-                ${allUsersHtml}
-            `;
-        }
+  }  catch (error) {
 
-    }  catch (error) {
+    resultDiv.className = 'result error';
+    resultDiv.innerHTML = `
+      <h2> Erro de Comunicação</h2>
+      <p>Não foi possível se comunicar com o servidor.</p>
+      <p><small>${error instanceof Error ? error.message : String(error)}</small></p>
+    `;
+  } finally {
+    listarUser.disabled = false;
+    listarUser.textContent = 'Listar user';
+  }
+});
 
-      resultDiv.className = 'result error';
-      resultDiv.innerHTML = `
-        <h2> Erro de Comunicação</h2>
-        <p>Não foi possível se comunicar com o servidor.</p>
-        <p><small>${error instanceof Error ? error.message : String(error)}</small></p>
-      `;
-    } finally {
-      listarUser.disabled = false;
-      listarUser.textContent = 'Listar user';
-    }
+form.addEventListener('submit', async (event) => {
 
-  });
+  event.preventDefault();
 
-  form.addEventListener('submit', async (event) => {
+  const nameInput = document.getElementById('name') as HTMLInputElement;
+  const emailInput = document.getElementById('email') as HTMLInputElement;
 
-    event.preventDefault();
-
-    const nameInput = document.getElementById('name') as HTMLInputElement;
-    const emailInput = document.getElementById('email') as HTMLInputElement;
-
-    const name = nameInput.value.trim();
-    const email = emailInput.value.trim();
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
 
     if (!name || !email) {
       resultDiv.className = 'result error';

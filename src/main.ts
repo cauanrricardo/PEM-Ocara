@@ -149,7 +149,7 @@ ipcMain.on('window:open', (_event, windowName: string) => {
       windowManager.createWindow('usersList', {
         width: 900,
         height: 600,
-        htmlFile: 'users-list.html',
+        htmlFile: 'telaAssistidas.html',
         preloadFile: 'preload.js'
       });
       break;
