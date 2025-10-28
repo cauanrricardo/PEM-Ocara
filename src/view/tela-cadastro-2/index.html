@@ -9,16 +9,16 @@
 <body>
     <!-- TÍTULO E ÉTAPAS (ESTRUTURA BASE) -->
     <div class="titulo">
-        <p>FORMULÁRIO DE ATENDIMENTO - CADASTRO DA ASSISTIDA</p>
+        <p>FORMULÁRIO DE ATENDIMENTO - CADASTRO DO CASO</p>
     </div>
 
     <div class="card">
         <nav class="etapas">
             <ol class="lista-etapas">
-                <li class="etapa-ativa">
+                <li class="etapa">
                     <span class="numero">1</span>
                 </li>
-                <li class="etapa">
+                <li class="etapa-ativa">
                     <span class="numero">2</span>
                 </li>
                 <li class="etapa">
@@ -39,8 +39,111 @@
         <div class="form">
         <!-- CONTEÚDO DENTRO DO CARD (APAGAR E SUBSTITUIR) -->
             <div class="titulo-sessao">
-                <h6>Passo 1</h6>
-                <h4>Identificação da Assistida</h4>
+                <h6>Passo 2</h6>
+                <h4>Identificação do Agressor(a)</h4>
+            </div>
+
+            <div class="perguntas">
+                <div class="pergunta-conjunta">
+                    <div class="pergunta">
+                        <label for="nome-completo-agressor">
+                            Nome do Agressor
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="text" id="nome-completo-agressor" name="nome-completo-agressor" required>
+                    </div>
+
+                    <div class="pergunta">
+                        <label for="idade">
+                            Idade
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="number" id="idade" name="idade">
+                    </div>
+                </div>
+
+                <div class="pergunta">
+                    <label for="vinculo">
+                        Vínculo entre a assistida e o agressor
+                        <span>
+                            *
+                        </span>
+                    </label>
+                    <input type="text" id="vinculo" name="vinculo">
+                </div>
+
+                <div class="pergunta">
+                    <label for="data-fato">
+                        Data do fato ocorrido
+                        <span>
+                            *
+                        </span>
+                    </label>
+                    <input type="date" id="data-fato" name="data-fato">
+                </div>
+            </div>
+
+            <div class="titulo-sessao">
+                <h6>Passo 3</h6>
+                <h4>Bloco I - Sobre o Histórico de Violência</h4>
+            </div>
+
+            <div class="perguntas">
+                <div class="pergunta-selecao">
+                    <div class="titulo-pergunta">
+                        <label for="ameacas">
+                            01 - O (a) agressor(a) já ameaçou você ou algum familiar com a finalidade de atingi-la?
+                            <span>
+                                *
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="opcoes-pergunta">
+                        <input type="checkbox" id="arma" name="ameaca-arma" value="Sim, utilizando arma de fogo">
+                        <label for="arma">Sim, utilizando arma de fogo</label>
+
+                        <input type="checkbox" id="faca" name="ameaca-faca" value="Sim, utilizando faca">
+                        <label for="faca">Sim, utilizando faca</label>
+
+                        <input type="checkbox" id="outra" name="ameaca-outra" value="Sim, de outra forma">
+                        <label for="outra">Sim, de outra forma</label>
+
+                        <input type="checkbox" id="nao" name="ameaca-nao" value="Não">
+                        <label for="nao">Não</label>
+                    </div>
+                </div>
+
+                <div class="pergunta-selecao">
+                    <div class="titulo-pergunta">
+                        <label for="ameacas">
+                            02 - O (a) agressor(a) já praticou alguma(s) destas agressões físicas com você?
+                            <span>
+                                *
+                            </span>
+                        </label>
+                    </div>
+
+                    <div class="opcoes-pergunta">
+                        <input type="checkbox" id="arma" name="ameaca-arma" value="Sim, utilizando arma de fogo">
+                        <label for="arma">
+                            Queimadura
+                        </label>
+                        <input type="checkbox" id="arma" name="ameaca-arma" value="Sim, utilizando arma de fogo">
+                        <label for="arma">
+                            Queimadura
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="titulo-sessao">
+                <h6>Passo 4</h6>
+                <h4>Bloco II - Sobre o (a) Agressor(a)</h4>
             </div>
 
             <div class="perguntas">
@@ -65,14 +168,72 @@
                         <input type="number" id="idade" name="idade">
                     </div>
                 </div>
+            </div>
 
-                <div class="obs">
-                    <p>
-                        Campos com
-                        <span>*</span>
-                        são obrigatórios
-                    </p>
+            <div class="titulo-sessao">
+                <h6>Passo 5</h6>
+                <h4>Bloco III - Sobre Você</h4>
+            </div>
+
+            <div class="perguntas">
+                <div class="pergunta-conjunta">
+                    <div class="pergunta">
+                        <label for="nome-completo">
+                            Nome
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="text" id="nome-completo" name="nome-completo" required>
+                    </div>
+
+                    <div class="pergunta">
+                        <label for="idade">
+                            Idade
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="number" id="idade" name="idade">
+                    </div>
                 </div>
+            </div>
+
+            <div class="titulo-sessao">
+                <h6>Passo 6</h6>
+                <h4>Bloco IV - Outras Informações Importantes</h4>
+            </div>
+
+            <div class="perguntas">
+                <div class="pergunta-conjunta">
+                    <div class="pergunta">
+                        <label for="nome-completo">
+                            Nome
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="text" id="nome-completo" name="nome-completo" required>
+                    </div>
+
+                    <div class="pergunta">
+                        <label for="idade">
+                            Idade
+                            <span>
+                                *
+                            </span>
+                        </label>
+                        <input type="number" id="idade" name="idade">
+                    </div>
+                </div>
+            </div>
+
+            <div class="obs">
+                <p>
+                    Campos com
+                    <span>*</span>
+                    são obrigatórios
+                </p>
             </div>
         </div>
     </div>
