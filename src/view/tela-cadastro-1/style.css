@@ -9,12 +9,22 @@ body {
     align-items: center;
     flex-direction: column;
     gap: 10px;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 .titulo {
     text-align: center;
     font-size: 32px;
     font-weight: 500;
+    width: 95%;
+    max-width: 1800px;
 }
 
 .card {
@@ -22,6 +32,7 @@ body {
     border-radius: 15px;
     color: #63468C;
     width: 95%;
+    max-width: 1800px;
     margin: 0 auto 25px auto;
     display: flex;
     flex-direction: column;
@@ -74,6 +85,7 @@ body {
     justify-content: center;
     color: #CEB3F2;
     background-color: #B291DE;
+    flex-shrink: 0;
 }
 
 .etapa-ativa {
@@ -141,6 +153,7 @@ body {
     border: 1px solid #63468C;
     padding: 0 12px;
     font-size: 24px;
+    width: 100%;
 }
 
 .pergunta-conjunta {
@@ -230,13 +243,14 @@ body {
 footer {
     position: fixed;
     bottom: 10px;
-    left: 0;
-    right: 0;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
     width: 95%;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
