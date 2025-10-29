@@ -1,4 +1,4 @@
-class OrgaoRedeApoio {
+export class OrgaoRedeApoio {
     private nome: string;
     private objetivo: string;
     private email: string;

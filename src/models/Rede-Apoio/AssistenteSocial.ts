@@ -1,4 +1,4 @@
-class AssistenteSocial {
+export class AssistenteSocial {
     private nome: string;
     private emailInstitucional: string;
 
