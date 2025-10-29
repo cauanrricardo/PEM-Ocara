@@ -1,6 +1,6 @@
 import {Caso} from "../assistida/Caso";
 import { OrgaoRedeApoio } from "../Rede-Apoio/OrgaoRedeApoio";
-import { AssistenteSocial } from "../Rede-Apoio/AssistenteSocial";
+import { AssistenteSocial } from "../AssistenteSocial";
 
 class Encaminhamento {
     private idEncaminhamento?: number;
