@@ -58,7 +58,7 @@ body {
     left: 0;
     top: 0;
     height: 100%;
-    width: calc(5% + 45% * 0.9 / 5 + 30px);
+    width: calc(5% + 5% * 0.9 / 5 + 30px);
     background-color: #F2B872;
     z-index: 0;
 }
@@ -156,6 +156,33 @@ body {
     width: 100%;
 }
 
+.pergunta input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: grayscale(1);
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.pergunta input[type="date"]::-webkit-datetime-edit-text,
+.pergunta input[type="date"]::-webkit-datetime-edit-month-field,
+.pergunta input[type="date"]::-webkit-datetime-edit-day-field,
+.pergunta input[type="date"]::-webkit-datetime-edit-year-field {
+    color: transparent;
+}
+
+.pergunta input[type="date"]:focus::-webkit-datetime-edit-text,
+.pergunta input[type="date"]:focus::-webkit-datetime-edit-month-field,
+.pergunta input[type="date"]:focus::-webkit-datetime-edit-day-field,
+.pergunta input[type="date"]:focus::-webkit-datetime-edit-year-field {
+    color: #63468C;
+}
+
+.pergunta input[type="date"]:valid::-webkit-datetime-edit-text,
+.pergunta input[type="date"]:valid::-webkit-datetime-edit-month-field,
+.pergunta input[type="date"]:valid::-webkit-datetime-edit-day-field,
+.pergunta input[type="date"]:valid::-webkit-datetime-edit-year-field {
+    color: #63468C;
+}
+
 .pergunta-conjunta {
     display: flex;
     flex-direction: row;
@@ -173,6 +200,11 @@ body {
     font-size: 24px;
     font-weight: 400;
     margin-bottom: 8px;
+}
+
+.perguntas span {
+    color: #a20202;
+    font-weight: 600;
 }
 
 .opcoes-pergunta {
@@ -217,6 +249,31 @@ body {
     border: solid #ffffff;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
+}
+
+.opcao input[type="number"] {
+    width: 384.54px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid #63468C;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+.opcao input[type="text"] {
+    width: 384.54px;
+    height: 24px;
+    border-radius: 5px;
+    border: 1px solid #63468C;
+    padding: 0 12px;
+    font-size: 14px;
+}
+
+#se-tem-filhos {
+    display: flex;
+    flex-direction: column;
+    gap: 19px;
+    border-radius: 25px;
 }
 
 .obs {
