@@ -4,13 +4,8 @@
   "description": "PEM OCARA",
   "main": "dist/main.js",
   "scripts": {
-    "build:main": "tsc --project configs/tsconfig.json",
-    "build:form": "tsc --project configs/tsconfig.form.json",
-    "build:users": "tsc --project configs/tsconfig.users.json",
-    "build:listarAssistida": "tsc --project configs/tsconfig.listarAssistida.json",
-    "build:telaInicial": "tsc --project configs/tsconfig.telaInicial.json",
-    "build:login": "tsc --project configs/tsconfig.login.json",
-    "build": "npm run build:main && npm run build:form && npm run build:users && npm run build:listarAssistida && npm run build:telaInicial && npm run build:login",
+    "build:main": "tsc --project configs/tsconfig.main.json",
+    "build": "npm run build:main && tsc --project configs/tsconfig.renderer.json",
     "start": "npm run build && electron .",
     "dev": "npm run build && electron ."
   },
