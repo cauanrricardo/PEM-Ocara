@@ -52,4 +52,44 @@ document.addEventListener('DOMContentLoaded', function() {
             atualizarVisibilidade();
         });
     });
+
+    // Funcionalidade: Enter para próxima pergunta (apenas na seção "Identificação do Agressor(a)")
+    // Encontra a seção de Identificação do Agressor
+    const titulosSessao = document.querySelectorAll('.titulo-sessao');
+    let secaoAgressor = null;
+    
+    titulosSessao.forEach(titulo => {
+        const h4 = titulo.querySelector('h4');
+        if (h4 && h4.textContent.includes('Identificação do Agressor(a)')) {
+            // Pega o próximo elemento .perguntas após este título
+            secaoAgressor = titulo.nextElementSibling;
+        }
+    });
+    
+    if (secaoAgressor) {
+        // Seleciona apenas os inputs da seção de Identificação do Agressor
+        const inputsAgressor = secaoAgressor.querySelectorAll('.pergunta input[type="text"], .pergunta input[type="number"], .pergunta input[type="date"]');
+        
+        inputsAgressor.forEach((input, index) => {
+            input.addEventListener('keydown', function(event) {
+                // Verifica se a tecla pressionada é Enter
+                if (event.key === 'Enter') {
+                    event.preventDefault(); // Previne o comportamento padrão
+                    
+                    // Encontra o próximo input
+                    const proximoInput = inputsAgressor[index + 1];
+                    
+                    if (proximoInput) {
+                        // Move o foco para o próximo input
+                        proximoInput.focus();
+                        
+                        // Se for um input date, abre o calendário
+                        if (proximoInput.type === 'date') {
+                            proximoInput.showPicker && proximoInput.showPicker();
+                        }
+                    }
+                }
+            });
+        });
+    }
 });
