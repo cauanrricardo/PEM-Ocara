@@ -262,6 +262,13 @@ body {
     border: 1px solid #63468C;
     padding: 0 12px;
     font-size: 14px;
+    color: #838383;
+}
+
+.opcao input[type="number"]:focus {
+    outline: none;
+    border-color: #838383;
+    color: black;
 }
 
 .opcao input[type="text"] {
@@ -271,6 +278,13 @@ body {
     border: 1px solid #63468C;
     padding: 0 12px;
     font-size: 14px;
+    color: #838383;
+}
+
+.opcao input[type="text"]:focus {
+    outline: none;
+    border-color: #838383;
+    color: black;
 }
 
 #se-tem-filhos {
