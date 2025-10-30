@@ -358,3 +358,96 @@ footer {
 #voltar:hover {
     text-decoration: underline;
 }
+
+/* Aplicação de Estilos Responsivos */
+@media screen and (max-width: 1366px) {
+    .titulo {
+        font-size: clamp(24px, 2.5vw, 32px);
+    }
+    
+    .titulo-sessao h6 {
+        font-size: clamp(18px, 2vw, 24px);
+    }
+    
+    .titulo-sessao h4 {
+        font-size: clamp(24px, 2.5vw, 32px);
+    }
+    
+    .pergunta label,
+    .titulo-pergunta {
+        font-size: clamp(18px, 2vw, 24px);
+    }
+    
+    .pergunta input {
+        height: clamp(50px, 5vw, 60px);
+        font-size: clamp(18px, 2vw, 24px);
+    }
+    
+    .opcao {
+        font-size: clamp(16px, 1.8vw, 20px);
+    }
+    
+    .opcao input[type="number"],
+    .opcao input[type="text"] {
+        width: clamp(250px, 30vw, 384.54px);
+        height: clamp(20px, 2vw, 24px);
+        font-size: clamp(12px, 1.2vw, 14px);
+    }
+    
+    #proximo,
+    #voltar {
+        font-size: clamp(18px, 2vw, 24px);
+    }
+    
+    #proximo {
+        width: clamp(200px, 20vw, 295px);
+        height: clamp(45px, 5vw, 57px);
+    }
+    
+    .etapa,
+    .etapa-ativa {
+        width: clamp(50px, 5vw, 60px);
+        height: clamp(50px, 5vw, 60px);
+    }
+    
+    .numero {
+        font-size: clamp(24px, 2.5vw, 32px);
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .titulo {
+        font-size: clamp(20px, 2.2vw, 28px);
+    }
+    
+    .card {
+        width: 98%;
+    }
+    
+    footer {
+        width: 98%;
+    }
+    
+    .perguntas {
+        padding: 15px 10px;
+        gap: 15px;
+    }
+    
+    .etapa,
+    .etapa-ativa {
+        width: clamp(45px, 4.5vw, 55px);
+        height: clamp(45px, 4.5vw, 55px);
+    }
+}
+
+@media screen and (min-width: 1920px) {
+    body {
+        zoom: 1.1;
+    }
+}
+
+@media screen and (min-width: 2560px) {
+    body {
+        zoom: 1.3;
+    }
+}
