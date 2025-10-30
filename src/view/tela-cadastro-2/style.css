@@ -154,6 +154,13 @@ body {
     padding: 0 12px;
     font-size: 24px;
     width: 100%;
+    color: #838383;
+}
+
+.pergunta input:focus {
+    outline: none;
+    border-color: #838383;
+    color: black;
 }
 
 .pergunta input[type="date"]::-webkit-calendar-picker-indicator {
@@ -172,15 +179,12 @@ body {
 .pergunta input[type="date"]:focus::-webkit-datetime-edit-text,
 .pergunta input[type="date"]:focus::-webkit-datetime-edit-month-field,
 .pergunta input[type="date"]:focus::-webkit-datetime-edit-day-field,
-.pergunta input[type="date"]:focus::-webkit-datetime-edit-year-field {
-    color: #63468C;
-}
-
+.pergunta input[type="date"]:focus::-webkit-datetime-edit-year-field,
 .pergunta input[type="date"]:valid::-webkit-datetime-edit-text,
 .pergunta input[type="date"]:valid::-webkit-datetime-edit-month-field,
 .pergunta input[type="date"]:valid::-webkit-datetime-edit-day-field,
 .pergunta input[type="date"]:valid::-webkit-datetime-edit-year-field {
-    color: #63468C;
+    color: #838383;
 }
 
 .pergunta-conjunta {
