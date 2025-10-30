@@ -17,6 +17,7 @@ export class FormularioController {
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quantidadeDependentes: number,
         temDependentes: boolean,
 
         //Agressor
@@ -87,6 +88,7 @@ export class FormularioController {
             profissao,
             limitacaoFisica,
             numeroCadastroSocial,
+            quantidadeDependentes,
             temDependentes,
 
             //Agressor

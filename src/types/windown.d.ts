@@ -28,6 +28,7 @@ export interface IElectronAPI {
     profissao: string,
     limitacaoFisica: string,
     numeroCadastroSocial: string,
+    quantidadeDependentes: number,
     temDependentes: boolean
   ) => Promise<{
     success: boolean;

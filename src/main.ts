@@ -68,6 +68,7 @@ ipcMain.handle('assistida:criar', async(
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quantidadeDependentes: number,
         temDependentes: boolean
   }
 ) => {
@@ -85,6 +86,7 @@ ipcMain.handle('assistida:criar', async(
       data.profissao,
       data.limitacaoFisica,
       data.numeroCadastroSocial,
+      data.quantidadeDependentes,
       data.temDependentes,
     )
 

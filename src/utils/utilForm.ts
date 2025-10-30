@@ -14,6 +14,7 @@ const assistida = new Assistida(
   'Advogada',
   'Nenhuma',
   '123456',
+  2,
   true,
 );
 

@@ -32,6 +32,7 @@ export class Formulario {
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quanidadeDependentes: number,
         temDependentes: boolean,
 
         //Agressor
@@ -103,6 +104,7 @@ export class Formulario {
             profissao,
             limitacaoFisica,
             numeroCadastroSocial,
+            quanidadeDependentes,
             temDependentes
         );
         this.agressor = new Agressor(

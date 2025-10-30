@@ -26,6 +26,7 @@ export class AssistidaController {
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quantidadeDependentes: number,
         temDependentes: boolean
     ): {
         success: boolean;
@@ -47,6 +48,7 @@ export class AssistidaController {
                 profissao,
                 limitacaoFisica,
                 numeroCadastroSocial,
+                quantidadeDependentes,
                 temDependentes,
             );
             return {

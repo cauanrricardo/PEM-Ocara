@@ -16,6 +16,7 @@ export class AssistidaService {
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quantidadeDependentes: number,
         temDependentes: boolean
     ) {
         if (!nome || nome.trim() === '') {
@@ -43,6 +44,7 @@ export class AssistidaService {
             profissao,
             limitacaoFisica,
             numeroCadastroSocial,
+            quantidadeDependentes,
             temDependentes
         );
 

@@ -6,7 +6,7 @@ export class PdfService {
   criarPdf(assistida: Assistida) {
     const { getNome, getIdade, getIdentidadeGenero, getNomeSocial, getEndereco, getEscolaridade, 
             getReligiao, getNacionalidade, getZonaHabitacao, getProfissao, getLimitacaoFisica, 
-            getNumeroCadastroSocial, getTemDependentes } = assistida;
+            getNumeroCadastroSocial, getQuantidadeDependentes, getTemDependentes } = assistida;
 
     const docDefinition: TDocumentDefinitions = {
       content: [
@@ -23,6 +23,7 @@ export class PdfService {
         { text: `Profissão: ${getProfissao()}`, style: 'subheader' },
         { text: `Limitação Física: ${getLimitacaoFisica()}`, style: 'subheader' },
         { text: `Número de Cadastro Social: ${getNumeroCadastroSocial()}`, style: 'subheader' },
+        { text: `Quantidade de Dependentes: ${getQuantidadeDependentes()}`, style: 'subheader' },
         { text: `Tem Dependentes: ${getTemDependentes() ? 'Sim' : 'Não'}`, style: 'subheader' },
       ],
       styles: {

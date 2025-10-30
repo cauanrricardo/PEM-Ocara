@@ -1,29 +1,53 @@
-export {}
+/// <reference path="../types/windown.d.ts" />
 
-const form = document.getElementById('atendimentoForm') as HTMLFormElement;
-const resultDiv = document.getElementById('result') as HTMLDivElement;
-const submitBtn = document.getElementById('submitBtn') as HTMLButtonElement;
-const listarAssistidasBtn = document.getElementById('getAllAssistidas') as HTMLButtonElement;
+export {}   
 
+const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
+const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
+const errorModal = document.getElementById('error-modal') as HTMLDivElement;
+const modalMessage = document.getElementById('modal-message') as HTMLDivElement;
 
-form.addEventListener('submit', async (event) => {
+voltarBtn.addEventListener('click', async (event) => {
+    const mudarTela = await window.api.openWindow("telaInicial");
+})
+
+pxmBtn.addEventListener('click', async (event) => {
 
     event.preventDefault();
-
     try {
 
-        const nomeInput = document.getElementById('assistida-nome') as HTMLInputElement;
-        const idadeInput = document.getElementById('assistida-idade') as HTMLInputElement;
-        const enderecoInput = document.getElementById('assistida-endereco') as HTMLInputElement;
-        const generoInput = document.getElementById('assistida-genero') as HTMLInputElement;
-        const nomeSocialInput = document.getElementById('assistida-nome-social') as HTMLInputElement;
-        const escolaridadeInput = document.getElementById('assistida-escolaridade') as HTMLInputElement;
-        const religiaoInput = document.getElementById('assistida-religiao') as HTMLInputElement;
-        const profissaoInput = document.getElementById('assistida-profissao') as HTMLInputElement;
-        const limitacaoInput = document.getElementById('assistida-limitacao') as HTMLInputElement;
-        const programaSocialInput = document.getElementById('assistida-programa-social') as HTMLInputElement;
+        const nomeInput = document.getElementById('nome-completo') as HTMLInputElement;
+        const idadeInput = document.getElementById('idade') as HTMLInputElement;
+        const enderecoInput = document.getElementById('endereco') as HTMLInputElement;
+        const generoInput = document.getElementById('identidade-genero') as HTMLInputElement;
+        const nomeSocialInput = document.getElementById('nome-social') as HTMLInputElement;
+        const escolaridadeInput = document.getElementById('escolaridade') as HTMLInputElement;
+        const religiaoInput = document.getElementById('religiao') as HTMLInputElement;
+        const profissaoInput = document.getElementById('profissao') as HTMLInputElement;
+        const limitacaoInput = document.getElementById('limitacao') as HTMLInputElement;
+        const programaSocialInput = document.getElementById('numero-cadastro') as HTMLInputElement;
         const nacionalidadeInput = document.getElementById('nacionalidade') as HTMLInputElement;
-        const zonaHabitacaoInput = document.getElementById('habitacao') as HTMLInputElement;
+        const dependentesInput = document.getElementById('dependentes') as HTMLInputElement;
+
+        // Validar se todos os elementos foram encontrados
+        if (!nomeInput || !idadeInput || !enderecoInput || !generoInput || !nomeSocialInput || 
+            !escolaridadeInput || !religiaoInput || !profissaoInput || !limitacaoInput || 
+            !programaSocialInput || !nacionalidadeInput || !dependentesInput) {
+            throw new Error('Um ou mais campos do formulário não foram encontrados no HTML');
+        }
+
+        // Obter zona de habitação do radio button
+        const zonaHabitacaoRadios = document.querySelectorAll('input[name="zona_habitacao"]') as NodeListOf<HTMLInputElement>;
+        let zonaHabitacao: string = '';
+        zonaHabitacaoRadios.forEach(radio => {
+            if (radio.checked) {
+                zonaHabitacao = radio.value;
+            }
+        });
+
+        if (!zonaHabitacao) {
+            throw new Error('Por favor, selecione uma zona de habitação');
+        }
 
         const nome: string = nomeInput.value.trim();
         const idade: number = parseInt(idadeInput.value.trim(), 10); 
@@ -33,12 +57,13 @@ form.addEventListener('submit', async (event) => {
         const escolaridade: string = escolaridadeInput.value.trim();
         const religiao: string = religiaoInput.value.trim();
         const nacionalidade: string = nacionalidadeInput.value.trim();
-        const zonaHabitacao: string = zonaHabitacaoInput.value.trim();
         const profissao: string = profissaoInput.value.trim();
         const limitacaoFisica: string = limitacaoInput.value.trim();
         const numeroCadastroSocial: string = programaSocialInput.value.trim();
-        const temDependentes = true;
-    
+        const quantidadeDependentes: number = parseInt(dependentesInput.value.trim(), 10);
+        const temDependentes: boolean = quantidadeDependentes > 0;
+
+        
         const result = await window.api.criarAssistida(
             nome, 
             idade, 
@@ -52,45 +77,19 @@ form.addEventListener('submit', async (event) => {
             profissao,
             limitacaoFisica,
             numeroCadastroSocial,
+            quantidadeDependentes,
             temDependentes
         )
             
         if(result.success && result.assistida) {
-    
-            resultDiv.className = 'result success' 
-            resultDiv.innerHTML = `
-            <h2>✅ Cadastro Realizado com Sucesso!</h2>
-            <div class="user-info">
-                <p><strong>Nome:</strong>${result.assistida.nome}</p>
-                <p><strong>Nome:</strong>${result.assistida.idade}</p>
-                <p><strong>Nome:</strong>${result.assistida.profissao}</p>
-                <p><strong>Nome:</strong>${result.assistida.endereco}</p>
-            </div>
-            `;
-            form.reset();
-        } else {
-            resultDiv.className = 'result error';
-            resultDiv.innerHTML = `
-                <h2> Erro de Validação</h2>
-                <p>Falha ao cadastrar. Detalhes: ${result.error || 'Erro desconhecido.'}</p>
-            `;
+            modalMessage.innerHTML = `<p>✅ Assistida cadastrada com sucesso! Protocolo: ${result.assistida.nome}</p>`;
+            errorModal.style.display = 'block';
         }
 
     } catch (error) {
-
-        resultDiv.className = 'result error';
-        resultDiv.innerHTML = `
-            <h2>Erro de Comunicação</h2>
-            <p>Não foi possível se comunicar com o servidor.</p>
-            <p><small>${error instanceof Error ? error.message : String(error)}</small></p>
-        `;
-    } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Finalizar Cadastro'; 
-    }
+        modalMessage.innerHTML = `<p>❌ Ocorreu um erro ao processar o cadastro: ${(error as Error).message}</p>`;
+        errorModal.style.display = 'block';
+    } 
 });
 
-listarAssistidasBtn.addEventListener('click', async (event) => {
-    const mudarTela = await window.api.openWindow("telaAssistidas");
-})
         

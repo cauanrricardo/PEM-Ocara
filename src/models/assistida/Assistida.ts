@@ -15,6 +15,7 @@ export class Assistida {
     private limitacaoFisica: string;
     private numeroCadastroSocial: string;
     private temDependentes: boolean;
+    private quantidadeDependentes: number;
     private casos: Caso[] = [];
 
     constructor(
@@ -30,6 +31,7 @@ export class Assistida {
         profissao: string,
         limitacaoFisica: string,
         numeroCadastroSocial: string,
+        quantidadeDependentes: number,
         temDependentes: boolean
     ) {
         this.protocolo = this.generateId();
@@ -45,6 +47,7 @@ export class Assistida {
         this.profissao = profissao;
         this.limitacaoFisica = limitacaoFisica;
         this.numeroCadastroSocial = numeroCadastroSocial;
+        this.quantidadeDependentes = quantidadeDependentes;
         this.temDependentes = temDependentes;
     }
 
@@ -88,6 +91,10 @@ export class Assistida {
     }
     public getNumeroCadastroSocial(): string {
         return this.numeroCadastroSocial;
+    }
+
+    public getQuantidadeDependentes(): number {
+        return this.quantidadeDependentes;
     }
     public getTemDependentes(): boolean {
         return this.temDependentes;
@@ -136,6 +143,9 @@ export class Assistida {
     }
     private setTemDependentes(value: boolean): void {
         this.temDependentes = value;
+    }
+    private setQuantidadeDependentes(value: number): void {
+        this.quantidadeDependentes = value;
     }
 
     private setCasos(value: Caso[]): void {
