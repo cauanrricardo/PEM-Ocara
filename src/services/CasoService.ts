@@ -1,8 +1,8 @@
-import { FormularioService } from "../services/FormularioService";
+import { Caso } from "../models/Caso/Caso";
 
-export class FormularioController {
+export class CasoService {
 
-    private formularioService: FormularioService;
+    private caso: Caso;
 
     constructor(
         nomeAssistida: string,
@@ -47,6 +47,11 @@ export class FormularioController {
         //Outras Infor
         anotacoesLivres: string, 
 
+        //Outras Infor Importantes
+        moraEmAreaRisco: boolean,
+        dependenteFinanceiroAgressor: boolean,
+        aceitaAbrigamentoTemporario: boolean,
+
         //PreenchimentoProfissional
         assistidaRespondeuSemAjuda: boolean,
         assistidaRespondeuComAuxilio: boolean,
@@ -54,11 +59,6 @@ export class FormularioController {
         assistidaRecusou: boolean,
         terceiroComunicante: boolean,
         tipoViolencia: string,
-
-        //Outras Infor Importantes
-        moraEmAreaRisco: boolean,
-        dependenteFinanceiroAgressor: boolean,
-        aceitaAbrigamentoTemporario: boolean,
 
         //Sobre voce
         separacaoRecente: string,
@@ -73,9 +73,13 @@ export class FormularioController {
         violenciaDuranteGravidez: boolean,
         novoRelacionamentoAumentouAgressao: boolean,
         possuiDeficienciaDoenca: string,
-        corRaca: string
+        corRaca: string,
+
+        data: Date, 
+        profissionalResponsavel: string, 
+        descricao: string 
     ) {
-        this.formularioService = new FormularioService(
+        this.caso = new Caso(
             nomeAssistida,
             idadeAssistida,
             identidadeGenero,
@@ -118,11 +122,6 @@ export class FormularioController {
             //Outras Infor
             anotacoesLivres,
 
-            //Outras Infor Importantes
-            moraEmAreaRisco,
-            dependenteFinanceiroAgressor,
-            aceitaAbrigamentoTemporario,
-
             //PreenchimentoProfissional
             assistidaRespondeuSemAjuda,
             assistidaRespondeuComAuxilio,
@@ -130,6 +129,11 @@ export class FormularioController {
             assistidaRecusou,
             terceiroComunicante,
             tipoViolencia,
+
+            //Outras Infor Importantes
+            moraEmAreaRisco,
+            dependenteFinanceiroAgressor,
+            aceitaAbrigamentoTemporario,
 
             //Sobre voce
             separacaoRecente,
@@ -144,7 +148,15 @@ export class FormularioController {
             violenciaDuranteGravidez,
             novoRelacionamentoAumentouAgressao,
             possuiDeficienciaDoenca,
-            corRaca
+            corRaca,
+
+            data,
+            profissionalResponsavel,
+            descricao
         );
+    }
+
+    public getCaso(): Caso {
+        return this.caso;
     }
 }

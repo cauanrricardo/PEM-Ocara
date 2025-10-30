@@ -1,8 +1,8 @@
-import { Formulario } from "../models/formulario/Formulario";
+import { CasoService } from "../services/CasoService";
 
-export class FormularioService {
+export class CasoController {
 
-    private formulario: Formulario;
+    private casoService: CasoService;
 
     constructor(
         nomeAssistida: string,
@@ -47,11 +47,6 @@ export class FormularioService {
         //Outras Infor
         anotacoesLivres: string, 
 
-        //Outras Infor Importantes
-        moraEmAreaRisco: boolean,
-        dependenteFinanceiroAgressor: boolean,
-        aceitaAbrigamentoTemporario: boolean,
-
         //PreenchimentoProfissional
         assistidaRespondeuSemAjuda: boolean,
         assistidaRespondeuComAuxilio: boolean,
@@ -59,6 +54,11 @@ export class FormularioService {
         assistidaRecusou: boolean,
         terceiroComunicante: boolean,
         tipoViolencia: string,
+
+        //Outras Infor Importantes
+        moraEmAreaRisco: boolean,
+        dependenteFinanceiroAgressor: boolean,
+        aceitaAbrigamentoTemporario: boolean,
 
         //Sobre voce
         separacaoRecente: string,
@@ -73,9 +73,13 @@ export class FormularioService {
         violenciaDuranteGravidez: boolean,
         novoRelacionamentoAumentouAgressao: boolean,
         possuiDeficienciaDoenca: string,
-        corRaca: string
+        corRaca: string,
+
+        data: Date, 
+        profissionalResponsavel: string, 
+        descricao: string 
     ) {
-        this.formulario = new Formulario(
+        this.casoService = new CasoService(
             nomeAssistida,
             idadeAssistida,
             identidadeGenero,
@@ -118,6 +122,11 @@ export class FormularioService {
             //Outras Infor
             anotacoesLivres,
 
+            //Outras Infor Importantes
+            moraEmAreaRisco,
+            dependenteFinanceiroAgressor,
+            aceitaAbrigamentoTemporario,
+
             //PreenchimentoProfissional
             assistidaRespondeuSemAjuda,
             assistidaRespondeuComAuxilio,
@@ -125,11 +134,6 @@ export class FormularioService {
             assistidaRecusou,
             terceiroComunicante,
             tipoViolencia,
-
-            //Outras Infor Importantes
-            moraEmAreaRisco,
-            dependenteFinanceiroAgressor,
-            aceitaAbrigamentoTemporario,
 
             //Sobre voce
             separacaoRecente,
@@ -144,11 +148,12 @@ export class FormularioService {
             violenciaDuranteGravidez,
             novoRelacionamentoAumentouAgressao,
             possuiDeficienciaDoenca,
-            corRaca
+            corRaca,
+            
+            //Caso
+            data, 
+            profissionalResponsavel, 
+            descricao
         );
-    }
-
-    public getFormulario(): Formulario {
-        return this.formulario;
     }
 }

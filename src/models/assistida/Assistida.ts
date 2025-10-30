@@ -1,4 +1,4 @@
-import { Caso } from "./Caso";
+import { Caso } from "../Caso/Caso";
 
 export class Assistida {
     private protocolo: number;
