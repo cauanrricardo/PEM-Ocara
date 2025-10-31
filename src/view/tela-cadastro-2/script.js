@@ -30,17 +30,33 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    checkboxes.forEach((checkbox, index) => {
-        checkbox.addEventListener('change', function() {
-            if (this.checked) {
-                checkboxes.forEach((cb, i) => {
-                    if (i !== index) {
-                        cb.checked = false;
-                    }
-                });
-            }
-            atualizarVisibilidade();
-        });
+    // Lógica para a opção "Não" ser exclusiva
+    const checkboxNao = checkboxes[2]; // Terceiro checkbox é o "Não"
+    const checkboxesSimAgressor = checkboxes[0]; // Primeiro checkbox "Sim, com agressor"
+    const checkboxesSimOutro = checkboxes[1]; // Segundo checkbox "Sim, de outro relacionamento"
+    
+    // Quando marcar "Não", desmarcar as outras opções
+    checkboxNao.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxesSimAgressor.checked = false;
+            checkboxesSimOutro.checked = false;
+        }
+        atualizarVisibilidade();
+    });
+    
+    // Quando marcar qualquer opção "Sim", desmarcar "Não"
+    checkboxesSimAgressor.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxNao.checked = false;
+        }
+        atualizarVisibilidade();
+    });
+    
+    checkboxesSimOutro.addEventListener('change', function() {
+        if (this.checked) {
+            checkboxNao.checked = false;
+        }
+        atualizarVisibilidade();
     });
 
     // Funcionalidade: Enter para próxima pergunta 
