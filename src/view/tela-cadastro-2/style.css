@@ -207,8 +207,10 @@ body {
 }
 
 .perguntas span {
+    font-size: 24px;
     color: #a20202;
-    font-weight: 600;
+    margin-left: 10px;
+    font-weight: 200;
 }
 
 .opcoes-pergunta {
@@ -328,6 +330,7 @@ body {
     font-size: 18px;
     color: #838383;
     text-align: center;
+    padding: 20px;
 }
 
 .obs span {
