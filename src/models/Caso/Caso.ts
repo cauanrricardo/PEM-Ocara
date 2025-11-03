@@ -8,11 +8,13 @@ import { PreenchimentoProfissional } from "./PreenchimentoProfissional";
 import { SobreAgressor } from "./SobreAgressor";
 import { SobreVoce } from "./SobreVoce";
 import { Historico } from "./Historico";
+import { Encaminhamento } from "../Rede-Apoio/Encaminhamento";
 
 export class Caso {
     private protocoloCaso?: number;
     private historico: Historico;
     private anexos: Anexo[] = [];
+    private encaminhamentos: Encaminhamento[] = [];
     private data: Date;
     private profissionalResponsavel: string;
     private descricao: string;
@@ -214,7 +216,13 @@ export class Caso {
         return this.descricao;
     }
 
-    
+    public getHistorico(): Historico {
+        return this.historico;
+    }
+
+    public getEncaminhamentos(): Encaminhamento[] {
+        return this.encaminhamentos;
+    }
 
     //Setters
     public setAnexos(anexos: Anexo[]) {
@@ -238,6 +246,8 @@ export class Caso {
         this.descricao = descricao;
     }
 
-    
+    public adicionarEncaminhamento(encaminhamento: Encaminhamento) {
+        this.encaminhamentos.push(encaminhamento);
+    }
 
 }
