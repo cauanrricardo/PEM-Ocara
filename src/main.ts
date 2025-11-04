@@ -55,7 +55,7 @@ ipcMain.handle('assistida:listarTodas', async () => {
   }
 });
 
-ipcMain.handle('caso:criarCaso', async(
+ipcMain.handle('caso:criar', async(
   _event,
   data: {
     nomeAssistida: string,
@@ -279,9 +279,12 @@ ipcMain.on('window:open', (_event, windowName: string) => {
     case 'telaCadastroAssistida':
       windowManager.loadContent('main', 'tela-cadastro-1/index.html');
       break;
-    case 'telaCadastro2':
+    case 'telaCadastroCaso':
+      console.log('Abrindo tela de cadastro de caso');
       windowManager.loadContent('main', 'tela-cadastro-2/index.html');
       break;
+    default:
+      console.log('tela desconhecida:', windowName);
   }
 });
 
