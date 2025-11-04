@@ -13,16 +13,23 @@ import { ServicoDeEmail } from "../services/ServicoDeEmail";
 export class ControladorEncaminhamento {
     private servicoDeEmail: ServicoDeEmail;
 
+
     constructor(servicoDeEmail: ServicoDeEmail) {
         this.servicoDeEmail = servicoDeEmail;
+
     }
 
     public async registrarEncaminhamento(caso: Caso, orgao: OrgaoRedeApoio, motivo: string, observacoes: string, assistenteSocial: AssistenteSocial) {
         try {
+
+            // ADICIONAR LOGICA PARA GERAR PDF DO ENCAMINHAMENTO
+
+
             const encaminhamento = new Encaminhamento(new Date(), motivo, observacoes, orgao, assistenteSocial, caso);
             const infoEmail = await this.servicoDeEmail.enviarEmailAutomatico(encaminhamento);
 
             const tipo = "Encaminhamento";
+            //ATUALIZAR A DESCRIÇÃO QUANDO TIVER O PDF
             const descricao = `Encaminhamento para o órgão ${orgao.getNome()} realizado com sucesso. Email enviado com ID: ${infoEmail.messageId}`;
             const data = new Date();
             const responsavel = assistenteSocial.getName();
@@ -39,5 +46,5 @@ export class ControladorEncaminhamento {
 
                 throw new Error("Falha ao enviar o e-mail. O encaminhamento não foi salvo.");
             }
-        } 
     }
+}
