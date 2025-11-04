@@ -134,30 +134,43 @@ ipcMain.handle('caso:criar', async(
 
   }) => {
   try {
-    casoController.handlerCriarCaso(data);
-
-    const caso = casoController.getCaso();
-
-    if (caso) {
-      BrowserWindow.getAllWindows().forEach(window => {
-        window.webContents.send('caso:criado', caso);
-      });
-      return {
-        success: true,
-        caso: caso
-      };
-    } else {
-      throw new Error('Erro ao criar o caso');
-    }
+    const result =casoController.handlerCriarCaso(data);
+    return {
+      success: true,
+      caso: result.toJSON()
+    };
   } catch (error) {
-    Logger.error('Erro ao criar caso:', error);
+    Logger.error('Erro ao criar Caso:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    };
+  }
+    
+});
+
+ipcMain.handle('caso:getByProtocolo', async(_event, protocolo: number) => {
+  try {
+    Logger.info('Requisição para buscar caso pelo protocolo:', protocolo);
+    const caso = casoController.getCaso(protocolo);
+    if (!caso) {
+      return {
+        success: false,
+        error: 'Caso não encontrado'
+      };
+    }
+    return {
+      success: true,
+      caso: caso.toJSON()
+    };
+  } catch (error) {
+    Logger.error('Erro ao buscar caso:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Erro desconhecido'
     };
   }
 });
-
 
 ipcMain.handle('assistida:criar', async(
   _event,

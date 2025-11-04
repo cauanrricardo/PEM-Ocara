@@ -3,7 +3,7 @@ import { Historico } from "../models/Caso/Historico";
 
 export class CasoService {
 
-    private caso: Caso = new Caso();
+    private casos: Caso[] = [];
 
     criarCaso(dados: {
         // Assistida
@@ -74,8 +74,8 @@ export class CasoService {
         profissionalResponsavel: string;
         descricao: string;
     }) {
-        this.caso = new Caso();
-        this.caso.criarCaso(
+        const novoCaso = new Caso();
+        novoCaso.criarCaso(
             dados.nomeAssistida,
             dados.idadeAssistida,
             dados.identidadeGenero,
@@ -135,9 +135,11 @@ export class CasoService {
             dados.profissionalResponsavel,
             dados.descricao
         );
+        this.casos.push(novoCaso);
+        return novoCaso;
     }
 
-    public getCaso(): Caso {
-        return this.caso;
+    public getCaso(protocolo: number): Caso | undefined {
+        return this.casos.find(caso => caso.getProtocoloCaso() === protocolo);
     }
 }

@@ -94,9 +94,6 @@ export interface IElectronAPI {
     assistida?: any;
     error?: string;
   }>;
-
-
-
     
   criarAssistida:(
     nome: string,
@@ -124,6 +121,13 @@ export interface IElectronAPI {
     assistidas?: any[];
     error?: string;
   }>;
+
+  casosPorProtocolo: (protocolo: number) => Promise<{
+    success: boolean;
+    caso?: any[];
+    error?: string;
+  }>;
+
   openWindow: (windowName: string) => void;
   closeWindow: () => void;
   onUserCreated: (callback: (user: any) => void) => void;

@@ -112,6 +112,7 @@ export class Caso {
         descricao: string 
     
     ) {
+        this.protocoloCaso = 1;
         this.historico = new Historico();
 
         // Se a assistida já foi criada no construtor, use-a. Caso contrário, crie uma nova
@@ -237,6 +238,34 @@ export class Caso {
         return this.encaminhamentos;
     }
 
+    public getAgressor(): Agressor | undefined {
+        return this.agressor;
+    }
+
+    public getSobreAgressor(): SobreAgressor | undefined {
+        return this.sobreAgressor;
+    }
+
+    public getHistoricoViolencia(): HistoricoViolencia | undefined {
+        return this.historicoViolencia;
+    }
+
+    public getOutrasInformacoesEncaminhamento(): OutrasInformacoesEncaminhamento | undefined {
+        return this.outrasInformacoesEncaminhamento;
+    }
+
+    public getOutrasInformacoesImportantes(): OutrasInformacoesImportantes | undefined {
+        return this.outrasInformacoesImportantes;
+    }
+
+    public getSobreVoce(): SobreVoce | undefined {
+        return this.sobreVoce;
+    }
+
+    public getPreenchimentoProfissional(): PreenchimentoProfissional | undefined {
+        return this.preenchimentoProfissional;
+    }
+
     //Setters
     public setAnexos(anexos: Anexo[]) {
         this.anexos = anexos;
@@ -263,4 +292,85 @@ export class Caso {
         this.encaminhamentos.push(encaminhamento);
     }
 
+    public toJSON() {
+        return {
+            protocoloCaso: this.protocoloCaso ?? 0,
+            data: this.data ?? new Date(),
+            profissionalResponsavel: this.profissionalResponsavel ?? "",
+            descricao: this.descricao ?? "",
+            assistida: this.assistida ? this.assistida.toJSON() : {
+                nome: "",
+                idade: 0,
+                identidadeGenero: "",
+                nomeSocial: "",
+                endereco: "",
+                escolaridade: "",
+                religiao: "",
+                nacionalidade: "",
+                zonaHabitacao: "",
+                profissao: "",
+                limitacaoFisica: "",
+                numeroCadastroSocial: "",
+                quantidadeDependentes: 0,
+                temDependentes: false
+            },
+            agressor: {
+                nome: this.agressor?.getNome() ?? "",
+                idade: this.agressor?.getIdade() ?? 0,
+                vinculoAssistida: this.agressor?.getVinculoAssistida() ?? "",
+                dataOcorrida: this.agressor?.getDataOcorrida() ?? new Date()
+            },
+            sobreAgressor: {
+                usoDrogasAlcool: this.sobreAgressor?.getUsoDrogasAlcool() ?? [],
+                doencaMental: this.sobreAgressor?.getDoencaMental() ?? "",
+                agressorCumpriuMedidaProtetiva: this.sobreAgressor?.getAgressorCumpriuMedidaProtetiva() ?? false,
+                agressorTentativaSuicidio: this.sobreAgressor?.getAgressorTentativaSuicidio() ?? false,
+                agressorDesempregado: this.sobreAgressor?.getAgressorDesempregado() ?? "",
+                agressorPossuiArmaFogo: this.sobreAgressor?.getAgressorPossuiArmaFogo() ?? "",
+                agressorAmeacouAlguem: this.sobreAgressor?.getAgressorAmeacouAlguem() ?? ""
+            },
+            historicoViolencia: {
+                ameacaFamiliar: this.historicoViolencia?.getAmeacaFamiliar() ?? false,
+                agressaoFisica: this.historicoViolencia?.getAgressaoFisica() ?? false,
+                outrasFormasViolencia: this.historicoViolencia?.getOutrasFormasViolencia() ?? "",
+                abusoSexual: this.historicoViolencia?.getAbusoSexual() ?? false,
+                comportamentosAgressor: this.historicoViolencia?.getComportamentosAgressor() ?? [],
+                ocorrenciaPolicialMedidaProtetivaAgressor: this.historicoViolencia?.getOcorrenciaPolicialMedidaProtetivaAgressor() ?? false,
+                agressoesMaisFrequentesUltimamente: this.historicoViolencia?.getAgressoesMaisFrequentesUltimamente() ?? false
+            },
+            outrasInformacoesEncaminhamento: {
+                anotacoesLivres: this.outrasInformacoesEncaminhamento?.getAnotacoesLivres() ?? ""
+            },
+            outrasInformacoesImportantes: {
+                moraEmAreaRisco: this.outrasInformacoesImportantes?.getMoraEmAreaRisco() ?? false,
+                dependenteFinanceiroAgressor: this.outrasInformacoesImportantes?.getDependenteFinanceiroAgressor() ?? false,
+                aceitaAbrigamentoTemporario: this.outrasInformacoesImportantes?.getAceitaAbrigamentoTemporario() ?? false
+            },
+            sobreVoce: {
+                separacaoRecente: this.sobreVoce?.getSeparacaoRecente() ?? "",
+                temFilhosComAgressor: this.sobreVoce?.getTemFilhosComAgressor() ?? false,
+                qntFilhosComAgressor: this.sobreVoce?.getQntFilhosComAgressor() ?? 0,
+                temFilhosOutroRelacionamento: this.sobreVoce?.getTemFilhosOutroRelacionamento() ?? false,
+                qntFilhosOutroRelacionamento: this.sobreVoce?.getQntFilhosOutroRelacionamento() ?? 0,
+                faixaFilhos: this.sobreVoce?.getFaixaFilhos() ?? [],
+                filhosComDeficiencia: this.sobreVoce?.getFilhosComDeficiencia() ?? false,
+                conflitoAgressor: this.sobreVoce?.getConflitoAgressor() ?? "",
+                filhosPresenciaramViolencia: this.sobreVoce?.getFilhosPresenciaramViolencia() ?? false,
+                violenciaDuranteGravidez: this.sobreVoce?.getViolenciaDuranteGravidez() ?? false,
+                novoRelacionamentoAumentouAgressao: this.sobreVoce?.getNovoRelacionamentoAumentouAgressao() ?? false,
+                possuiDeficienciaDoenca: this.sobreVoce?.getPossuiDeficienciaDoenca() ?? "",
+                corRaca: this.sobreVoce?.getCorRaca() ?? ""
+            },
+            preenchimentoProfissional: {
+                assistidaRespondeuSemAjuda: this.preenchimentoProfissional?.getAssistidaRespondeuSemAjuda() ?? false,
+                assistidaRespondeuComAuxilio: this.preenchimentoProfissional?.getAssistidaRespondeuComAuxilio() ?? false,
+                assistidaSemCondicoes: this.preenchimentoProfissional?.getAssistidaSemCondicoes() ?? false,
+                assistidaRecusou: this.preenchimentoProfissional?.getAssistidaRecusou() ?? false,
+                terceiroComunicante: this.preenchimentoProfissional?.getTerceiroComunicante() ?? false,
+                tipoViolencia: this.preenchimentoProfissional?.getTipoViolencia() ?? ""
+            },
+            anexos: this.anexos ?? [],
+            encaminhamentos: this.encaminhamentos ?? []
+        };
+    }
 }
