@@ -154,6 +154,13 @@ body {
     padding: 0 12px;
     font-size: 24px;
     width: 100%;
+    color: #838383;
+}
+
+.pergunta input:focus {
+    outline: none;
+    border-color: #838383;
+    color: black;
 }
 
 .pergunta-conjunta {
