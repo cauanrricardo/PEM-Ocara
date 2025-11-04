@@ -1,10 +1,17 @@
 import { Caso } from "../models/Caso/Caso";
+import { AssistidaService } from "./AssistidaService";
 import { Historico } from "../models/Caso/Historico";
+import { Assistida } from "../models/assistida/Assistida";
+
 
 export class CasoService {
 
+    private assistidaService: AssistidaService;
     private casos: Caso[] = [];
 
+    constructor() {
+        this.assistidaService = new AssistidaService();
+    }
     criarCaso(dados: {
         // Assistida
         nomeAssistida: string;
@@ -73,9 +80,11 @@ export class CasoService {
         data: Date;
         profissionalResponsavel: string;
         descricao: string;
+    
     }) {
         const novoCaso = new Caso();
-        novoCaso.criarCaso(
+
+        const assistida = this.assistidaService.criarAssistida(
             dados.nomeAssistida,
             dados.idadeAssistida,
             dados.identidadeGenero,
@@ -89,7 +98,24 @@ export class CasoService {
             dados.limitacaoFisica,
             dados.numeroCadastroSocial,
             dados.quantidadeDependentes,
-            dados.temDependentes,
+            dados.temDependentes
+        );
+
+        novoCaso.criarCaso(
+            assistida.getNome(),
+            assistida.getIdade(),
+            assistida.getIdentidadeGenero(),
+            assistida.getNomeSocial(),
+            assistida.getEndereco(),
+            assistida.getEscolaridade(),
+            assistida.getReligiao(),
+            assistida.getNacionalidade(),
+            assistida.getZonaHabitacao(),
+            assistida.getProfissao(),
+            assistida.getLimitacaoFisica(),
+            assistida.getNumeroCadastroSocial(),
+            assistida.getQuantidadeDependentes(),
+            assistida.getTemDependentes(),
             dados.nomeAgressor,
             dados.idadeAgresssor,
             dados.vinculoAssistida,
@@ -135,7 +161,14 @@ export class CasoService {
             dados.profissionalResponsavel,
             dados.descricao
         );
+        
+
+        this.assistidaService.addCasoAAssistida(
+            novoCaso.getAssistida()?.getProtocolo() || 0,
+            novoCaso
+        );
         this.casos.push(novoCaso);
+
         return novoCaso;
     }
 

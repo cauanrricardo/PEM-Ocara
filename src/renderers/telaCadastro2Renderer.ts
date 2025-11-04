@@ -137,7 +137,24 @@ pxmBtn.addEventListener('click', async (event) => {
 
         if (dadosAssistidaJSON) {
             try {
-                assistidaDados = JSON.parse(dadosAssistidaJSON);
+                const dadosRaw = JSON.parse(dadosAssistidaJSON);
+                // Mapear os nomes dos campos do formulario para os nomes esperados pelo CasoService
+                assistidaDados = {
+                    nomeAssistida: dadosRaw.nome || "N/A",
+                    idadeAssistida: dadosRaw.idade || 0,
+                    identidadeGenero: dadosRaw.identidadeGenero || "N/A",
+                    nomeSocial: dadosRaw.nomeSocial || "N/A",
+                    endereco: dadosRaw.endereco || "N/A",
+                    escolaridade: dadosRaw.escolaridade || "N/A",
+                    religiao: dadosRaw.religiao || "N/A",
+                    nacionalidade: dadosRaw.nacionalidade || "N/A",
+                    zonaHabitacao: dadosRaw.zonaHabitacao || "N/A",
+                    profissao: dadosRaw.profissao || "N/A",
+                    limitacaoFisica: dadosRaw.limitacaoFisica || "N/A",
+                    numeroCadastroSocial: dadosRaw.numeroCadastroSocial || "N/A",
+                    quantidadeDependentes: dadosRaw.quantidadeDependentes || 0,
+                    temDependentes: dadosRaw.temDependentes || false,
+                };
             } catch (parseError) {
                 console.error('Erro ao fazer parse dos dados da assistida:', parseError);
                 assistidaDados = dadosPasso1Mock;

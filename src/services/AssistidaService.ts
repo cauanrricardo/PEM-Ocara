@@ -1,4 +1,5 @@
 import { Assistida } from "../models/assistida/Assistida";
+import { Caso } from "../models/Caso/Caso";
 
 export class AssistidaService {
     private assistida: Assistida[] = [];
@@ -58,6 +59,11 @@ export class AssistidaService {
 
     public getAssistidaPorProtocolo(id: number): Assistida | undefined {
         return this.assistida.find(assistida => assistida.getProtocolo() == id);
+    }
+
+    public addCasoAAssistida(protocolo: number, caso: Caso): void {
+        const assistida = this.getAssistidaPorProtocolo(protocolo);
+        assistida?.addCaso(caso);
     }
 
 }
