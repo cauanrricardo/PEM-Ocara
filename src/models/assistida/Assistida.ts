@@ -152,7 +152,7 @@ export class Assistida {
         this.casos = value;
     }
 
-    private addCaso(caso: Caso): void {
+    public addCaso(caso: Caso): void {
         this.casos.push(caso);
     }
     

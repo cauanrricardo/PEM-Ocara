@@ -4,8 +4,6 @@ export {}
 
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
-const errorModal = document.getElementById('error-modal') as HTMLDivElement;
-const modalMessage = document.getElementById('modal-message') as HTMLDivElement;
 
 voltarBtn.addEventListener('click', async (event) => {
     const mudarTela = await window.api.openWindow("telaInicial");
@@ -92,13 +90,10 @@ pxmBtn.addEventListener('click', async (event) => {
 
         localStorage.setItem('dadosAssistida', JSON.stringify(dadosAssistida));
 
-        console.log('Abrindo tela de renderer de caso');
         const mudarTela = await window.api.openWindow("telaCadastroCaso");
-        console.log('Tela de renderer de caso aberta com sucesso');
 
     } catch (error) {
-        modalMessage.innerHTML = `<p>❌ ${error instanceof Error ? error.message : 'Erro desconhecido'}</p>`;
-        errorModal.style.display = 'flex';
+        alert(`❌ ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
         console.error("Erro de validação:", error);
     }
 });

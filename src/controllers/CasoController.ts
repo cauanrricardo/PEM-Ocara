@@ -1,4 +1,5 @@
 import { CasoService } from "../services/CasoService";
+import { Caso } from "../models/Caso/Caso";
 
 export class CasoController {
 
@@ -72,11 +73,11 @@ export class CasoController {
         data: Date;
         profissionalResponsavel: string;
         descricao: string;
-    }) {
-        this.casoService.criarCaso(dados);
+    }): Caso {
+        return this.casoService.criarCaso(dados);
     }
 
-    getCaso() {
-        return this.casoService.getCaso();
+    getCaso(protocolo: number): Caso | undefined {
+        return this.casoService.getCaso(protocolo);
     }
 }

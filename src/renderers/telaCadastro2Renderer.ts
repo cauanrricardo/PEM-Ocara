@@ -4,8 +4,6 @@ export {}
 
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
-const errorModal = document.getElementById('error-modal') as HTMLDivElement;
-const modalMessage = document.getElementById('modal-message') as HTMLDivElement;
 
 voltarBtn.addEventListener('click', async (event) => {
     const mudarTela = await window.api.openWindow("telaCadastroAssistida");
@@ -74,6 +72,7 @@ pxmBtn.addEventListener('click', async (event) => {
     const quantosDeOutro = temFilhosDeOutro ? parseInt((document.getElementById('q16-quantos-outro') as HTMLInputElement).value) : 0;
     const temFilhosNao = (document.getElementById('q16-tem-filhos-nao') as HTMLInputElement).checked;
     const temFilhos = temFilhosComAgressor || temFilhosDeOutro;
+    const corRaca = (document.querySelector('input[name="cor"]:checked') as HTMLInputElement)?.value || "";
 
     let faixaEtaria: string[] = [];
     if (temFilhos) {
@@ -89,9 +88,7 @@ pxmBtn.addEventListener('click', async (event) => {
     if (!nomeAgressor || !vinculo || !dataFato || !isRadioChecked('q04-estupro') || !isRadioChecked('q06-bo-medida') || 
         !isRadioChecked('q07-frequencia-aumento') || !isRadioChecked('q10-descumpriu-medida') || !isRadioChecked('q11-tentativa-suicidio') || 
         !isRadioChecked('q12-desempregado-dificuldades') || !isRadioChecked('q13-acesso-armas') || !isRadioChecked('q15-separacao')) {
-        
-        modalMessage.textContent = "Por favor, preencha todos os campos obrigatórios (marcados com *).";
-        errorModal.style.display = 'flex';
+        alert("Por favor, preencha todos os campos obrigatórios (marcados com *).");
         return; 
     }
 
@@ -125,7 +122,6 @@ pxmBtn.addEventListener('click', async (event) => {
     const violenciaDuranteGravidez = false;
     const novoRelacionamentoAumentouAgressao = false; 
     const possuiDeficienciaDoenca = "";
-    const corRaca = ""; 
 
 
     const dadosPasso1Mock = {
@@ -141,7 +137,24 @@ pxmBtn.addEventListener('click', async (event) => {
 
         if (dadosAssistidaJSON) {
             try {
-                assistidaDados = JSON.parse(dadosAssistidaJSON);
+                const dadosRaw = JSON.parse(dadosAssistidaJSON);
+                // Mapear os nomes dos campos do formulario para os nomes esperados pelo CasoService
+                assistidaDados = {
+                    nomeAssistida: dadosRaw.nome || "N/A",
+                    idadeAssistida: dadosRaw.idade || 0,
+                    identidadeGenero: dadosRaw.identidadeGenero || "N/A",
+                    nomeSocial: dadosRaw.nomeSocial || "N/A",
+                    endereco: dadosRaw.endereco || "N/A",
+                    escolaridade: dadosRaw.escolaridade || "N/A",
+                    religiao: dadosRaw.religiao || "N/A",
+                    nacionalidade: dadosRaw.nacionalidade || "N/A",
+                    zonaHabitacao: dadosRaw.zonaHabitacao || "N/A",
+                    profissao: dadosRaw.profissao || "N/A",
+                    limitacaoFisica: dadosRaw.limitacaoFisica || "N/A",
+                    numeroCadastroSocial: dadosRaw.numeroCadastroSocial || "N/A",
+                    quantidadeDependentes: dadosRaw.quantidadeDependentes || 0,
+                    temDependentes: dadosRaw.temDependentes || false,
+                };
             } catch (parseError) {
                 console.error('Erro ao fazer parse dos dados da assistida:', parseError);
                 assistidaDados = dadosPasso1Mock;
@@ -212,18 +225,15 @@ pxmBtn.addEventListener('click', async (event) => {
         };
 
         const result = await window.api.criarCaso(dadosParaServiceAtualizado);
-        
+        console.log('Resultado da criação do caso:', result);
         if (result.success && result.caso) {
-            modalMessage.innerHTML = `<p>✅ Caso cadastrado com sucesso! Protocolo: ${result.caso.getProtocoloCaso()}</p>`;
-            errorModal.style.display = 'flex';
-            // Limpar localStorage após sucesso
             localStorage.removeItem('dadosAssistida');
+            window.api.openWindow("telaAssistidas");
         } else {
             throw new Error(result.error || 'Erro desconhecido ao criar caso');
         }
    } catch (error) {
        console.error("Erro ao processar o formulário:", error);
-       modalMessage.innerHTML = `<p>❌ Ocorreu um erro: ${(error as Error).message}</p>`;
-       errorModal.style.display = 'flex';
+       alert("Erro ao processar o formulário. Por favor, tente novamente.");
    }
 });
