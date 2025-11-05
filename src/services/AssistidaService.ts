@@ -1,5 +1,6 @@
 import { Assistida } from "../models/assistida/Assistida";
 import { Caso } from "../models/Caso/Caso";
+import { Logger } from "../utils/Logger";
 
 export class AssistidaService {
     private assistida: Assistida[] = [];

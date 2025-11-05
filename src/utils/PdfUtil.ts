@@ -1,8 +1,12 @@
+/*
+
 import PdfPrinter from 'pdfmake';
 import fs from 'fs';
 import path from 'path';
 import { Assistida } from '../models/assistida/Assistida'
 import { app } from 'electron';
+
+
 
 //indentificação da assistida
 export interface IAtendimentoData {
@@ -920,3 +924,5 @@ export class PdfUtil {
     });
   }
 }
+
+*/

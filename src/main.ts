@@ -9,7 +9,7 @@ import { CasoController } from './controllers/CasoController';
 const windowManager = new WindowManager();
 const userController = new UserController();
 const assistidaController = new AssistidaController();
-const casoController = new CasoController();
+const casoController = new CasoController(assistidaController.getAssistidaService());
 
 // ==========================================
 // IPC HANDLERS - Backend Logic
@@ -295,6 +295,9 @@ ipcMain.on('window:open', (_event, windowName: string) => {
     case 'telaCadastroCaso':
       console.log('Abrindo tela de cadastro de caso');
       windowManager.loadContent('main', 'tela-cadastro-2/index.html');
+      break;
+    case 'telaListarAssistidas':
+      windowManager.loadContent('main', 'tela-assistidas/index.html');
       break;
     default:
       console.log('tela desconhecida:', windowName);

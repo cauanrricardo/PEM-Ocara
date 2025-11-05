@@ -1,4 +1,6 @@
 import { Caso } from "../models/Caso/Caso";
+
+/*
 import { Assistida } from "../models/assistida/Assistida";
 import { Agressor } from "../models/Caso/Agressor";
 import { HistoricoViolencia } from "../models/Caso/HistoricoViolencia";
@@ -133,3 +135,5 @@ export class PdfService {
     }
   }
 }
+
+*/

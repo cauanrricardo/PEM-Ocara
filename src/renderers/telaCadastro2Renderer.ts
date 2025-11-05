@@ -228,7 +228,7 @@ pxmBtn.addEventListener('click', async (event) => {
         console.log('Resultado da criação do caso:', result);
         if (result.success && result.caso) {
             localStorage.removeItem('dadosAssistida');
-            window.api.openWindow("telaAssistidas");
+            window.api.openWindow("telaListarAssistidas");
         } else {
             throw new Error(result.error || 'Erro desconhecido ao criar caso');
         }

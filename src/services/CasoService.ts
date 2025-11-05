@@ -1,7 +1,6 @@
 import { Caso } from "../models/Caso/Caso";
 import { AssistidaService } from "./AssistidaService";
-import { Historico } from "../models/Caso/Historico";
-import { Assistida } from "../models/assistida/Assistida";
+
 
 
 export class CasoService {
@@ -9,8 +8,8 @@ export class CasoService {
     private assistidaService: AssistidaService;
     private casos: Caso[] = [];
 
-    constructor() {
-        this.assistidaService = new AssistidaService();
+    constructor(assistidaService?: AssistidaService) {
+        this.assistidaService = assistidaService || new AssistidaService();
     }
     criarCaso(dados: {
         // Assistida

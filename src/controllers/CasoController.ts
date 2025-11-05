@@ -1,9 +1,14 @@
 import { CasoService } from "../services/CasoService";
+import { AssistidaService } from "../services/AssistidaService";
 import { Caso } from "../models/Caso/Caso";
 
 export class CasoController {
 
-    private casoService: CasoService = new CasoService();
+    private casoService: CasoService;
+
+    constructor(assistidaService?: AssistidaService) {
+        this.casoService = new CasoService(assistidaService);
+    }
 
     handlerCriarCaso(dados: {
         // Assistida
