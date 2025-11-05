@@ -1,10 +1,10 @@
 export class OutrasInformacoesImportantes {
-    private moraEmAreaRisco: boolean;
+    private moraEmAreaRisco: string;
     private dependenteFinanceiroAgressor: boolean;
     private aceitaAbrigamentoTemporario: boolean;
 
     constructor(
-        moraEmAreaRisco: boolean,
+        moraEmAreaRisco: string,
         dependenteFinanceiroAgressor: boolean,
         aceitaAbrigamentoTemporario: boolean
     )
@@ -16,7 +16,7 @@ export class OutrasInformacoesImportantes {
     
     //Getters
 
-    public getMoraEmAreaRisco(): boolean {
+    public getMoraEmAreaRisco(): string {
         return this.moraEmAreaRisco;
     }
     public getDependenteFinanceiroAgressor(): boolean {
@@ -28,7 +28,7 @@ export class OutrasInformacoesImportantes {
 
     //Setters
 
-    private setMoraEmAreaRisco(value: boolean): void {
+    private setMoraEmAreaRisco(value: string): void {
         this.moraEmAreaRisco = value;
     }
     private setDependenteFinanceiroAgressor(value: boolean): void {

@@ -88,7 +88,7 @@ export class Caso {
         tipoViolencia: string,
 
         //Outras Infor Importantes
-        moraEmAreaRisco: boolean,
+        moraEmAreaRisco: string,
         dependenteFinanceiroAgressor: boolean,
         aceitaAbrigamentoTemporario: boolean,
 

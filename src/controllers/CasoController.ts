@@ -57,7 +57,7 @@ export class CasoController {
         terceiroComunicante: boolean;
         tipoViolencia: string;
         // Outras Infor Importantes
-        moraEmAreaRisco: boolean;
+        moraEmAreaRisco: string;
         dependenteFinanceiroAgressor: boolean;
         aceitaAbrigamentoTemporario: boolean;
         // Sobre voce

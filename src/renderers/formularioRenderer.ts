@@ -1,6 +1,70 @@
 /// <reference path="../types/windown.d.ts" />
 
-export {}   
+export {}
+
+function mostrarErro(mensagem: string) {
+    let modal = document.getElementById('erro-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'erro-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const conteudo = document.createElement('div');
+    conteudo.style.cssText = `
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    `;
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = `Erro de Validação: ${mensagem}`;
+    titulo.style.color = '#d9534f';
+
+    const texto = document.createElement('p');
+    texto.textContent = mensagem;
+    texto.style.marginTop = '15px';
+
+    const botao = document.createElement('button');
+    botao.textContent = 'OK';
+    botao.style.cssText = `
+        margin-top: 20px;
+        padding: 10px 30px;
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    `;
+
+    botao.addEventListener('click', () => {
+        modal!.remove();
+    });
+
+    conteudo.appendChild(titulo);
+    conteudo.appendChild(texto);
+    conteudo.appendChild(botao);
+
+    modal.innerHTML = '';
+    modal.appendChild(conteudo);
+    modal.style.display = 'flex';
+}
 
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
@@ -12,7 +76,6 @@ voltarBtn.addEventListener('click', async (event) => {
 
 
 pxmBtn.addEventListener('click', async (event) => {
-    event.preventDefault();
     try {
         const nomeInput = document.getElementById('nome-completo') as HTMLInputElement;
         const idadeInput = document.getElementById('idade') as HTMLInputElement;
@@ -43,10 +106,6 @@ pxmBtn.addEventListener('click', async (event) => {
             }
         });
 
-        if (!zonaHabitacao) {
-            throw new Error('Por favor, selecione uma zona de habitação');
-        }
-
         // Validar campos obrigatórios
         if (!nomeInput.value.trim()) throw new Error('O nome é obrigatório');
         if (!idadeInput.value.trim()) throw new Error('A idade é obrigatória');
@@ -55,6 +114,7 @@ pxmBtn.addEventListener('click', async (event) => {
         if (!profissaoInput.value.trim()) throw new Error('A profissão é obrigatória');
         if (!limitacaoInput.value.trim()) throw new Error('O campo de limitação física é obrigatório');
         if (!dependentesInput.value.trim()) throw new Error('O campo de dependentes é obrigatório');
+        if (!zonaHabitacao) throw new Error('Por favor, selecione uma zona de habitação');
 
         const nome: string = nomeInput.value.trim();
         const idade: number = parseInt(idadeInput.value.trim(), 10); 
@@ -93,9 +153,7 @@ pxmBtn.addEventListener('click', async (event) => {
         const mudarTela = await window.api.openWindow("telaCadastroCaso");
 
     } catch (error) {
-        alert(`❌ ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
+        mostrarErro(error instanceof Error ? error.message : 'Erro desconhecido');
         console.error("Erro de validação:", error);
     }
 });
-
-        

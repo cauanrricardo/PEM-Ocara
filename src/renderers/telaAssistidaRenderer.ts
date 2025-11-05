@@ -40,21 +40,13 @@ function exibirAssistidas(assistidas: any[]) {
     
     if (!containerCards) return;
 
-    const cardsExistentes = containerCards.querySelectorAll('.col-md-6');
-    cardsExistentes.forEach((card, index) => {
-        if (index > 0) card.remove();
-    });
-
     assistidas.forEach((assistida: any) => {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'col-md-6';
         cardDiv.innerHTML = `
-            <div class="text-center card-paciente" style="cursor: pointer; transition: transform 0.2s;" data-protocolo="${assistida.protocolo}">
-                <h3 class="mb-2" style="color: #63468c; font-weight: bold;">ID: ${assistida.protocolo || 'N/A'}</h3>
-                <p style="font-size: 1.1rem; font-weight: 600; color: #333;"><strong>${assistida.nome || 'N/A'}</strong></p>
-                <p class="mb-0" style="font-size: 0.9rem; color: #666;">
-                    ${assistida.idade || 'N/A'} anos | ${assistida.profissao || 'N/A'}
-                </p>
+            <div class="text-center card-paciente";" data-protocolo="${assistida.protocolo}">
+                <h3 class="mb-2">ID: ${assistida.protocolo || 'N/A'}</h3>
+                <p>${assistida.nome || 'N/A'}</p>
             </div>
         `;
     

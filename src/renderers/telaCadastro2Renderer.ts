@@ -2,6 +2,70 @@
 
 export {}
 
+function mostrarErro(mensagem: string) {
+    let modal = document.getElementById('erro-modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'erro-modal';
+        modal.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        `;
+        document.body.appendChild(modal);
+    }
+
+    const conteudo = document.createElement('div');
+    conteudo.style.cssText = `
+        background-color: white;
+        padding: 30px;
+        border-radius: 10px;
+        max-width: 400px;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    `;
+
+    const titulo = document.createElement('h3');
+    titulo.textContent = `Erro de Validação: ${mensagem}`;
+    titulo.style.color = '#d9534f';
+
+    const texto = document.createElement('p');
+    texto.textContent = mensagem;
+    texto.style.marginTop = '15px';
+
+    const botao = document.createElement('button');
+    botao.textContent = 'OK';
+    botao.style.cssText = `
+        margin-top: 20px;
+        padding: 10px 30px;
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    `;
+
+    botao.addEventListener('click', () => {
+        modal!.remove();
+    });
+
+    conteudo.appendChild(titulo);
+    conteudo.appendChild(texto);
+    conteudo.appendChild(botao);
+
+    modal.innerHTML = '';
+    modal.appendChild(conteudo);
+    modal.style.display = 'flex';
+}
+
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
 
@@ -18,9 +82,6 @@ const isCheckboxGroupChecked = (selector: string): boolean => {
 };
 
 pxmBtn.addEventListener('click', async (event) => {
-
-    event.preventDefault();
-
     // Passo 2: Dados do Agressor
     const nomeAgressor = (document.getElementById('nome-completo-agressor') as HTMLInputElement).value.trim();
     const idadeAgressor = (document.getElementById('idade') as HTMLInputElement).value.trim();
@@ -70,7 +131,6 @@ pxmBtn.addEventListener('click', async (event) => {
     const quantosComAgressor = temFilhosComAgressor ? parseInt((document.getElementById('q16-quantos-agressor') as HTMLInputElement).value) : 0;
     const temFilhosDeOutro = (document.getElementById('q16-tem-filhos-sim-outro') as HTMLInputElement).checked;
     const quantosDeOutro = temFilhosDeOutro ? parseInt((document.getElementById('q16-quantos-outro') as HTMLInputElement).value) : 0;
-    const temFilhosNao = (document.getElementById('q16-tem-filhos-nao') as HTMLInputElement).checked;
     const temFilhos = temFilhosComAgressor || temFilhosDeOutro;
     const corRaca = (document.querySelector('input[name="cor"]:checked') as HTMLInputElement)?.value || "";
 
@@ -83,13 +143,228 @@ pxmBtn.addEventListener('click', async (event) => {
             })
             .filter(text => text !== '');
     }
+
+    // Coletar dados das questões condicionais (16.2 a 16.5)
+    const conflitosComAgressor = Array.from(document.querySelectorAll('input[id^="q16-3-conflito-"]:checked'))
+        .filter(input => (input as HTMLInputElement).id !== 'q16-3-conflito-nao')
+        .map(input => {
+            const label = (input as HTMLInputElement).labels?.[0];
+            return label?.textContent?.trim() || '';
+        })
+        .filter(text => text !== '');
+
+    // Coletar dados questão 18 
+    const temDeficienciaOuDoenca = (document.querySelector('input[name="q18-deficiencia"]:checked') as HTMLInputElement)?.value === 'Sim';
+    const qualDeficiencia = temDeficienciaOuDoenca ? (document.getElementById('q18-qual-deficiencia') as HTMLInputElement)?.value || "" : "";
+
+    // Coletar dados questões 20, 21, 22
+    const moraEmAreaRiscoRadio = (document.querySelector('input[name="q20-local-risco"]:checked') as HTMLInputElement)?.value === 'Sim';
+    const dependenteFinanceiroAgressorRadio = (document.querySelector('input[name="q21-dependente-financeira"]:checked') as HTMLInputElement)?.value === 'Sim';
+    const aceitaAbrigamentoTemporarioRadio = (document.querySelector('input[name="q22-abrigamento"]:checked') as HTMLInputElement)?.value === 'Sim';
     
 
-    if (!nomeAgressor || !vinculo || !dataFato || !isRadioChecked('q04-estupro') || !isRadioChecked('q06-bo-medida') || 
-        !isRadioChecked('q07-frequencia-aumento') || !isRadioChecked('q10-descumpriu-medida') || !isRadioChecked('q11-tentativa-suicidio') || 
-        !isRadioChecked('q12-desempregado-dificuldades') || !isRadioChecked('q13-acesso-armas') || !isRadioChecked('q15-separacao')) {
-        alert("Por favor, preencha todos os campos obrigatórios (marcados com *).");
-        return; 
+    // Validações individuais com mensagens específicas
+    if (!nomeAgressor || !nomeAgressor.trim()) {
+        mostrarErro('O nome do agressor é obrigatório');
+        return;
+    }
+
+    if (!idadeAgressor || !idadeAgressor.trim()) {
+        mostrarErro('A idade do agressor é obrigatória');
+        return;
+    }
+
+    if (!vinculo || !vinculo.trim()) {
+        mostrarErro('O vínculo com a assistida é obrigatório');
+        return;
+    }
+
+    if (!dataFato || !dataFato.trim()) {
+        mostrarErro('A data da ocorrência é obrigatória');
+        return;
+    }
+
+    if(ameacas.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre ameaças');
+        return;
+    }
+
+    if(agressoesGraves.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre agressões graves');
+        return;
+    }
+
+    if (outrasAgressoes.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre outras agressões');
+        return;
+    }
+
+    if (!isRadioChecked('q04-estupro')) {
+        mostrarErro('Por favor, responda sobre abuso sexual');
+        return;
+    }
+
+    if (comportamentos.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre comportamentos');
+        return;
+    }
+
+    if (boMedida === undefined) {
+        mostrarErro('Por favor, responda sobre ocorrência policial/medida protetiva');
+        return;
+    }
+
+    if (frequenciaAumento === undefined) {
+        mostrarErro('Por favor, responda sobre aumento de frequência das agressões');
+        return;
+    }
+
+    if (usoAbusivo.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre uso abusivo de drogas/álcool');
+        return;
+    }
+
+    if (doencaMental === undefined) {
+        mostrarErro('Por favor, responda sobre doença mental diagnosticada');
+        return;
+    }
+
+    if (descumpriuMedida === undefined) {
+        mostrarErro('Por favor, responda sobre cumprimento de medida protetiva');
+        return;
+    }
+
+    if (!isRadioChecked('q06-bo-medida')) {
+        mostrarErro('Por favor, responda sobre ocorrência policial/medida protetiva');
+        return;
+    }
+
+    if (!isRadioChecked('q07-frequencia-aumento')) {
+        mostrarErro('Por favor, responda sobre aumento de frequência das agressões');
+        return;
+    }
+
+    if (!isRadioChecked('q10-descumpriu-medida')) {
+        mostrarErro('Por favor, responda sobre cumprimento de medida protetiva');
+        return;
+    }
+
+    if (!isRadioChecked('q11-tentativa-suicidio')) {
+        mostrarErro('Por favor, responda sobre tentativa de suicídio');
+        return;
+    }
+
+    if (!isRadioChecked('q12-desempregado-dificuldades')) {
+        mostrarErro('Por favor, responda sobre desemprego/dificuldades');
+        return;
+    }
+
+    if (!isRadioChecked('q13-acesso-armas')) {
+        mostrarErro('Por favor, responda sobre acesso a armas de fogo');
+        return;
+    }
+
+    if (ameacouAgrediuOutros.length === 0) {
+        mostrarErro('Por favor, selecione ao menos uma opção sobre ameaças/agressões a outros');
+        return;
+    }
+
+    if (!isRadioChecked('q15-separacao')) {
+        mostrarErro('Por favor, responda sobre separação recente');
+        return;
+    }
+
+    // Validar questão 16 - Tem filhos?
+    const temFilhosNaoCheckbox = (document.getElementById('q16-tem-filhos-nao') as HTMLInputElement)?.checked;
+    const temAlgumFilho = temFilhosComAgressor || temFilhosDeOutro || temFilhosNaoCheckbox;
+    
+    if (!temAlgumFilho) {
+        mostrarErro('Por favor, responda se tem filhos');
+        return;
+    }
+
+    // Se tem filhos com agressor, validar quantidade e faixa etária
+    if (temFilhosComAgressor) {
+        if (!quantosComAgressor || quantosComAgressor <= 0 || isNaN(quantosComAgressor)) {
+            mostrarErro('Por favor, informe a quantidade de filhos com o agressor');
+            return;
+        }
+    }
+
+    // Se tem filhos de outro relacionamento, validar quantidade
+    if (temFilhosDeOutro) {
+        if (!quantosDeOutro || quantosDeOutro <= 0 || isNaN(quantosDeOutro)) {
+            mostrarErro('Por favor, informe a quantidade de filhos de outro relacionamento');
+            return;
+        }
+    }
+
+    // Se tem algum filho, validar faixa etária
+    if (temFilhos) {
+        if (faixaEtaria.length === 0) {
+            mostrarErro('Por favor, selecione ao menos uma faixa etária dos filhos');
+            return;
+        }
+
+        // Validar questão 16.2 - Deficiência dos filhos
+        if (!isRadioChecked('q16-2-deficiencia')) {
+            mostrarErro('Por favor, responda se algum filho tem deficiência');
+            return;
+        }
+
+        // Validar questão 16.3 - Conflito com agressor
+        if (!isRadioChecked('q16-3-conflito-nao')) {
+            mostrarErro('Por favor, responda sobre conflitos com o agressor relacionado aos filhos');
+            return;
+        }
+
+        // Validar questão 16.4 - Filhos presenciaram violência
+        if (!isRadioChecked('q16-4-presenciaram-violencia')) {
+            mostrarErro('Por favor, responda se filhos presenciaram violência');
+            return;
+        }
+
+        // Validar questão 16.5 - Violência durante gravidez
+        if (!isRadioChecked('q16-5-violencia-gravidez')) {
+            mostrarErro('Por favor, responda sobre violência durante gravidez');
+            return;
+        }
+    }
+
+    // Validar questão 17 - Novo relacionamento
+    if (!isRadioChecked('q17-novo-relacionamento')) {
+        mostrarErro('Por favor, responda sobre novo relacionamento e aumento de agressões');
+        return;
+    }
+
+    // Validar questão 18 - Deficiência própria
+    if (!isRadioChecked('q18-deficiencia')) {
+        mostrarErro('Por favor, responda se tem alguma deficiência ou doença');
+        return;
+    }
+
+    // Validar questão 19 - Cor/raça
+    if (!isRadioChecked('cor')) {
+        mostrarErro('Por favor, selecione sua cor/raça');
+        return;
+    }
+
+    // Validar questão 20 - Mora em área de risco
+    if (!isRadioChecked('q20-local-risco')) {
+        mostrarErro('Por favor, responda se mora em área de risco');
+        return;
+    }
+
+    // Validar questão 21 - Dependente financeira
+    if (!isRadioChecked('q21-dependente-financeira')) {
+        mostrarErro('Por favor, responda se é dependente financeira do agressor');
+        return;
+    }
+
+    // Validar questão 22 - Aceita abrigamento
+    if (!isRadioChecked('q22-abrigamento')) {
+        mostrarErro('Por favor, responda se aceita abrigamento temporário');
+        return;
     }
 
     // Agressor
@@ -117,11 +392,11 @@ pxmBtn.addEventListener('click', async (event) => {
     
 
     const filhosComDeficiencia = false; 
-    const conflitoAgressor = ""; 
-    const filhosPresenciaramViolencia = false;
-    const violenciaDuranteGravidez = false;
-    const novoRelacionamentoAumentouAgressao = false; 
-    const possuiDeficienciaDoenca = "";
+    const conflitoAgressor = conflitosComAgressor.join('; '); 
+    const filhosPresenciaramViolencia = temFilhos ? (document.querySelector('input[name="q16-4-presenciaram-violencia"]:checked') as HTMLInputElement)?.value === 'Sim' : false;
+    const violenciaDuranteGravidez = temFilhos ? (document.querySelector('input[name="q16-5-violencia-gravidez"]:checked') as HTMLInputElement)?.value === 'Sim' : false;
+    const novoRelacionamentoAumentouAgressao = (document.querySelector('input[name="q17-novo-relacionamento"]:checked') as HTMLInputElement)?.value === 'Sim'; 
+    const possuiDeficienciaDoenca = qualDeficiencia;
 
 
     const dadosPasso1Mock = {
@@ -131,14 +406,13 @@ pxmBtn.addEventListener('click', async (event) => {
     };
 
     try {
-        // Recuperar dados da assistida armazenados no localStorage
         const dadosAssistidaJSON = localStorage.getItem('dadosAssistida');
         let assistidaDados: any = null;
 
         if (dadosAssistidaJSON) {
             try {
                 const dadosRaw = JSON.parse(dadosAssistidaJSON);
-                // Mapear os nomes dos campos do formulario para os nomes esperados pelo CasoService
+
                 assistidaDados = {
                     nomeAssistida: dadosRaw.nome || "N/A",
                     idadeAssistida: dadosRaw.idade || 0,
@@ -167,35 +441,31 @@ pxmBtn.addEventListener('click', async (event) => {
         const dadosParaServiceAtualizado = {
             ...assistidaDados,
             
-            // Agressor
             nomeAgressor,
             idadeAgresssor: idadeAgressorNumber,
             vinculoAssistida: vinculo,
-            dataOcorrida: new Date(dataFato), // Convertido para Date
-            
-            // SobreAgressor
+            dataOcorrida: new Date(dataFato), 
+
             usoDrogasAlcool,
-            doencaMental, // STRING (do service)
-            agressorCumpriuMedidaProtetiva, // BOOLEAN
-            agressorTentativaSuicidio, // BOOLEAN
+            doencaMental, 
+            agressorCumpriuMedidaProtetiva,
+            agressorTentativaSuicidio,
             agressorDesempregado: desempregadoDificuldades, // STRING (do service)
-            agressorPossuiArmaFogo: acessoArmas, // STRING (do service)
-            agressorAmeacouAlguem, // STRING
-            
-            // Historico Violencia
-            ameacaFamiliar, // BOOLEAN
-            agressaoFisica, // BOOLEAN
-            outrasFormasViolencia, // STRING
-            abusoSexual, // BOOLEAN
-            comportamentosAgressor, // STRING[]
-            ocorrenciaPolicialMedidaProtetivaAgressor, // BOOLEAN
-            agressoesMaisFrequentesUltimamente, // BOOLEAN
-            
-            // Outras Infor
+            agressorPossuiArmaFogo: acessoArmas,
+            agressorAmeacouAlguem,
+
+            ameacaFamiliar,
+            agressaoFisica,
+            outrasFormasViolencia,
+            abusoSexual,
+            comportamentosAgressor,
+            ocorrenciaPolicialMedidaProtetivaAgressor,
+            agressoesMaisFrequentesUltimamente,
+
             anotacoesLivres: "",
-            moraEmAreaRisco: false,
-            dependenteFinanceiroAgressor: false,
-            aceitaAbrigamentoTemporario: false,
+            moraEmAreaRisco: moraEmAreaRiscoRadio,
+            dependenteFinanceiroAgressor: dependenteFinanceiroAgressorRadio,
+            aceitaAbrigamentoTemporario: aceitaAbrigamentoTemporarioRadio,
             assistidaRespondeuSemAjuda: false,
             assistidaRespondeuComAuxilio: false,
             assistidaSemCondicoes: false,
@@ -203,22 +473,21 @@ pxmBtn.addEventListener('click', async (event) => {
             terceiroComunicante: false,
             tipoViolencia: "",
 
-            // Sobre voce (Bloco III)
-            separacaoRecente, // STRING (do service)
-            temFilhosComAgressor: temFilhosComAgressor, // BOOLEAN
-            qntFilhosComAgressor: qntFilhosComAgressorNumber, // NUMBER
-            temFilhosOutroRelacionamento: temFilhosDeOutro, // BOOLEAN
-            qntFilhosOutroRelacionamento: qntFilhosOutroRelacionamentoNumber, // NUMBER
-            faixaFilhos: faixaEtaria, // STRING[]
-            filhosComDeficiencia, // BOOLEAN (fallback)
-            conflitoAgressor, // STRING (fallback)
-            filhosPresenciaramViolencia, // BOOLEAN (fallback)
-            violenciaDuranteGravidez, // BOOLEAN (fallback)
-            novoRelacionamentoAumentouAgressao, // BOOLEAN (fallback)
-            possuiDeficienciaDoenca, // STRING (fallback)
-            corRaca, // STRING (fallback)
 
-            // Dados do Caso
+            separacaoRecente, 
+            temFilhosComAgressor: temFilhosComAgressor,
+            qntFilhosComAgressor: qntFilhosComAgressorNumber, 
+            temFilhosOutroRelacionamento: temFilhosDeOutro, 
+            qntFilhosOutroRelacionamento: qntFilhosOutroRelacionamentoNumber, 
+            faixaFilhos: faixaEtaria, 
+            filhosComDeficiencia, 
+            conflitoAgressor,
+            filhosPresenciaramViolencia,
+            violenciaDuranteGravidez, 
+            novoRelacionamentoAumentouAgressao, 
+            possuiDeficienciaDoenca,
+            corRaca, 
+
             data: new Date(),
             profissionalResponsavel: "N/A",
             descricao: "",
@@ -234,6 +503,6 @@ pxmBtn.addEventListener('click', async (event) => {
         }
    } catch (error) {
        console.error("Erro ao processar o formulário:", error);
-       alert("Erro ao processar o formulário. Por favor, tente novamente.");
+       mostrarErro(error instanceof Error ? error.message : "Erro ao processar o formulário. Por favor, tente novamente.");
    }
 });
