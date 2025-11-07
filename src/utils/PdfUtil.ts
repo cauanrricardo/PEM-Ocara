@@ -102,7 +102,6 @@ export interface IBlocoIIIData {
     nao: boolean;
   };
   p_conflito_filhos: {
-    sim: boolean;
     guarda: boolean;
     visitas: boolean;
     pensao: boolean;
@@ -595,7 +594,6 @@ export class PdfUtil {
             this.renderPergunta('17 - VOCÊ ESTÁ VIVENDO ALGUM CONFLITO COM O (A) AGRESSOR (A) EM RELAÇÃO A GUARDA DO (S) FILHO (S), VISITAS OU PAGAMENTO DE PENSÃO?'),
             {
               stack: [
-                this.renderCheckbox('SIM', blocoIII.p_conflito_filhos.sim),
                 { text: 'SE SIM, ESPECIFIQUE:', style: 'labelSmall', margin: [10, 0] },
                 this.renderCheckbox('GUARDA DO(S) FILHO (S)', blocoIII.p_conflito_filhos.guarda),
                 this.renderCheckbox('VISITAS', blocoIII.p_conflito_filhos.visitas),
