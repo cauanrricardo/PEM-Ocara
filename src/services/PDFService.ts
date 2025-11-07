@@ -207,15 +207,15 @@ export class PdfService {
       nao: possui_deficiencia.includes('NAO'),
     },
 
-    p_cor_raca: cor?.includes('BRANCA')
-      ? 'BRANCA'
+    p_cor_raca: cor?.includes('INDIGENA')
+      ? 'INDIGENA'
       : cor?.includes('PRETA')
       ? 'PRETA'
       : cor?.includes('PARDA')
       ? 'PARDA'
       : cor?.includes('AMARELA/ORIENTAL')
       ? 'AMARELA/ORIENTAL'
-      : 'INDIGENA'
+      : 'BRANCA'
   };
 
   const mora_risco = outrasInformacoes?.getMoraEmAreaRisco() || 'NAO';
