@@ -406,7 +406,7 @@ pxmBtn.addEventListener('click', async (event) => {
     };
 
     try {
-        const dadosAssistidaJSON = localStorage.getItem('dadosAssistida');
+        const dadosAssistidaJSON = sessionStorage.getItem('dadosAssistida');
         let assistidaDados: any = null;
 
         if (dadosAssistidaJSON) {

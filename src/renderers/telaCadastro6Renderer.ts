@@ -25,6 +25,7 @@ pxmBtn.addEventListener('click', async (event) => {
             throw new Error('Erro ao criar caso: ' + result.error);
         }
 
+        sessionStorage.removeItem('dadosCaso');
         window.api.openWindow("telaListarAssistidas");
     } catch (error) {
         console.error("Erro ao processar tela 6:", error);

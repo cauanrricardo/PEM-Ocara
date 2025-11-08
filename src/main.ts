@@ -120,7 +120,7 @@ ipcMain.handle('caso:criar', async(
     temFilhosOutroRelacionamento: boolean,
     qntFilhosOutroRelacionamento: number,
     faixaFilhos: string[],
-    filhosComDeficiencia: boolean,
+    filhosComDeficiencia: number,
     conflitoAgressor: string,
     filhosPresenciaramViolencia: boolean,
     violenciaDuranteGravidez: boolean,
