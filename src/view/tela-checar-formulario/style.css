@@ -2,7 +2,8 @@
 
 /* Estrutura Base da Página */
 body {
-    font-family: sans-serif;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
     background-color: #63468C;
     color: #ffffff;
     display: flex;
@@ -24,6 +25,7 @@ body {
     text-align: center;
     font-size: 32px;
     font-weight: 500;
+    font-family: 'Poppins', sans-serif;
     width: 90%;
     max-width: 1350px;
 }
@@ -62,7 +64,8 @@ body {
 
 .titulo-sessao h4 {
     font-size: 32px;
-    font-weight: 400;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
     color: #63468C;
     margin: 0;
 }
@@ -78,6 +81,7 @@ body {
     color: #838383;
     font-size: 24px;
     font-weight: 500;
+    font-family: 'Poppins', sans-serif;
     min-height: 400px;
 }
 
