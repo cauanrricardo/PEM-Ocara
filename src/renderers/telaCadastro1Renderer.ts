@@ -66,13 +66,41 @@ function mostrarErro(mensagem: string) {
     modal.style.display = 'flex';
 }
 
+window.addEventListener('DOMContentLoaded', () => {
+    const dadosSalvos = sessionStorage.getItem('dadosAssistida');
+    if (!dadosSalvos) return;
+
+    const dados = JSON.parse(dadosSalvos);
+
+    (document.getElementById('nome-completo') as HTMLInputElement).value = dados.nome || '';
+    (document.getElementById('idade') as HTMLInputElement).value = dados.idade?.toString() || '';
+    (document.getElementById('endereco') as HTMLInputElement).value = dados.endereco || '';
+    (document.getElementById('identidade-genero') as HTMLInputElement).value = dados.identidadeGenero || '';
+    (document.getElementById('nome-social') as HTMLInputElement).value = dados.nomeSocial || '';
+    (document.getElementById('escolaridade') as HTMLInputElement).value = dados.escolaridade || '';
+    (document.getElementById('religiao') as HTMLInputElement).value = dados.religiao || '';
+    (document.getElementById('profissao') as HTMLInputElement).value = dados.profissao || '';
+    (document.getElementById('limitacao') as HTMLInputElement).value = dados.limitacaoFisica || '';
+    (document.getElementById('numero-cadastro') as HTMLInputElement).value = dados.numeroCadastroSocial || '';
+    (document.getElementById('nacionalidade') as HTMLInputElement).value = dados.nacionalidade || '';
+    (document.getElementById('dependentes') as HTMLInputElement).value = dados.quantidadeDependentes?.toString() || '';
+
+    const radios = document.querySelectorAll('input[name="zona_habitacao"]') as NodeListOf<HTMLInputElement>;
+    radios.forEach(r => {
+        if (r.value === dados.zonaHabitacao) {
+            r.checked = true;
+        }
+    });
+});
+
+
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
 
 voltarBtn.addEventListener('click', async (event) => {
+    sessionStorage.removeItem('dadosAssistida');
     const mudarTela = await window.api.openWindow("telaInicial");
 })
-
 
 
 pxmBtn.addEventListener('click', async (event) => {

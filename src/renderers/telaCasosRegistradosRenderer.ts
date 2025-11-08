@@ -5,6 +5,7 @@ export {}
 
 document.addEventListener('DOMContentLoaded', async () => {
     const telaInicialBtn = document.getElementById('telaInicial') as HTMLButtonElement;
+    const sairBtn = document.getElementById('sairBtn') as HTMLDivElement;
     const assistidasBtn = document.getElementById('listarAssistidas') as HTMLLIElement;
 
     if (assistidasBtn) {
@@ -19,15 +20,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    if (sairBtn) {
+        sairBtn.addEventListener('click', async (event) => {
+            const mudarTela = await window.api.openWindow("telaListarAssistidas");
+        });
+    }
+
     const protocoloAssistida = sessionStorage.getItem('protocoloAssistidaSelecionada');
     if (protocoloAssistida) {
         const titulo = document.querySelector('h2');
         if (titulo) {
             titulo.textContent = `Casos Registrados a ${protocoloAssistida}`;
-            const closeIcon = document.createElement('span');
-            closeIcon.className = 'material-symbols-outlined icone-titulo-close';
-            closeIcon.textContent = 'close';
-            titulo.appendChild(closeIcon);
         }
     }
 

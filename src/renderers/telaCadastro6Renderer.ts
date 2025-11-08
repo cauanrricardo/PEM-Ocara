@@ -1,5 +1,7 @@
 /// <reference path="../types/windown.d.ts" />
 
+import { session } from "electron";
+
 export {}
 
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
@@ -26,6 +28,7 @@ pxmBtn.addEventListener('click', async (event) => {
         }
 
         sessionStorage.removeItem('dadosCaso');
+        sessionStorage.removeItem('dadosAssistida');
         window.api.openWindow("telaListarAssistidas");
     } catch (error) {
         console.error("Erro ao processar tela 6:", error);
