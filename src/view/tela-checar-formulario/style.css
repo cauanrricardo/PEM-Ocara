@@ -12,9 +12,8 @@ body {
     gap: 10px;
     margin: 0;
     padding: 0;
-    height: 100vh;
+    min-height: 100vh;
     box-sizing: border-box;
-    overflow: hidden;
 }
 
 * {
@@ -27,35 +26,30 @@ body {
     font-weight: 500;
     width: 95%;
     max-width: 1800px;
-    flex-shrink: 0;
 }
 
 .card {
     background-color: #ffffff;
     border-radius: 15px;
     color: #63468C;
-    width: 1350px; 
+    width: 95%;
     max-width: 1800px;
-    margin: 0 auto;
+    margin: 0 auto 25px auto;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    height: calc(100vh - 100px - 97px - 25px);
     overflow: hidden;
-    margin-bottom: 80px;
 } 
-
-form {
-    padding-top: 20px;
-    overflow-y: auto;
-    flex: 1;
-    border-radius: 0 0 25px 0;
-}
 
 .form {
     display: flex;
     flex-direction: column;
     flex: 1;
     overflow-y: auto;
+}
+
+.form::-webkit-scrollbar-track {
+    border-radius: 0 0 25px 0;
 }
 
 /* Estilo do Visualizador de PDF */
@@ -89,10 +83,6 @@ form {
 
 /* Estilo do Rodapé */
 footer {
-    position: fixed;
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
     justify-content: space-between;
     align-items: center;
