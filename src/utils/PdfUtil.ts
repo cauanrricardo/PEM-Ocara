@@ -10,7 +10,7 @@ import { app } from 'electron';
 export interface IAtendimentoData {
   codigo: number;
   data: string;
-  nucleo: 'JURIDICO' | 'PSICOSSOCIAL' | 'NENHUM';
+  nucleo: 'JURIDICO' | 'PSICOSSOCIAL';
   responsavel: string;
 }
 
