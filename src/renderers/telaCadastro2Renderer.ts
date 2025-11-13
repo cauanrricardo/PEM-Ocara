@@ -69,7 +69,146 @@ function mostrarErro(mensagem: string) {
 const pxmBtn = document.getElementById('proximo') as HTMLButtonElement; 
 const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
 
+// Helpers
+function getCheckedValues(selector: string): string[] {
+    return Array.from(document.querySelectorAll(selector)).map(input => (input as HTMLInputElement).value);
+}
+
+function setCheckboxesFromValues(selectorAll: string, values: string[]) {
+    const inputs = document.querySelectorAll<HTMLInputElement>(selectorAll);
+    inputs.forEach(i => {
+        i.checked = false;
+    });
+    inputs.forEach(i => {
+        if (values.includes(i.value)) {
+            i.checked = true;
+        }
+    });
+}
+
+function setRadiosFromValue(name: string, value?: string) {
+    if (!value) return;
+    const radio = document.querySelector<HTMLInputElement>(`input[name="${name}"][value="${CSS.escape(value)}"]`);
+    if (radio) radio.checked = true;
+}
+
+function setInputValue(id: string, value: string | number | undefined) {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    if (!el) return;
+    el.value = value !== undefined && value !== null ? String(value) : '';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    try {
+        const dadosAssistidaJSON = sessionStorage.getItem('dadosAssistida');
+        if (dadosAssistidaJSON) {
+            const dadosAssistida = JSON.parse(dadosAssistidaJSON);
+        }
+
+        const dadosCasoJSON = sessionStorage.getItem('dadosCaso');
+        if (!dadosCasoJSON) return;
+        const dadosCaso = JSON.parse(dadosCasoJSON);
+
+        // Agressor
+        setInputValue('nome-completo-agressor', dadosCaso.nomeAgressor);
+        setInputValue('idade', dadosCaso.idadeAgresssor);
+        setInputValue('vinculo', dadosCaso.vinculoAssistida);
+        if (dadosCaso.dataOcorrida) {
+            try {
+                const d = new Date(dadosCaso.dataOcorrida);
+                setInputValue('data-fato', d.toISOString().slice(0,10));
+            } catch {}
+        }
+
+        // Bloco I - histórico
+        if (Array.isArray(dadosCaso._ameacas) && dadosCaso._ameacas.length) {
+            setCheckboxesFromValues('input[id^="q01-ameaca"]', dadosCaso._ameacas);
+        } else if (Array.isArray(dadosCaso.ameacas) && dadosCaso.ameacas.length) {
+            setCheckboxesFromValues('input[id^="q01-ameaca"]', dadosCaso.ameacas);
+        }
+
+        if (Array.isArray(dadosCaso._agressoesGraves) && dadosCaso._agressoesGraves.length) {
+            setCheckboxesFromValues('input[id^="q02-agressao"]', dadosCaso._agressoesGraves);
+        } else if (Array.isArray(dadosCaso.agressoes) && dadosCaso.agressoes.length) {
+            setCheckboxesFromValues('input[id^="q02-agressao"]', dadosCaso.agressoes);
+        }
+
+        if (Array.isArray(dadosCaso._outrasAgressoes) && dadosCaso._outrasAgressoes.length) {
+            setCheckboxesFromValues('input[id^="q03-agressao"]', dadosCaso._outrasAgressoes);
+        } else if (Array.isArray(dadosCaso.outrasAgressoes) && dadosCaso.outrasAgressoes.length) {
+            setCheckboxesFromValues('input[id^="q03-agressao"]', dadosCaso.outrasAgressoes);
+        }
+
+    const estuproVal = dadosCaso._estupro ?? (dadosCaso.abusoSexual ? 'Sim' : (dadosCaso.abusoSexual === false ? 'Não' : undefined));
+    setRadiosFromValue('q04-estupro', estuproVal);
+
+    if (Array.isArray(dadosCaso._comportamentos)) setCheckboxesFromValues('input[id^="q05-comportamento"]', dadosCaso._comportamentos);
+    else if (Array.isArray(dadosCaso.comportamentosAgressor)) setCheckboxesFromValues('input[id^="q05-comportamento"]', dadosCaso.comportamentosAgressor);
+
+    const boMedidaVal = dadosCaso._boMedida ?? (dadosCaso.ocorrenciaPolicialMedidaProtetivaAgressor ? 'Sim' : (dadosCaso.ocorrenciaPolicialMedidaProtetivaAgressor === false ? 'Não' : undefined));
+    setRadiosFromValue('q06-bo-medida', boMedidaVal);
+
+    const freqVal = dadosCaso._frequenciaAumento ?? (dadosCaso.agressoesMaisFrequentesUltimamente ? 'Sim' : (dadosCaso.agressoesMaisFrequentesUltimamente === false ? 'Não' : undefined));
+    setRadiosFromValue('q07-frequencia-aumento', freqVal);
+
+    // Bloco II - agressor
+    if (Array.isArray(dadosCaso._usoAbusivo)) setCheckboxesFromValues('input[id^="q08-uso-abusivo"]', dadosCaso._usoAbusivo);
+    else if (Array.isArray(dadosCaso.usoDrogasAlcool)) setCheckboxesFromValues('input[id^="q08-uso-abusivo"]', dadosCaso.usoDrogasAlcool);
+
+    setRadiosFromValue('q09-doenca-mental', dadosCaso._doencaMental ?? dadosCaso.doencaMental);
+
+    const descumpriuVal = dadosCaso._descumpriuMedida ?? (dadosCaso.agressorCumpriuMedidaProtetiva ? 'Sim' : (dadosCaso.agressorCumpriuMedidaProtetiva === false ? 'Não' : undefined));
+    setRadiosFromValue('q10-descumpriu-medida', descumpriuVal);
+
+    setRadiosFromValue('q11-tentativa-suicidio', dadosCaso._tentativaSuicidio ?? (dadosCaso.agressorTentativaSuicidio ? 'Sim' : (dadosCaso.agressorTentativaSuicidio === false ? 'Não' : undefined)));
+    setRadiosFromValue('q12-desempregado-dificuldades', dadosCaso._desempregadoDificuldades ?? dadosCaso.agressorDesempregado);
+        setRadiosFromValue('q13-acesso-armas', dadosCaso._acessoArmas ?? dadosCaso.agressorPossuiArmaFogo);
+        if (Array.isArray(dadosCaso._ameacouAgrediuOutros) && dadosCaso._ameacouAgrediuOutros.length) {
+            setCheckboxesFromValues('input[id^="q14-ameacou-agrediu"]', dadosCaso._ameacouAgrediuOutros);
+        } else if (Array.isArray(dadosCaso.ameacouAgrediuOutros) && dadosCaso.ameacouAgrediuOutros.length) {
+            setCheckboxesFromValues('input[id^="q14-ameacou-agrediu"]', dadosCaso.ameacouAgrediuOutros);
+        }        // Bloco III - sobre você
+        setRadiosFromValue('q15-separacao', dadosCaso.separacaoRecente);
+  
+        setRadiosFromValue('q17-novo-relacionamento', dadosCaso.novoRelacionamentoAumentouAgressao ? 'Sim' : (dadosCaso.novoRelacionamentoAumentouAgressao === false ? 'Não' : undefined));
+        setRadiosFromValue('q18-deficiencia', dadosCaso.possuiDeficienciaDoenca ? 'Sim' : (dadosCaso.possuiDeficienciaDoenca ? undefined : 'Não'));
+        setInputValue('q18-qual-deficiencia', dadosCaso.possuiDeficienciaDoenca || '');
+        setRadiosFromValue('cor', dadosCaso.corRaca);
+
+        setRadiosFromValue('q20-local-risco', dadosCaso.moraEmAreaRisco ? 'Sim' : (dadosCaso.moraEmAreaRisco === false ? 'Não' : undefined));
+        setRadiosFromValue('q21-dependente-financeira', dadosCaso.dependenteFinanceiroAgressor ? 'Sim' : (dadosCaso.dependenteFinanceiroAgressor === false ? 'Não' : undefined));
+        setRadiosFromValue('q22-abrigamento', dadosCaso.aceitaAbrigamentoTemporario ? 'Sim' : (dadosCaso.aceitaAbrigamentoTemporario === false ? 'Não' : undefined));
+
+    } catch (err) {
+        console.error('Erro ao preencher telaCadastro2 a partir do sessionStorage:', err);
+    }
+});
+
 voltarBtn.addEventListener('click', async (event) => {
+    try {
+        const currentDadosCasoJSON = sessionStorage.getItem('dadosCaso');
+        const currentDados = currentDadosCasoJSON ? JSON.parse(currentDadosCasoJSON) : {};
+
+        currentDados.nomeAgressor = (document.getElementById('nome-completo-agressor') as HTMLInputElement)?.value.trim() || currentDados.nomeAgressor || "";
+        currentDados.idadeAgresssor = parseInt((document.getElementById('idade') as HTMLInputElement)?.value || currentDados.idadeAgresssor || 0);
+        currentDados.vinculoAssistida = (document.getElementById('vinculo') as HTMLInputElement)?.value.trim() || currentDados.vinculoAssistida || "";
+        const dataVal = (document.getElementById('data-fato') as HTMLInputElement)?.value;
+        if (dataVal) currentDados.dataOcorrida = new Date(dataVal).toISOString();
+
+        const ameacas = Array.from(document.querySelectorAll<HTMLInputElement>('input[id^="q01-ameaca"]:checked')).map(i => i.value);
+        if (ameacas.length) currentDados.ameacas = ameacas;
+
+        const agressoes = Array.from(document.querySelectorAll<HTMLInputElement>('input[id^="q02-agressao"]:checked')).map(i => i.value);
+        if (agressoes.length) currentDados.agressoes = agressoes;
+
+        const outrasAgressoes = Array.from(document.querySelectorAll<HTMLInputElement>('input[id^="q03-agressao"]:checked')).map(i => i.value);
+        if (outrasAgressoes.length) currentDados.outrasAgressoes = outrasAgressoes;
+
+        sessionStorage.setItem('dadosCaso', JSON.stringify(currentDados));
+    } catch (err) {
+        console.error('Erro ao salvar dados antes de voltar:', err);
+    }
+
     const mudarTela = await window.api.openWindow("telaCadastroAssistida");
 });
 
@@ -89,43 +228,22 @@ pxmBtn.addEventListener('click', async (event) => {
     const dataFato = (document.getElementById('data-fato') as HTMLInputElement).value.trim();
 
     // Bloco I - Sobre o Histórico de Violência
-    const ameacas: string[] = Array.from(document.querySelectorAll('input[name^="ameaca-"]:checked')).map(input => (input as HTMLInputElement).value);
-    const agressoesGraves: string[] = Array.from(document.querySelectorAll('input[name^="agressões-"][name$="queimadura"], input[name^="agressões-"][name$="enforcamento"], input[name^="agressões-"][name$="sufocamento"], input[name^="agressões-"][name$="tiro"], input[name^="agressões-"][name$="afogamento"], input[name^="agressões-"][name$="facada"], input[name^="agressões-"][name$="paulada"], input[id="q02-agressao-nenhuma"]'))
-        .map(input => (input as HTMLInputElement).value);
-    const outrasAgressoes: string[] = Array.from(document.querySelectorAll('input[id^="q03-agressao-"]:checked'))
-        .filter(input => (input as HTMLInputElement).id !== 'q03-agressao-nenhuma')
-        .map(input => (input as HTMLInputElement).value);
+    const ameacas: string[] = Array.from(document.querySelectorAll('input[id^="q01-ameaca"]:checked')).map(input => (input as HTMLInputElement).value);
+    const agressoesGraves: string[] = Array.from(document.querySelectorAll('input[id^="q02-agressao"]:checked')).map(input => (input as HTMLInputElement).value);
+    const outrasAgressoes: string[] = Array.from(document.querySelectorAll('input[id^="q03-agressao"]:checked')).map(input => (input as HTMLInputElement).value);
     const estupro = (document.querySelector('input[name="q04-estupro"]:checked') as HTMLInputElement)?.value;
-    const comportamentos: string[] = Array.from(document.querySelectorAll('input[id^="q05-comportamento-"]:checked'))
-        .filter(input => (input as HTMLInputElement).id !== 'q05-comportamento-nenhum')
-        .map(input => {
-            const label = (input as HTMLInputElement).labels?.[0];
-            return label?.textContent?.trim() || '';
-        })
-        .filter(text => text !== '');
+    const comportamentos: string[] = Array.from(document.querySelectorAll('input[id^="q05-comportamento"]:checked')).map(input => (input as HTMLInputElement).value);
     const boMedida = (document.querySelector('input[name="q06-bo-medida"]:checked') as HTMLInputElement)?.value;
     const frequenciaAumento = (document.querySelector('input[name="q07-frequencia-aumento"]:checked') as HTMLInputElement)?.value;
 
     // Bloco II - Sobre o (a) Agressor(a)
-    const usoAbusivo: string[] = Array.from(document.querySelectorAll('input[id^="q08-uso-abusivo-"]:checked'))
-        .filter(input => (input as HTMLInputElement).id !== 'q08-uso-abusivo-nao' && (input as HTMLInputElement).id !== 'q08-uso-abusivo-nao-sei')
-        .map(input => {
-            const label = (input as HTMLInputElement).labels?.[0];
-            return label?.textContent?.trim() || '';
-        })
-        .filter(text => text !== '');
+    const usoAbusivo: string[] = Array.from(document.querySelectorAll('input[id^="q08-uso-abusivo"]:checked')).map(input => (input as HTMLInputElement).value);
     const doencaMental = (document.querySelector('input[name="q09-doenca-mental"]:checked') as HTMLInputElement)?.value;
     const descumpriuMedida = (document.querySelector('input[name="q10-descumpriu-medida"]:checked') as HTMLInputElement)?.value;
     const tentativaSuicidio = (document.querySelector('input[name="q11-tentativa-suicidio"]:checked') as HTMLInputElement)?.value;
     const desempregadoDificuldades = (document.querySelector('input[name="q12-desempregado-dificuldades"]:checked') as HTMLInputElement)?.value;
     const acessoArmas = (document.querySelector('input[name="q13-acesso-armas"]:checked') as HTMLInputElement)?.value;
-    const ameacouAgrediuOutros: string[] = Array.from(document.querySelectorAll('input[id^="q14-ameacou-agrediu-"]:checked'))
-        .filter(input => (input as HTMLInputElement).id !== 'q14-ameacou-agrediu-nao' && (input as HTMLInputElement).id !== 'q14-ameacou-agrediu-nao-sei')
-        .map(input => {
-            const label = (input as HTMLInputElement).labels?.[0];
-            return label?.textContent?.trim() || '';
-        })
-        .filter(text => text !== '');    // Bloco III - Sobre Você
+    const ameacouAgrediuOutros: string[] = Array.from(document.querySelectorAll('input[id^="q14-ameacou-agrediu"]:checked')).map(input => (input as HTMLInputElement).value);    // Bloco III - Sobre Você
     const separacao = (document.querySelector('input[name="q15-separacao"]:checked') as HTMLInputElement)?.value;
     const temFilhosComAgressor = (document.getElementById('q16-tem-filhos-sim-agressor') as HTMLInputElement).checked;
     const quantosComAgressor = temFilhosComAgressor ? parseInt((document.getElementById('q16-quantos-agressor') as HTMLInputElement).value) : 0;
@@ -136,22 +254,11 @@ pxmBtn.addEventListener('click', async (event) => {
 
     let faixaEtaria: string[] = [];
     if (temFilhos) {
-        faixaEtaria = Array.from(document.querySelectorAll('input[id^="q16-1-faixa-etaria-"]:checked'))
-            .map(input => {
-                const label = (input as HTMLInputElement).labels?.[0];
-                return label?.textContent?.trim() || '';
-            })
-            .filter(text => text !== '');
+        faixaEtaria = Array.from(document.querySelectorAll('input[id^="q16-1-faixa-etaria"]:checked')).map(input => (input as HTMLInputElement).value);
     }
 
     // Coletar dados das questões condicionais (16.2 a 16.5)
-    const conflitosComAgressor = Array.from(document.querySelectorAll('input[id^="q16-3-conflito-"]:checked'))
-        .filter(input => (input as HTMLInputElement).id !== 'q16-3-conflito-nao')
-        .map(input => {
-            const label = (input as HTMLInputElement).labels?.[0];
-            return label?.textContent?.trim() || '';
-        })
-        .filter(text => text !== '');
+    const conflitosComAgressor = Array.from(document.querySelectorAll('input[id^="q16-3-conflito"]:checked')).map(input => (input as HTMLInputElement).value);
 
     // Coletar dados questão 18 
     const temDeficienciaOuDoenca = (document.querySelector('input[name="q18-deficiencia"]:checked') as HTMLInputElement)?.value === 'Sim';
@@ -391,8 +498,9 @@ pxmBtn.addEventListener('click', async (event) => {
     const qntFilhosOutroRelacionamentoNumber = quantosDeOutro;
     
 
-    const filhosComDeficiencia = false; 
-    const conflitoAgressor = conflitosComAgressor.join('; '); 
+    // número de filhos com deficiência (se aplicável)
+    const filhosComDeficiencia = (document.querySelector('input[name="q16-2-deficiencia"]:checked') as HTMLInputElement)?.value === 'Sim' ? parseInt((document.getElementById('q16-2-quantos-deficiencia') as HTMLInputElement)?.value || '0') : 0;
+    const conflitoAgressor = conflitosComAgressor.join('; ');
     const filhosPresenciaramViolencia = temFilhos ? (document.querySelector('input[name="q16-4-presenciaram-violencia"]:checked') as HTMLInputElement)?.value === 'Sim' : false;
     const violenciaDuranteGravidez = temFilhos ? (document.querySelector('input[name="q16-5-violencia-gravidez"]:checked') as HTMLInputElement)?.value === 'Sim' : false;
     const novoRelacionamentoAumentouAgressao = (document.querySelector('input[name="q17-novo-relacionamento"]:checked') as HTMLInputElement)?.value === 'Sim'; 
@@ -473,6 +581,21 @@ pxmBtn.addEventListener('click', async (event) => {
             assistidaRecusou: false,
             terceiroComunicante: false,
             tipoViolencia: "",
+
+            _ameacas: ameacas,
+            _agressoesGraves: agressoesGraves,
+            _outrasAgressoes: outrasAgressoes,
+            _estupro: estupro,
+            _comportamentos: comportamentos,
+            _boMedida: boMedida,
+            _frequenciaAumento: frequenciaAumento,
+            _usoAbusivo: usoAbusivo,
+            _doencaMental: doencaMental,
+            _descumpriuMedida: descumpriuMedida,
+            _tentativaSuicidio: tentativaSuicidio,
+            _desempregadoDificuldades: desempregadoDificuldades,
+            _acessoArmas: acessoArmas,
+            _ameacouAgrediuOutros: ameacouAgrediuOutros,
 
             separacaoRecente, 
             temFilhosComAgressor: temFilhosComAgressor,

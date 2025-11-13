@@ -179,7 +179,7 @@ pxmBtn.addEventListener('click', async (event) => {
 
         sessionStorage.setItem('dadosAssistida', JSON.stringify(dadosAssistida));
 
-        const mudarTela = await window.api.openWindow("telaCadastroCaso");
+        const mudarTela = await window.api.openWindow("telaCadastro2");
 
     } catch (error) {
         mostrarErro(error instanceof Error ? error.message : 'Erro desconhecido');
