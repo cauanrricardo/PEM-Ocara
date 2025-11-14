@@ -99,6 +99,7 @@ const voltarBtn = document.getElementById('voltar') as HTMLButtonElement;
 
 voltarBtn.addEventListener('click', async (event) => {
     sessionStorage.removeItem('dadosAssistida');
+    sessionStorage.removeItem('dadosCaso');
     const mudarTela = await window.api.openWindow("telaInicial");
 })
 
@@ -185,4 +186,41 @@ pxmBtn.addEventListener('click', async (event) => {
         mostrarErro(error instanceof Error ? error.message : 'Erro desconhecido');
         console.error("Erro de validação:", error);
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('input[type="text"], input[type="number"], input[type="radio"]');
+    const btnProximo = document.getElementById('proximo') as HTMLButtonElement | null;
+
+    inputs.forEach((input, index) => {
+        input.addEventListener('keypress', function(event) {
+            const keyEvent = event as KeyboardEvent;
+            if (keyEvent.key === 'Enter') {
+                event.preventDefault();
+                
+                const inputElement = input as HTMLInputElement;
+                if (inputElement.type === 'radio') {
+                    let nextIndex = index + 1;
+                    while (nextIndex < inputs.length && (inputs[nextIndex] as HTMLInputElement).type === 'radio' && 
+                        (inputs[nextIndex] as HTMLInputElement).name === inputElement.name) {
+                        nextIndex++;
+                    }
+                    
+                    if (nextIndex < inputs.length) {
+                        (inputs[nextIndex] as HTMLInputElement).focus();
+                    } else if (btnProximo) {
+                        btnProximo.click();
+                    }
+                } else {
+                    if (index < inputs.length - 1) {
+                        (inputs[index + 1] as HTMLInputElement).focus();
+                    } else if (btnProximo) {
+                        btnProximo.click();
+                    }
+                }
+            }
+        });
+    });
+
 });

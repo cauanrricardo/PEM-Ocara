@@ -5,11 +5,50 @@ import { Logger } from './utils/Logger';
 import { UserController } from './controllers/UserController';
 import { AssistidaController } from './controllers/AssistidaController';
 import { CasoController } from './controllers/CasoController';
+import { PostgresInitializer } from './db/PostgresInitializer';
+import { IDataBase } from './db/IDataBase';
 
 const windowManager = new WindowManager();
 const userController = new UserController();
 const assistidaController = new AssistidaController();
 const casoController = new CasoController(assistidaController.getAssistidaService());
+
+// ==========================================
+// INITIALIZATION & BOOTSTRAP
+// ==========================================
+
+function createMainWindow(): void {
+  Logger.info('Criando janela principal...');
+  
+  windowManager.createWindow('main', {
+    width: 900,
+    height: 700,
+    htmlFile: 'tela-login/index.html',
+    preloadFile: 'preload.js'
+  });
+}
+
+async function bootstrap(): Promise<void> {
+  Logger.info('Iniciando aplicação...');
+  
+  // Inicializar banco de dados
+  const dbInitializer: IDataBase = new PostgresInitializer();
+  await dbInitializer.initialize();
+  
+  createMainWindow();
+  Logger.info('Aplicação iniciada com sucesso!');
+}
+
+app.whenReady().then(() => {
+  Logger.info('App pronto!');
+  bootstrap();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createMainWindow();
+    }
+  });
+});
 
 // ==========================================
 // IPC HANDLERS - Backend Logic
@@ -344,28 +383,6 @@ ipcMain.on('window:close', (event) => {
 // ==========================================
 // APP LIFECYCLE
 // ==========================================
-
-function createMainWindow() {
-  Logger.info('Criando janela principal...');
-  
-  windowManager.createWindow('main', {
-    width: 900,
-    height: 700,
-    htmlFile: 'tela-login/index.html',
-    preloadFile: 'preload.js'
-  });
-}
-
-app.whenReady().then(() => {
-  Logger.info('App inicializado!');
-  createMainWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createMainWindow();
-    }
-  });
-});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
