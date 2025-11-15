@@ -127,3 +127,17 @@ body {
     transform: scale(1.4);
 }
 
+
+/* === TELA DE CONFIGURAÇÕES === */
+.page-header {
+    width: 100%;
+    margin-bottom: 40px;
+}
+
+.page-header h1 {
+    font-weight: 600;
+    font-size: 36px;
+    color: #63468C;
+    margin: 0;
+    letter-spacing: 0.05em;
+}
