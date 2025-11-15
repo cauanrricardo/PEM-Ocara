@@ -127,8 +127,15 @@ body {
 
 .page-header h1 {
     font-weight: 800;
-    font-size: 36px;
+    font-size: 48px;
     color: #63468C;
     margin: 0;
     letter-spacing: 0.05em;
+}
+
+.title-divider {
+    border: none;
+    border-top: 5px solid #63468C;
+    width: 920px;
+    margin: 30px 0 20px 0;
 }
