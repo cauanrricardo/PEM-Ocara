@@ -134,3 +134,92 @@ footer {
 #voltar:hover {
     text-decoration: underline;
 }
+
+/* Estilos Responsivos */
+@media (max-width: 1024px) {
+    .titulo {
+        font-size: 28px;
+    }
+
+    .pdf-viewer-container {
+        padding: 20px;
+    }
+
+    .pdf-placeholder {
+        font-size: 20px;
+        min-height: 300px;
+    }
+
+    .imprimirPDF, #voltar {
+        font-size: 20px;
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .titulo {
+        font-size: 24px;
+    }
+
+    .card {
+        height: auto;
+        min-height: 70vh;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 10px;
+        position: static;
+        transform: none;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .imprimirPDF {
+        width: 100%;
+        height: 55px;
+    }
+
+    #voltar {
+        font-size: 20px;
+    }
+
+    .pdf-viewer-container {
+        padding: 15px;
+    }
+
+    .pdf-placeholder {
+        font-size: 18px;
+        min-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        gap: 5px;
+    }
+
+    .titulo {
+        font-size: 20px;
+    }
+
+    .titulo-sessao h4 {
+        font-size: 22px;
+    }
+
+    .pdf-placeholder {
+        font-size: 16px;
+        min-height: 200px;
+    }
+
+    .imprimirPDF,
+    #voltar {
+        font-size: 18px;
+        padding: 0 15px;
+        height: 50px;
+    }
+
+    footer {
+        padding: 5px;
+    }
+}
