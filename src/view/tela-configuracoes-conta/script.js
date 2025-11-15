@@ -1,17 +1,17 @@
 const modalNome = document.getElementById('modalNome');
-const botaoNome = document.querySelector('.info-section:first-of-type .info-item:first-child');
-const botaoFechar = document.querySelector('.close-button');
+const botaoNome = document.getElementById('itemNome');
+const botaoFechar = document.querySelector('.modal-close');
 
 botaoNome.addEventListener('click', () => {
-    modalNome.style.display = 'flex';
+    modalNome.classList.add('visible');
 });
 
 botaoFechar.addEventListener('click', () => {
-    modalNome.style.display = 'none';
+    modalNome.classList.remove('visible');
 });
 
 window.addEventListener('click', (evento) => {
     if (evento.target === modalNome) {
-        modalNome.style.display = 'none';
+        modalNome.classList.remove('visible');
     }
 });
