@@ -2,13 +2,11 @@
 
 /* Estrutura Base da Página */
 body {
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
+    font-family: sans-serif;
     background-color: #63468C;
     color: #ffffff;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     flex-direction: column;
     gap: 10px;
     margin: 0;
@@ -25,36 +23,34 @@ body {
     text-align: center;
     font-size: 32px;
     font-weight: 500;
-    font-family: 'Poppins', sans-serif;
-    width: 90%;
-    max-width: 1350px;
+    width: 95%;
+    max-width: 1800px;
 }
 
 .card {
     background-color: #ffffff;
     border-radius: 15px;
     color: #63468C;
-    width: 90%;
-    max-width: 1350px;
+    width: 95%;
+    max-width: 1800px;
     margin: 0 auto 25px auto;
     display: flex;
     flex-direction: column;
     height: calc(100vh - 100px - 97px - 25px);
     overflow: hidden;
-} 
+}
 
 .form {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
+    padding-top: 20px;
     overflow-y: auto;
+    flex: 1;
+    border-radius: 0 0 25px 0;
 }
 
 .form::-webkit-scrollbar-track {
     border-radius: 0 0 25px 0;
 }
 
-/* Estilo do Visualizador de PDF */
 .pdf-viewer-container {
     padding: 20px 40px 40px 40px;
     flex: 1;
@@ -64,8 +60,7 @@ body {
 
 .titulo-sessao h4 {
     font-size: 32px;
-    font-weight: 500;
-    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
     color: #63468C;
     margin: 0;
 }
@@ -85,7 +80,6 @@ body {
     min-height: 400px;
 }
 
-/* Estilo do Rodapé */
 footer {
     position: fixed;
     bottom: 10px;
@@ -95,10 +89,10 @@ footer {
     justify-content: space-between;
     align-items: center;
     padding: 10px;
-    width: 90%;
-    max-width: 1350px;
+    width: 95%;
+    max-width: 1800px;
     margin: 0 auto;
-} 
+}
 
 .imprimirPDF {
     background-color: #B291DE;
@@ -139,357 +133,4 @@ footer {
 
 #voltar:hover {
     text-decoration: underline;
-}
-
-/* Responsividade */
-@media (min-width: 2560px) {
-    .titulo {
-        font-size: 40px;
-        max-width: 1800px;
-    }
-
-    .card {
-        max-width: 1800px;
-        height: calc(100vh - 120px - 100px - 30px);
-    }
-
-    .pdf-viewer-container {
-        padding: 30px 60px 60px 60px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 40px;
-    }
-
-    .pdf-placeholder {
-        font-size: 32px;
-        min-height: 500px;
-    }
-
-    footer {
-        max-width: 1800px;
-    }
-
-    .imprimirPDF {
-        height: 65px;
-        padding: 0 40px;
-        font-size: 28px;
-    }
-
-    #voltar {
-        font-size: 28px;
-    }
-}
-
-@media (min-width: 1920px) and (max-width: 2559px) {
-    .titulo {
-        font-size: 36px;
-        max-width: 1600px;
-    }
-
-    .card {
-        max-width: 1600px;
-    }
-
-    .pdf-viewer-container {
-        padding: 25px 50px 50px 50px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 36px;
-    }
-
-    .pdf-placeholder {
-        font-size: 26px;
-        min-height: 450px;
-    }
-
-    footer {
-        max-width: 1600px;
-    }
-
-    .imprimirPDF {
-        height: 60px;
-        padding: 0 35px;
-        font-size: 26px;
-    }
-
-    #voltar {
-        font-size: 26px;
-    }
-}
-
-@media (min-width: 1600px) and (max-width: 1919px) {
-    .titulo {
-        font-size: 30px;
-        max-width: 1400px;
-    }
-
-    .card {
-        max-width: 1400px;
-        height: calc(100vh - 90px - 87px - 20px);
-    }
-
-    .pdf-viewer-container {
-        padding: 20px 40px 40px 40px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 30px;
-    }
-
-    .pdf-placeholder {
-        font-size: 22px;
-        min-height: 400px;
-    }
-
-    footer {
-        max-width: 1400px;
-    }
-
-    .imprimirPDF {
-        height: 55px;
-        padding: 0 28px;
-        font-size: 22px;
-    }
-
-    #voltar {
-        font-size: 22px;
-    }
-}
-
-@media (min-width: 1366px) and (max-width: 1599px) {
-    .titulo {
-        font-size: 28px;
-        max-width: 1350px;
-    }
-
-    .card {
-        max-width: 1350px;
-        height: calc(100vh - 85px - 82px - 20px);
-    }
-
-    .pdf-viewer-container {
-        padding: 18px 35px 35px 35px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 28px;
-    }
-
-    .pdf-placeholder {
-        font-size: 20px;
-        min-height: 350px;
-    }
-
-    footer {
-        max-width: 1350px;
-    }
-
-    .imprimirPDF {
-        height: 52px;
-        padding: 0 25px;
-        font-size: 20px;
-    }
-
-    #voltar {
-        font-size: 20px;
-    }
-}
-
-@media (min-width: 1024px) and (max-width: 1365px) {
-    .titulo {
-        font-size: 24px;
-        max-width: 1000px;
-        width: 92%;
-    }
-
-    .card {
-        max-width: 1000px;
-        width: 92%;
-        height: calc(100vh - 75px - 72px - 15px);
-    }
-
-    .pdf-viewer-container {
-        padding: 15px 25px 25px 25px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 24px;
-    }
-
-    .pdf-placeholder {
-        font-size: 18px;
-        min-height: 300px;
-    }
-
-    footer {
-        max-width: 1000px;
-        width: 92%;
-        bottom: 8px;
-    }
-
-    .imprimirPDF {
-        height: 48px;
-        padding: 0 20px;
-        font-size: 18px;
-    }
-
-    #voltar {
-        font-size: 18px;
-    }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-    body {
-        gap: 8px;
-    }
-
-    .titulo {
-        font-size: 22px;
-        width: 96%;
-    }
-
-    .card {
-        width: 96%;
-        height: calc(100vh - 65px - 65px - 15px);
-    }
-
-    .pdf-viewer-container {
-        padding: 12px 20px 20px 20px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 22px;
-    }
-
-    .pdf-placeholder {
-        font-size: 16px;
-        min-height: 250px;
-    }
-
-    footer {
-        width: 96%;
-        bottom: 8px;
-        padding: 8px;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .imprimirPDF {
-        height: 45px;
-        padding: 0 18px;
-        font-size: 16px;
-        width: 100%;
-    }
-
-    #voltar {
-        font-size: 16px;
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (min-width: 480px) and (max-width: 767px) {
-    body {
-        gap: 5px;
-    }
-
-    .titulo {
-        font-size: 18px;
-        width: 97%;
-    }
-
-    .card {
-        width: 97%;
-        height: calc(100vh - 55px - 110px - 10px);
-        border-radius: 12px;
-    }
-
-    .pdf-viewer-container {
-        padding: 10px 15px 15px 15px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 18px;
-    }
-
-    .pdf-placeholder {
-        font-size: 14px;
-        min-height: 200px;
-    }
-
-    footer {
-        width: 97%;
-        bottom: 5px;
-        padding: 6px;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .imprimirPDF {
-        height: 42px;
-        padding: 0 15px;
-        font-size: 14px;
-        width: 100%;
-        border-radius: 8px;
-    }
-
-    #voltar {
-        font-size: 14px;
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-@media (max-width: 479px) {
-    body {
-        gap: 5px;
-    }
-
-    .titulo {
-        font-size: 16px;
-        width: 98%;
-    }
-
-    .card {
-        width: 98%;
-        height: calc(100vh - 50px - 115px - 10px);
-        border-radius: 10px;
-    }
-
-    .pdf-viewer-container {
-        padding: 8px 12px 12px 12px;
-    }
-
-    .titulo-sessao h4 {
-        font-size: 16px;
-    }
-
-    .pdf-placeholder {
-        font-size: 12px;
-        min-height: 180px;
-    }
-
-    footer {
-        width: 98%;
-        bottom: 5px;
-        padding: 5px;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .imprimirPDF {
-        height: 40px;
-        padding: 0 12px;
-        font-size: 13px;
-        width: 100%;
-        border-radius: 8px;
-    }
-
-    #voltar {
-        font-size: 13px;
-        width: 100%;
-        justify-content: center;
-    }
 }
