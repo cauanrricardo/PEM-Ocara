@@ -161,6 +161,7 @@ body {
     color: #FFFFFF;
     font-size: 40px;
     font-weight: 700;
+    letter-spacing: 0.15em;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,16 +181,24 @@ body {
 .infos {
     color: #63468C;
     font-size: 24px;
-    font-weight: 600;
+    font-weight: 500;
     gap: 20px;
     text-decoration: underline;
+}
+
+.infos span {
+    font-weight: 700;
+}
+
+#assistida-bold {
+    font-weight: 600;
 }
 
 .provas h1 {
     font-size: 32px;
     font-weight: 700;
     color: #63468C;
-    letter-spacing: 2px;
+    letter-spacing: 0.15em;
     text-decoration: underline;
     margin-bottom: 20px;
 }
@@ -334,7 +343,7 @@ body {
     color: #FFFFFF;
     font-size: 32px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 0.15em;
     border-radius: 25px;
     align-items: center;
     width: 100%;
@@ -355,7 +364,7 @@ body {
     font-size: 32px;
     font-weight: 700;
     color: #63468C;
-    letter-spacing: 2px;
+    letter-spacing: 0.15em;
     text-decoration: underline;
 }
 
@@ -371,7 +380,7 @@ body {
     color: #FFFFFF;
     font-size: 24px;
     font-weight: 700;
-    letter-spacing: 2px;
+    letter-spacing: 0.15em;
     border-radius: 15px;
     align-items: center;
     height: 73px;

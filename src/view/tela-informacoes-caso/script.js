@@ -363,14 +363,13 @@ document.addEventListener('DOMContentLoaded', function() {
       const itemDiv = document.createElement('div');
       itemDiv.className = 'anexo-item-modal';
       
-      // Adiciona ícone - attach_file para formulário, ícone do arquivo para outros
+      // Adiciona ícone - attach_file para formulário, description para outros
       const iconeDiv = document.createElement('div');
       iconeDiv.className = 'anexo-icone-modal';
       if (anexo.id === 'formulario') {
         iconeDiv.innerHTML = '<span class="material-symbols-outlined">attach_file</span>';
       } else {
-        const iconeArquivo = obterIconeArquivo(anexo.nome);
-        iconeDiv.innerHTML = `<img src="${iconeArquivo}" alt="Ícone do arquivo" style="width: 24px; height: 24px;">`;
+        iconeDiv.innerHTML = '<span class="material-symbols-outlined">description</span>';
       }
       
       const infoDiv = document.createElement('div');
