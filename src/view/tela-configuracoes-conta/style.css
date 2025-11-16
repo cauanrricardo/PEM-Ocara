@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700;800&display=swap');
 
 html,
-html,
 body {
     font-family: 'Poppins', sans-serif;
     margin: 0;
@@ -11,13 +10,11 @@ body {
     overflow-x: hidden;
 }
 
-/* --- Layout Principal do App --- */
 .app-container {
     display: flex;
     height: 100vh;
 }
 
-/* --- Barra Lateral / Sidebar ============) --- */
 .sidebar {
     width: clamp(340px, 28vw, 480px);
     background-color: #63468C;
@@ -33,7 +30,8 @@ body {
 
 .sidebar-header {
     text-align: center;
-    width: 400px;
+    width: 90%;
+    max-width: 400px;
     margin: 0 auto;
     flex-shrink: 0;
 }
@@ -101,17 +99,14 @@ body {
 }
 
 .main-content {
-    position: relative; /* necessário para fixar o botão dentro dela */
+    position: relative; 
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
-
     display: flex;
     flex-direction: column;
     padding: 50px 80px 0 80px;
     box-sizing: border-box;
-    max-width: 1920px;
-    margin: 0 auto;
 }
 
 .icone-rede-apoio {
@@ -136,14 +131,12 @@ body {
     border: none;
     border-top: 5px solid #63468C;
     width: 100%;
-    max-width: 920px;
     margin: 12px 0 20px 0;
 }
 
 /* Seção de Informações */
 .info-section {
     width: 100%;
-    max-width: 920px;
     margin-top: 20px;
 }
 
@@ -189,6 +182,7 @@ body {
 
 .logout-button {
     width: 363px;
+    max-width: 100%;
     height: 83px;
     margin: 41px auto 31px auto;
     padding: 0;
@@ -243,9 +237,9 @@ body {
 .modal-content {
     background-color: #FFFFFF;
     border-radius: 0;
-    width: 1011px;
+    width: 100%;
+    max-width: 1011px;
     height: 557px;
-    max-width: 90vw;
     max-height: 90vh;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     padding: 0;
@@ -256,9 +250,9 @@ body {
 
 /* Modal: Cargo */
 #modalCargo .modal-content {
-    width: 1011px;
+    width: 100%;
+    max-width: 1011px;
     height: 434px;
-    max-width: 90vw;
     max-height: 90vh;
 }
 
@@ -336,7 +330,7 @@ body {
 }
 
 .form-group input[type="text"] {
-    width: 871px;
+    width: 100%;
     height: 64px;
     padding: 12px 20px;
     border: 1px solid #63468C;
@@ -361,6 +355,7 @@ body {
 
 .btn-atualizar {
     width: 363px;
+    max-width: 100%;
     height: 83px;
     margin-top: 30px;
     margin-bottom: 0;
@@ -393,5 +388,183 @@ body {
 .btn-atualizar:active {
     background-color: #9478B6;
     transform: translateY(0);
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.18);
+    box-shadow: 0px 8px 16px rgba(0, E0, 0, 0.18);
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 1024px) {
+    .sidebar {
+        width: clamp(280px, 30vw, 340px);
+        padding: 40px 0;
+    }
+
+    .sidebar-header h1 {
+        font-size: 36px;
+        letter-spacing: 0.15em;
+    }
+
+    .sidebar-nav a {
+        font-size: 24px;
+        padding: 12px 30px;
+        gap: 15px;
+    }
+
+    .sidebar-nav svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .main-content {
+        padding: 40px;
+    }
+
+    .page-header h1 {
+        font-size: 40px;
+    }
+
+    .info-section h2 {
+        font-size: 30px;
+    }
+
+    .info-label {
+        font-size: 24px;
+    }
+
+    .modal-body {
+        padding: 30px 40px;
+    }
+
+    .modal-title {
+        font-size: 32px;
+    }
+
+    .form-group label {
+        font-size: 24px;
+    }
+
+    .form-group input[type="text"] {
+        font-size: 20px;
+        height: 56px;
+    }
+}
+
+@media (max-width: 768px) {
+    .app-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .sidebar {
+        width: 100%;
+        height: auto;
+        border-radius: 0 0 25px 25px;
+        padding: 20px 0;
+    }
+
+    .sidebar-nav {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sidebar-nav ul {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        height: auto;
+        gap: 10px;
+        padding: 0 15px; 
+    }
+
+    .sidebar-nav a {
+        font-size: 16px;
+        padding: 10px 15px;
+        gap: 8px;
+    }
+
+    .sidebar-nav svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .sidebar-header h1 {
+        font-size: 28px;
+        letter-spacing: 0.1em;
+    }
+
+    .main-content {
+        padding: 30px 20px;
+    }
+
+    .page-header h1 {
+        font-size: 32px;
+    }
+
+    .info-section h2 {
+        font-size: 24px;
+    }
+
+    .info-label {
+        font-size: 18px;
+        letter-spacing: 0;
+    }
+
+    .info-item {
+        padding: 20px 0;
+    }
+
+    .logout-button,
+    .btn-atualizar {
+        font-size: 20px;
+        height: 60px;
+        width: 100%; 
+    }
+
+    .modal-content,
+    #modalCargo .modal-content {
+        width: 95vw;
+        height: auto;
+        max-height: 85vh;
+        overflow-y: auto; 
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+    
+    .modal-title {
+        font-size: 24px;
+        text-align: center;
+    }
+
+    .modal-close {
+        right: 15px;
+        top: 15px;
+        font-size: 30px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+
+    .form-group {
+        gap: 10px;
+    }
+
+    .form-group:first-of-type {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        font-size: 18px;
+    }
+
+    .form-group input[type="text"] {
+        font-size: 16px;
+        height: 48px;
+    }
+
+    .btn-atualizar {
+        margin-top: 20px;
+    }
 }
