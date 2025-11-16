@@ -84,12 +84,12 @@
                         <path d="M1 1L9 9L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
                     </svg>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">Cargo</span>
-                    <svg class="info-arrow" viewBox="0 0 10 18" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M1 1L9 9L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                    </svg>
-                </div>
+                    <div class="info-item" id="itemCargo">
+                        <span class="info-label">Cargo</span>
+                        <svg class="info-arrow" viewBox="0 0 10 18" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M1 1L9 9L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                        </svg>
+                    </div>
             </section>
 
             <section class="info-section">
@@ -142,6 +142,26 @@
                         <input type="text" id="novoNome" placeholder="">
                     </div>
                     <button class="btn-atualizar">Atualizar Dados</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Atualizar Cargo -->
+        <div id="modalCargo" class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">Atualizar Cargo</h3>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="cargoAtual">Cargo Atual</label>
+                        <input type="text" id="cargoAtual" value="Assistente Social" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="novoCargo">Novo Cargo</label>
+                        <p style="color: #C94A2C; font-weight: 500; margin-bottom: 8px;">Para atualizar o cargo solicite o <span style="font-weight:700; color:#C94A2C;">Administrador do Sistema</span></p>
+                    </div>
                 </div>
             </div>
         </div>
