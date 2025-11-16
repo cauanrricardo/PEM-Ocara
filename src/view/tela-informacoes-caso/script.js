@@ -242,15 +242,7 @@ document.addEventListener('DOMContentLoaded', function() {
     btnFecharPopup.addEventListener('click', fecharPopupUpload);
   }
   
-  // Evento do overlay (clicar fora fecha)
-  const popupOverlay = document.getElementById('popup-upload');
-  if (popupOverlay) {
-    popupOverlay.addEventListener('click', function(e) {
-      if (e.target === popupOverlay) {
-        fecharPopupUpload();
-      }
-    });
-  }
+  // Removido: popup não fecha ao clicar fora, apenas no botão close
   
   // Evento do input de arquivo
   const fileInput = document.getElementById('file-input');
