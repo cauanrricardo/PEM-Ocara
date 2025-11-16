@@ -12,7 +12,6 @@
 <body>
     <div class="app-container">
 
-        <!-- sidebar -->
         <aside class="sidebar">
             <header class="sidebar-header">
                 <h1>PEM OCARA</h1>
@@ -20,7 +19,6 @@
             </header>
             <nav class="sidebar-nav">
                 <ul>
-                    <!-- assistidas -->
                     <li><a href="#">
                             <svg viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" role="img"
                                 aria-label="Assistidas">
@@ -30,7 +28,6 @@
                             <span>Assistidas</span></a>
                     </li>
 
-                    <!-- rede de apoio -->
                     <li><a href="#">
                             <svg class="icone-rede-apoio" viewBox="0 0 50 25" xmlns="http://www.w3.org/2000/svg"
                                 role="img" aria-label="Rede de Apoio">
@@ -40,7 +37,6 @@
                             <span>Rede de Apoio</span></a>
                     </li>
 
-                    <!-- inicial -->
                     <li><a href="#">
                             <svg viewBox="0 0 34 38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Inicial">
                                 <path fill="currentColor"
@@ -49,7 +45,6 @@
                             <span>Inicial</span></a>
                     </li>
 
-                    <!-- estatisticas -->
                     <li><a href="#">
                             <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" role="img"
                                 aria-label="Estatísticas">
@@ -59,7 +54,6 @@
                             <span>Estatísticas</span></a>
                     </li>
 
-                    <!-- conta -->
                     <li><a href="#" class="active">
                             <svg viewBox="0 0 42 36" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Conta">
                                 <path fill="currentColor"
@@ -127,7 +121,6 @@
                 <button class="logout-button">Sair da Conta</button>
         </main>
 
-        <!-- Modal Atualizar Nome -->
         <div id="modalNome" class="modal-overlay">
             <div class="modal-content">
                 <div class="modal-header">
@@ -148,7 +141,6 @@
             </div>
         </div>
 
-        <!-- Modal Atualizar Cargo -->
         <div id="modalCargo" class="modal-overlay">
             <div class="modal-content">
                 <div class="modal-header">
@@ -168,7 +160,6 @@
             </div>
         </div>
 
-            <!-- Modal Atualizar Senha -->
             <div id="modalSenha" class="modal-overlay">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -199,13 +190,13 @@
                                 <span class="password-toggle-icon" onclick="togglePassword(this)">
                                     </span>
                             </div>
+                            <p id="senhaError" class="error-message"></p>
                         </div>
                         <button class="btn-atualizar">Atualizar Dados</button>
                     </div>
                 </div>
             </div>
             
-            <!-- Modal Atualizar E-mail -->
             <div id="modalEmail" class="modal-overlay">
                 <div class="modal-content">
                     <div class="modal-header">

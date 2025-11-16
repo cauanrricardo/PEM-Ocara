@@ -99,7 +99,7 @@ body {
 }
 
 .main-content {
-    position: relative; 
+    position: relative;
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
@@ -427,7 +427,16 @@ body {
 .btn-atualizar:active {
     background-color: #9478B6;
     transform: translateY(0);
-    box-shadow: 0px 8px 16px rgba(0, E0, 0, 0.18);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.18);
+}
+
+.error-message {
+    color: #C94A2C;
+    font-size: 18px;
+    font-weight: 500;
+    margin: -15px 0 10px 0;
+    display: none;
+    text-align: center;
 }
 
 @media (max-width: 1024px) {
@@ -512,7 +521,7 @@ body {
         justify-content: center;
         height: auto;
         gap: 10px;
-        padding: 0 15px; 
+        padding: 0 15px;
     }
 
     .sidebar-nav a {
@@ -556,7 +565,7 @@ body {
     .btn-atualizar {
         font-size: 20px;
         height: 60px;
-        width: 100%; 
+        width: 100%;
     }
 
     .modal-content,
@@ -564,7 +573,7 @@ body {
         width: 95vw;
         height: auto;
         max-height: 85vh;
-        overflow-y: auto; 
+        overflow-y: auto;
     }
 
     .modal-header {
@@ -599,7 +608,7 @@ body {
     }
 
     .form-group input[type="text"],
-    .form-group input[type="password"] { 
+    .form-group input[type="password"] {
         font-size: 16px;
         height: 48px;
     }

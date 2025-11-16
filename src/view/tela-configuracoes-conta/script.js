@@ -4,10 +4,10 @@ function togglePassword(iconElement) {
 
     if (input.type === "password") {
         input.type = "text";
-        iconElement.textContent = "visibility_off"; 
+        iconElement.textContent = "visibility_off";
     } else {
         input.type = "password";
-        iconElement.textContent = "visibility"; 
+        iconElement.textContent = "visibility";
     }
 }
 
@@ -43,7 +43,7 @@ function setupModal(modalId, triggerId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     setupModal('modalNome', 'itemNome');
     setupModal('modalCargo', 'itemCargo');
     setupModal('modalEmail', 'itemEmail');
@@ -51,8 +51,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const icons = document.querySelectorAll('.password-toggle-icon');
     icons.forEach(icon => {
-        icon.textContent = "visibility"; 
+        icon.textContent = "visibility";
         icon.classList.add('material-symbols-outlined');
     });
+
+    const modalSenha = document.getElementById('modalSenha');
+
+    if (modalSenha) {
+        const btnAtualizarSenha = modalSenha.querySelector('.btn-atualizar');
+        const senhaAtualInput = document.getElementById('senhaAtual');
+        const novaSenhaInput = document.getElementById('novaSenha');
+        const confirmarSenhaInput = document.getElementById('confirmarSenha');
+        const senhaError = document.getElementById('senhaError');
+
+        btnAtualizarSenha.addEventListener('click', () => {
+
+            const senhaAtual = senhaAtualInput.value;
+            const novaSenha = novaSenhaInput.value;
+            const confirmarSenha = confirmarSenhaInput.value;
+
+            senhaError.textContent = '';
+            senhaError.style.display = 'none';
+
+            if (senhaAtual === '' || novaSenha === '' || confirmarSenha === '') {
+                senhaError.textContent = 'Por favor, preencha todos os campos.';
+                senhaError.style.display = 'block';
+                return;
+            }
+
+            if (novaSenha.length < 8) {
+                senhaError.textContent = 'A nova senha deve ter pelo menos 8 caracteres.';
+                senhaError.style.display = 'block';
+                return;
+            }
+
+            if (novaSenha !== confirmarSenha) {
+                senhaError.textContent = 'As senhas não coincidem. Tente novamente.';
+                senhaError.style.display = 'block';
+                return;
+            }
+
+            alert('Senha atualizada com sucesso! (Isso é uma simulação)');
+
+            senhaAtualInput.value = '';
+            novaSenhaInput.value = '';
+            confirmarSenhaInput.value = '';
+            modalSenha.classList.remove('visible');
+        });
+    }
 
 });
