@@ -113,7 +113,7 @@ body {
     transform: scale(1.4);
 }
 
-/* === TELA DE CONFIGURAÇÕES === */
+/* Tela de Configurações */
 .page-header {
     width: 100%;
     margin-bottom: 40px;
@@ -216,7 +216,7 @@ body {
     box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.18);
 }
 
-/* --- Modal: Nome --- */
+/* Modal: Nome */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -391,7 +391,7 @@ body {
     box-shadow: 0px 8px 16px rgba(0, E0, 0, 0.18);
 }
 
-/* RESPONSIVIDADE */
+/* Responsividade */
 @media (max-width: 1024px) {
     .sidebar {
         width: clamp(280px, 30vw, 340px);
