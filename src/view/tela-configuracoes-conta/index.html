@@ -94,7 +94,7 @@
 
             <section class="info-section">
                 <h2>Informações da Conta</h2>
-                <div class="info-item">
+                <div class="info-item" id="itemEmail">
                     <span class="info-label">E-mail</span>
                     <svg class="info-arrow" viewBox="0 0 10 18" xmlns="http://www.w3.org/2000/svg">
                         <path d="M1 1L9 9L1 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -125,6 +125,7 @@
             </section>
                 <button class="logout-button">Sair da Conta</button>
         </main>
+
         <!-- Modal Atualizar Nome -->
         <div id="modalNome" class="modal-overlay">
             <div class="modal-content">
@@ -165,23 +166,24 @@
                 </div>
             </div>
         </div>
+
             <!-- Modal Atualizar E-mail -->
             <div id="modalEmail" class="modal-overlay">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h2 class="modal-title">Atualizar E-mail</h2>
+                        <h3 class="modal-title">Atualizar E-mail</h3>
                         <button class="modal-close" id="fecharModalEmail">&times;</button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
                             <label for="emailAtual">E-mail Atual</label>
-                            <input type="email" id="emailAtual" value="mariadorosariosousa@gmail.com" readonly>
+                            <input type="text" id="emailAtual" value="mariadorosariosousa@gmail.com" readonly>
                         </div>
                         <div class="form-group">
                             <label for="novoEmail">Novo E-mail</label>
-                            <input type="email" id="novoEmail" placeholder="Digite o novo e-mail">
+                            <input type="text" id="novoEmail" placeholder="">
                         </div>
-                        <button class="btn-atualizar" id="btnAtualizarEmail">Atualizar Dados</button>
+                        <button class="btn-atualizar">Atualizar Dados</button>
                     </div>
                 </div>
             </div>
