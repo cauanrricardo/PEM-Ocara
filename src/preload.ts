@@ -22,6 +22,9 @@ contextBridge.exposeInMainWorld('api', {
   obterCasosPorProtocoloAssistida: (protocoloAssistida: number) =>
     ipcRenderer.invoke('caso:obterPorProtocoloAssistida', protocoloAssistida),
 
+  gerarPdf: (protocoloCaso: number) =>
+    ipcRenderer.invoke('caso:gerarPdf', protocoloCaso),
+
   criarAssistida: (
     nome: string,
     idade: number,

@@ -193,6 +193,25 @@ ipcMain.handle('caso:obterPorProtocoloAssistida', async(_event, protocoloAssisti
   }
 });
 
+ipcMain.handle('caso:gerarPdf', async(_event, protocoloCaso: number) => {
+  try {
+    Logger.info('Requisição para gerar PDF do caso:', protocoloCaso);
+
+    const caminhoDoPdf = await casoController.handlerCriarPdfCaso(protocoloCaso);
+
+    return {
+      sucess: true,
+      patch: caminhoDoPdf
+      };
+  } catch (error) {
+      Logger.error('Erro gerar PDF caso:', error);
+      return {
+        sucess: false,
+        error: error instanceof Error ? error.message : 'Erro desconhecido'
+      };
+    }
+});
+
 ipcMain.handle('assistida:criar', async(
   _event,
   data: {

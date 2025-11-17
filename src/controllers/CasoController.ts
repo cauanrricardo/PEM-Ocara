@@ -1,13 +1,16 @@
 import { CasoService } from "../services/CasoService";
 import { AssistidaService } from "../services/AssistidaService";
 import { Caso } from "../models/Caso/Caso";
+import { PdfService } from "../services/PDFService";
 
 export class CasoController {
 
+    private PdfService: PdfService
     private casoService: CasoService;
 
     constructor(assistidaService?: AssistidaService) {
         this.casoService = new CasoService(assistidaService);
+        this.PdfService = new PdfService(this.casoService)
     }
 
     handlerCriarCaso(dados: {
@@ -88,5 +91,16 @@ export class CasoController {
 
     getCasosPorProtocoloAssistida(protocoloAssistida: number): Caso[] {
         return this.casoService.getCasosPorProtocoloAssistida(protocoloAssistida);
+    }
+
+    async handlerCriarPdfCaso(protocoloCaso: number): Promise<string> {
+        try {
+            const caminhoDoPdf = await this.PdfService.criarPdfDeFormulario(protocoloCaso);
+            console.log(`PDF gerado com sucesso em: ${caminhoDoPdf}`);
+            return caminhoDoPdf;
+            } catch (error) {
+                console.error("Erro ao gerar PDF:", error);
+                throw new Error("Falha ao gerar PDF.");
+        }
     }
 }
