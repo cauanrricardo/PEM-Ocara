@@ -8,109 +8,110 @@
     <title>Informações do Caso</title>
 </head>
 <body>
+    <!-- Página Inteira -->
     <div class="app-container">
         <!-- Menu Lateral -->
         <aside class="sidebar">
-        <header class="sidebar-header">
-            <h1>PEM OCARA</h1>
-            <hr class="sidebar-divider" />
-        </header>
+            <header class="sidebar-header">
+                <h1>PEM OCARA</h1>
+                <hr class="sidebar-divider" />
+            </header>
 
-        <nav class="sidebar-nav">
-            <ul>
-                <li>
-                    <a href="#" class="active">
-                    <span class="material-symbols-outlined">person_2</span>
-                    <span>Assistidas</span></a>
-                </li>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li>
+                        <a href="#" class="active">
+                        <span class="material-symbols-outlined">person_2</span>
+                        <span>Assistidas</span></a>
+                    </li>
 
-                <li>
-                    <a href="#">
-                    <span class="material-symbols-outlined">groups</span>
-                    <span>Rede de Apoio</span></a>
-                </li>
+                    <li>
+                        <a href="#">
+                        <span class="material-symbols-outlined">groups</span>
+                        <span>Rede de Apoio</span></a>
+                    </li>
 
-                <li>
-                    <a href="#">
-                    <span class="material-symbols-outlined">home</span>
-                    <span>Inicial</span></a>
-                </li>
+                    <li>
+                        <a href="#">
+                        <span class="material-symbols-outlined">home</span>
+                        <span>Inicial</span></a>
+                    </li>
 
-                <li>
-                    <a href="#">
-                    <span class="material-symbols-outlined">monitoring</span>
-                    <span>Estatísticas</span></a>
-                </li>
+                    <li>
+                        <a href="#">
+                        <span class="material-symbols-outlined">monitoring</span>
+                        <span>Estatísticas</span></a>
+                    </li>
 
-                <li>
-                    <a href="#">
-                    <span class="material-symbols-outlined">manage_accounts</span>
-                    <span>Conta</span></a>
-                </li>
+                    <li>
+                        <a href="#">
+                        <span class="material-symbols-outlined">manage_accounts</span>
+                        <span>Conta</span></a>
+                    </li>
 
-            </ul>
-        </nav>
-    </aside>
+                </ul>
+            </nav>
+        </aside>
 
-    <!-- Conteúdo da Página -->
-    <main class="main-content">
-    <div class="title">
-        <h1>Informações sobre o Caso <span id="Protocolo"></span></h1>
-        <button><span class="material-symbols-outlined">close</span></button>
-    </div>
+        <!-- Conteúdo da Página -->
+        <main class="main-content">
+            <div class="title">
+                <h1>Informações sobre o Caso <span id="Protocolo"></span></h1>
+                <button><span class="material-symbols-outlined">close</span></button>
+            </div>
 
-    <button id="acessar-form">ACESSAR FORMULÁRIO</button>
+            <button id="acessar-form">ACESSAR FORMULÁRIO</button>
 
-    <div class="infos">
-        <p>Assistida: <span id="Assistida"></span></p>
-        <p>Agressor: <span id="Agressor"></span></p>
-        <p>Data de abertura do Caso: <span id="DataCadastro"></span></p>
-        <p>Status do Caso na Assistência Social: <span id="StatusAssistencia"></span></p>
-        <p>Status do Caso no Processo Jurídico: <span id="StatusJuridico"></span></p>
-        <p>Tipo de Violência: <span id="TipoViolencia"></span></p>
-    </div>
+            <div class="infos">
+                <p>Assistida: <span id="Assistida"></span></p>
+                <p>Agressor: <span id="Agressor"></span></p>
+                <p>Data de abertura do Caso: <span id="DataCadastro"></span></p>
+                <p>Status do Caso na Assistência Social: <span id="StatusAssistencia"></span></p>
+                <p>Status do Caso no Processo Jurídico: <span id="StatusJuridico"></span></p>
+                <p>Tipo de Violência: <span id="TipoViolencia"></span></p>
+            </div>
 
-    <div class="provas">
-        <h1>Provas do Caso:</h1>
-        <ul id="lista-anexos"></ul>
-        <button id="anexar-prova">ANEXAR NOVA PROVA</button>
-    </div>
+            <div class="provas">
+                <h1>Provas do Caso:</h1>
+                <ul id="lista-anexos"></ul>
+                <button id="anexar-prova">ANEXAR NOVA PROVA</button>
+            </div>
 
-    <div class="provas">
-        <h1>Relatórios do Caso:</h1>
-        <ul id="lista-relatorios"></ul>
-        <button id="anexar-relatorio">ANEXAR NOVO RELATÓRIO</button>
-    </div>
+            <div class="provas">
+                <h1>Relatórios do Caso:</h1>
+                <ul id="lista-relatorios"></ul>
+                <button id="anexar-relatorio">ANEXAR NOVO RELATÓRIO</button>
+            </div>
 
-    <div id="divisao"></div>
+            <div id="divisao"></div>
 
-    <div class="redes">
-        <h1>Redes de Apoio Contatadas:</h1>
-        <p id="redes-contatadas"></p>
-        <button id="encaminhamento">GERAR NOVO ENCAMINHAMENTO PARA A REDE</button>
-    </div>
+            <div class="redes">
+                <h1>Redes de Apoio Contatadas:</h1>
+                <p id="redes-contatadas"></p>
+                <button id="encaminhamento">GERAR NOVO ENCAMINHAMENTO PARA A REDE</button>
+            </div>
 
-    <!-- Rodapé -->
-    <footer class="rodape d-flex justify-content-between align-items-center flex-wrap mt-auto px-5">
-        <img
-            src="img/logo-ocara.png"
-            alt="Logo Ocara"
-            class="logo-esquerda"
-        />
+            <!-- Rodapé -->
+            <footer class="rodape d-flex justify-content-between align-items-center flex-wrap mt-auto px-5">
+                <img
+                    src="img/logo-ocara.png"
+                    alt="Logo Ocara"
+                    class="logo-esquerda"
+                />
 
-        <p>
-            Avenida Coronel João Felipe, Centro <br />
-            CEP 62755-000 – Ocara-CE <br />
-            pemocara@gmail.com
-        </p>
+                <p>
+                    Avenida Coronel João Felipe, Centro <br />
+                    CEP 62755-000 – Ocara-CE <br />
+                    pemocara@gmail.com
+                </p>
 
-        <img
-            src="img/brasao-ocara.png"
-            alt="Brasão Ocara"
-            class="logo-direita"
-        />
-    </footer>
-    </main>
+                <img
+                    src="img/brasao-ocara.png"
+                    alt="Brasão Ocara"
+                    class="logo-direita"
+                />
+            </footer>
+        </main>
     </div>
 
     <!-- Popup de Upload -->
@@ -146,7 +147,6 @@
                 <div class="form-group">
                     <select id="email-para">
                         <option value="" disabled selected>Para</option>
-                        <!-- Opções serão preenchidas dinamicamente pelo backend -->
                     </select>
                 </div>
                 <div class="form-group">
