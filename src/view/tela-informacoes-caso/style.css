@@ -37,10 +37,9 @@ body {
 
 .sidebar-header {
     text-align: center;
-    width: 84%;
+    width: 400px;
     margin: 0 auto;
     flex-shrink: 0;
-    padding-top: 8px;
 }
 
 .sidebar-header h1 {
@@ -52,12 +51,9 @@ body {
 }
 
 .sidebar-divider {
-    border: none;
-    height: 4px;
-    background-color: #FFFFFF;
-    opacity: 1;
+    border: 2px solid #FFFFFF;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 
 .sidebar-nav {
@@ -436,15 +432,12 @@ body {
 
 /* rodape */
 .rodape {
-    margin-top: auto;
-    padding-top: 40px;
-    padding-bottom: 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    padding-left: 80px;
-    padding-right: 80px;
+    width: 100%;
+    margin-top: 70px;
 }
 
 .rodape p {
@@ -453,7 +446,6 @@ body {
     font-weight: 700;
     font-size: 16px;
     color: #63468C;
-    margin: 0;
 }
 
 .logo-esquerda {

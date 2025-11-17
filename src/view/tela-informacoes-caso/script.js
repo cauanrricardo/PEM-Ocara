@@ -307,13 +307,22 @@ function preencherInformacoesCaso(dados) {
   }
   
   // Preenche as redes contatadas
-  if (dados.redesContatadas) {
-    document.getElementById('redes-contatadas').textContent = dados.redesContatadas;
+  const redesContatadas = document.getElementById('redes-contatadas');
+  if (dados.redesContatadas && dados.redesContatadas.trim() !== '') {
+    redesContatadas.textContent = dados.redesContatadas;
+  } else {
+    redesContatadas.textContent = 'Nenhuma rede de apoio foi contatada até o momento';
   }
 }
 
 // Renderiza as listas quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
+  // Inicializa a mensagem padrão para redes contatadas
+  const redesContatadas = document.getElementById('redes-contatadas');
+  if (redesContatadas && !redesContatadas.textContent.trim()) {
+    redesContatadas.textContent = 'Nenhuma rede de apoio foi contatada até o momento';
+  }
+  
   // Renderiza as listas de anexos e relatórios
   renderizarAnexos(dadosDosAnexos, 'lista-anexos');
   renderizarAnexos(dadosDosRelatorios, 'lista-relatorios');
