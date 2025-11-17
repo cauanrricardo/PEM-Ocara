@@ -291,7 +291,7 @@ body {
 
 .modal-content {
     background-color: #FFFFFF;
-    border-radius: 25px;
+    /* border-radius: 25px; */
     width: min(1011px, 90vw);
     max-width: 90vw;
     height: auto;
