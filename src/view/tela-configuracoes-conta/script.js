@@ -22,6 +22,20 @@ class PasswordValidator {
     }
 }
 
+class EmailValidator {
+    validate(novoEmail) {
+        if (novoEmail === '') {
+            return 'Por favor, preencha o campo de e-mail.';
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(novoEmail)) {
+            return 'Por favor, insira um formato de e-mail válido.';
+        }
+        return null;
+    }
+}
+
+
 function togglePassword(iconElement) {
     const inputWrapper = iconElement.parentElement;
     const input = inputWrapper.querySelector('input');
@@ -82,7 +96,7 @@ class ModalManager {
         this.modal.classList.remove('visible');
 
         this.inputs.forEach(input => {
-            if (input.type === 'text' || input.type === 'password') {
+            if ((input.type === 'text' || input.type === 'password') && !input.readOnly) {
                 input.value = '';
             }
         });
@@ -142,16 +156,65 @@ class PasswordController {
     }
 }
 
+class EmailController {
+    constructor(emailValidator, emailModalManager) {
+        this.validator = emailValidator;
+        this.modalManager = emailModalManager;
+        this.btnAtualizar = document.querySelector('#modalEmail .btn-atualizar');
+        this.novoEmailInput = document.getElementById('novoEmail');
+        this.errorDisplay = document.getElementById('emailError'); 
+
+        if (!this.btnAtualizar || !this.novoEmailInput || !this.errorDisplay) {
+            console.warn('Elementos do modal de e-mail não encontrados.');
+            return;
+        }
+        this.setupListener();
+    }
+
+    setupListener() {
+        this.btnAtualizar.addEventListener('click', () => this.handleUpdateEmail());
+    }
+
+    handleUpdateEmail() {
+        const novoEmail = this.novoEmailInput.value;
+        
+        this.errorDisplay.textContent = '';
+        this.errorDisplay.style.display = 'none';
+
+        const errorMessage = this.validator.validate(novoEmail);
+
+        if (errorMessage) {
+            this.showError(errorMessage);
+        } else {
+            this.showSuccess();
+        }
+    }
+
+    showError(message) {
+        this.errorDisplay.textContent = message;
+        this.errorDisplay.style.display = 'block';
+    }
+
+    showSuccess() {
+        alert('E-mail atualizado com sucesso! (Isso é uma simulação)');
+        this.modalManager.close();
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
 
     const passwordValidator = new PasswordValidator();
+    const emailValidator = new EmailValidator();
 
     new ModalManager('modalNome', 'itemNome');
     new ModalManager('modalCargo', 'itemCargo');
-    new ModalManager('modalEmail', 'itemEmail');
+    
+    const emailModalManager = new ModalManager('modalEmail', 'itemEmail');
     const passwordModalManager = new ModalManager('modalSenha', 'itemSenha');
 
     initializePasswordIcons();
+    
     new PasswordController(passwordValidator, passwordModalManager);
+    new EmailController(emailValidator, emailModalManager);
 
 });

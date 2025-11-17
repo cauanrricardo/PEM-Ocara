@@ -243,6 +243,8 @@ body {
     overflow: hidden;
     transform: scale(0.95);
     transition: transform 0.3s ease-in-out;
+    display: flex;
+    flex-direction: column;
 }
 
 #modalCargo .modal-content {
@@ -258,6 +260,12 @@ max-width: 70.2vw;
 height: auto;
 max-height: 90vh;
 overflow-y: auto;
+display: block;
+}
+
+#modalSenha .modal-body {
+    flex-grow: 0;
+    overflow-y: visible;
 }
 
 .modal-overlay.visible .modal-content {
@@ -314,6 +322,8 @@ overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 25px;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .form-group {
