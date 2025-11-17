@@ -313,7 +313,7 @@ ipcMain.on('window:open', (_event, windowName: string) => {
     case 'telaCadastroAssistida':
       windowManager.loadContent('main', 'tela-cadastro-1/index.html');
       break;
-    case 'telaCadastroCaso':
+    case 'telaCadastro2':
       windowManager.loadContent('main', 'tela-cadastro-2/index.html');
       break;
     case 'telaCadastro3':
