@@ -237,16 +237,32 @@ document.addEventListener('DOMContentLoaded', async () => {
     let redesCadastradas = []; // Array de redes que vem do backend
     let dadosDoCaso = {}; // Dados do caso que vem do backend
 
+    // Função para mostrar popup customizado
+    const mostrarPopup = (mensagem) => {
+        const popup = document.getElementById('popupConfirmacao');
+        const popupMensagem = document.getElementById('popupMensagem');
+        const btnOk = document.getElementById('popupBtnOk');
+        
+        popupMensagem.textContent = mensagem;
+        popup.classList.add('visible');
+        
+        btnOk.onclick = () => {
+            popup.classList.remove('visible');
+        };
+    };
+
     const atualizarTela = ()=> {
         const acoesArquivo = {
             onDelete: (id) => {
-                if (confirm('Tem certeza que deseja apagar este arquivo?')) {
+                const confirmar = confirm('Tem certeza que deseja apagar este arquivo?');
+                if (confirmar) {
                     fileManager.remover(id);
                     atualizarTela();
                 }
             },
             onCancel: (id) => {
-                if (confirm('Cancelar o upload?')) {
+                const confirmar = confirm('Cancelar o upload?');
+                if (confirmar) {
                     fileManager.remover(id);
                     atualizarTela();
                 }
@@ -265,7 +281,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.log('Tipo de anexo:', estadoUpload.tipoAtual);
 
         if (file.size > Config.MAX_FILE_SIZE) {
-            alert('O arquivo excede o tamanho máximo permitido de 100MB. Por favor, selecione um arquivo menor.');
+            mostrarPopup('O arquivo excede o tamanho máximo permitido de 100MB. Por favor, selecione um arquivo menor.');
             return;
         }
 
@@ -416,6 +432,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             console.log('Anexos selecionados:', estadoEncaminhamento.anexosSelecionadosIds);
             
             uiManager.toggleModalEncaminhamento(false);
+            
+            // Exibe popup de sucesso
+            mostrarPopup('Email enviado com sucesso!');
             
             // Limpa campos
             document.getElementById('email-para').value = '';
