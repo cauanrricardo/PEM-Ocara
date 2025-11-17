@@ -79,7 +79,7 @@ class ModalManager {
         }
 
         this.closeBtn = this.modal.querySelector('.modal-close');
-        this.inputs = this.modal.querySelectorAll('input');        
+        this.inputs = this.modal.querySelectorAll('input');     
         this.errorDisplay = this.modal.querySelector('.error-message'); 
 
         if (!this.closeBtn) {
@@ -116,7 +116,7 @@ class ModalManager {
         if (this.errorDisplay) {
             this.errorDisplay.textContent = '';
             this.errorDisplay.style.display = 'none';
-        }
+        }        
     }
 }
 
@@ -127,7 +127,7 @@ class PasswordController {
         this.btnAtualizar = document.querySelector('#modalSenha .btn-atualizar'); 
         this.senhaAtualInput = document.getElementById('senhaAtual');
         this.novaSenhaInput = document.getElementById('novaSenha');
-        this.confirmarSenhaInput = document.getElementById('confirmarSenha');        
+        this.confirmarSenhaInput = document.getElementById('confirmarSenha');    
         this.errorDisplay = document.getElementById('senhaError'); 
         this.setupListener();
     }
@@ -145,8 +145,7 @@ class PasswordController {
         const novaSenha = this.novaSenhaInput.value;
         const confirmarSenha = this.confirmarSenhaInput.value;
         
-        this.errorDisplay.textContent = '';
-        this.errorDisplay.style.display = 'none';
+        this.hideError();
 
         const errorMessage = this.validator.validate(senhaAtual, novaSenha, confirmarSenha);
 
@@ -160,6 +159,11 @@ class PasswordController {
     showError(message) {
         this.errorDisplay.textContent = message;
         this.errorDisplay.style.display = 'block';
+    }
+
+    hideError() {
+        this.errorDisplay.textContent = '';
+        this.errorDisplay.style.display = 'none';
     }
 
     showSuccess() {
@@ -189,9 +193,7 @@ class NameController {
 
     handleUpdateName() {
         const novoNome = this.novoNomeInput.value;
-
-        this.errorDisplay.textContent = '';
-        this.errorDisplay.style.display = 'none';
+        this.hideError();
 
         const errorMessage = this.validator.validate(novoNome);
 
@@ -205,6 +207,11 @@ class NameController {
     showError(message) {
         this.errorDisplay.textContent = message;
         this.errorDisplay.style.display = 'block';
+    }
+
+    hideError() {
+        this.errorDisplay.textContent = '';
+        this.errorDisplay.style.display = 'none';
     }
 
     showSuccess() {
@@ -234,9 +241,7 @@ class EmailController {
 
     handleUpdateEmail() {
         const novoEmail = this.novoEmailInput.value;
-        
-        this.errorDisplay.textContent = '';
-        this.errorDisplay.style.display = 'none';
+        this.hideError();
 
         const errorMessage = this.validator.validate(novoEmail);
 
@@ -247,10 +252,15 @@ class EmailController {
         }
     }
 
-    showError(message) {
-        this.errorDisplay.textContent = message;
-        this.errorDisplay.style.display = 'block';
-    }
+	showError(message) {
+		this.errorDisplay.textContent = message;
+		this.errorDisplay.style.display = 'block';
+	}
+
+	hideError() {
+		this.errorDisplay.textContent = '';
+		this.errorDisplay.style.display = 'none';
+	}
 
     showSuccess() {
         alert('E-mail atualizado com sucesso! (Isso é uma simulação)');
