@@ -1,3 +1,27 @@
+class PasswordValidator {
+    validate(senhaAtual, novaSenha, confirmarSenha) {
+        if (senhaAtual === '' || novaSenha === '' || confirmarSenha === '') {
+            return 'Por favor, preencha todos os campos.';
+        }
+        if (novaSenha.length < 8) {
+            return 'A nova senha deve ter pelo menos 8 caracteres.';
+        }
+        if (!/[A-Z]/.test(novaSenha)) {
+            return 'A nova senha deve conter pelo menos uma letra maiúscula.';
+        }
+        if (!/[a-z]/.test(novaSenha)) {
+            return 'A nova senha deve conter pelo menos uma letra minúscula.';
+        }
+        if (!/[^A-Za-z0-9]/.test(novaSenha)) {
+            return 'A nova senha deve conter pelo menos um caractere especial (ex: !@#$%).';
+        }
+        if (novaSenha !== confirmarSenha) {
+            return 'As senhas não coincidem. Tente novamente.';
+        }
+        return null;
+    }
+}
+
 function togglePassword(iconElement) {
     const inputWrapper = iconElement.parentElement;
     const input = inputWrapper.querySelector('input');
@@ -26,23 +50,21 @@ function setupModal(modalId, triggerId) {
         console.warn(`Botão de fechar não encontrado no modal: ${modalId}`);
         return;
     }
-
     const closeModal = () => {
         modal.classList.remove('visible');
 
-        if (modalId === 'modalSenha') {
-            const novaSenhaInput = modal.querySelector('#novaSenha');
-            const confirmarSenhaInput = modal.querySelector('#confirmarSenha');
-            const senhaError = modal.querySelector('#senhaError');
-
-            if (novaSenhaInput) novaSenhaInput.value = '';
-            if (confirmarSenhaInput) confirmarSenhaInput.value = '';
-            
-            if (senhaError) {
-                senhaError.textContent = '';
-                senhaError.style.display = 'none';
+        const inputs = modal.querySelectorAll('input');
+        inputs.forEach(input => {
+            if (input.type === 'text' || input.type === 'password') {
+                input.value = '';
             }
-        }
+        });
+
+        const senhaError = modal.querySelector('#senhaError');
+        if (senhaError) {
+            senhaError.textContent = '';
+            senhaError.style.display = 'none';
+        }        
     };
 
     trigger.addEventListener('click', () => {
@@ -59,6 +81,7 @@ function setupModal(modalId, triggerId) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const passwordValidator = new PasswordValidator();
 
     setupModal('modalNome', 'itemNome');
     setupModal('modalCargo', 'itemCargo');
@@ -87,43 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmarSenha = confirmarSenhaInput.value;
             senhaError.textContent = '';
             senhaError.style.display = 'none';
+            const errorMessage = passwordValidator.validate(senhaAtual, novaSenha, confirmarSenha);
 
-            if (senhaAtual === '' || novaSenha === '' || confirmarSenha === '') {
-                senhaError.textContent = 'Por favor, preencha todos os campos.';
+            if (errorMessage) {
+                senhaError.textContent = errorMessage;
                 senhaError.style.display = 'block';
                 return;
             }
-
-            if (novaSenha.length < 8) {
-                senhaError.textContent = 'A nova senha deve ter pelo menos 8 caracteres.';
-                senhaError.style.display = 'block';
-                return;
-            }
-            
-            if (!/[A-Z]/.test(novaSenha)) {
-                senhaError.textContent = 'A nova senha deve conter pelo menos uma letra maiúscula.';
-                senhaError.style.display = 'block';
-                return;
-            }
-            
-            if (!/[a-z]/.test(novaSenha)) {
-                senhaError.textContent = 'A nova senha deve conter pelo menos uma letra minúscula.';
-                senhaError.style.display = 'block';
-                return;
-            }
-
-            if (!/[^A-Za-z0-9]/.test(novaSenha)) {
-                senhaError.textContent = 'A nova senha deve conter pelo menos um caractere especial (ex: !@#$%).';
-                senhaError.style.display = 'block';
-                return;
-            }
-
-            if (novaSenha !== confirmarSenha) {
-                senhaError.textContent = 'As senhas não coincidem. Tente novamente.';
-                senhaError.style.display = 'block';
-                return;
-            }
-
             alert('Senha atualizada com sucesso! (Isso é uma simulação)');
 
             novaSenhaInput.value = '';
