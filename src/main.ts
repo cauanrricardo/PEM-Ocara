@@ -3,13 +3,17 @@ import * as path from 'path';
 import { WindowManager } from './utils/WindowManeger';
 import { Logger } from './utils/Logger';
 import { UserController } from './controllers/UserController';
+import { PdfService } from './services/PDFService';
 import { AssistidaController } from './controllers/AssistidaController';
 import { CasoController } from './controllers/CasoController';
+import { CasoService } from './services/CasoService';
 
 const windowManager = new WindowManager();
 const userController = new UserController();
 const assistidaController = new AssistidaController();
+const casoService = new CasoService(assistidaController.getAssistidaService());
 const casoController = new CasoController(assistidaController.getAssistidaService());
+const pdfService = new PdfService(casoService);
 
 // ==========================================
 // IPC HANDLERS - Backend Logic
@@ -197,7 +201,7 @@ ipcMain.handle('caso:gerarPdf', async(_event, protocoloCaso: number) => {
   try {
     Logger.info('Requisição para gerar PDF do caso:', protocoloCaso);
 
-    const caminhoDoPdf = await casoController.handlerCriarPdfCaso(protocoloCaso);
+    const caminhoDoPdf = await pdfService.criarPdfDeFormulario(protocoloCaso);
 
     return {
       sucess: true,
