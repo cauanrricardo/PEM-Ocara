@@ -16,6 +16,7 @@ body {
 .app-container {
     display: flex;
     height: 100vh;
+    overflow: hidden;
 }
 
 /* --- Sidebar ============) --- */
@@ -114,23 +115,23 @@ body {
     flex-grow: 1;
     overflow-y: auto;
     overflow-x: hidden;
-
     display: flex;
     flex-direction: column;
     padding: 50px 80px;
     box-sizing: border-box;
-
     max-width: 1920px;
-
     margin: 0 auto;
 
 }
 
 
-.icone-rede-apoio {
-    transform: scale(1.4);
-}
+.icone-rede {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    font-size: 40px;
 
+}
 
 /* ---================ Conteúdo Principal ===================== --- */
 .main-content {
