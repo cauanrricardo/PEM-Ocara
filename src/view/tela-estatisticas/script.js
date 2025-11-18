@@ -20,6 +20,20 @@ function setupFilterModal() {
   const dataInicio = document.getElementById("data-inicio");
   const dataFim = document.getElementById("data-fim");
 
+  // ===== ELEMENTOS DE VALIDAÇÃO =====
+  // Criar elemento para mensagem de erro
+  const errorMessage = document.createElement("div");
+  errorMessage.className = "error-message";
+  errorMessage.style.color = "#E66953";
+  errorMessage.style.fontSize = "14px";
+  errorMessage.style.marginTop = "5px";
+  errorMessage.style.display = "none";
+  errorMessage.style.fontFamily = "Poppins";
+
+  // Inserir a mensagem de erro após o campo data-fim
+  const dateFimGroup = dataFim.closest(".date-input-group");
+  dateFimGroup.appendChild(errorMessage);
+
   // ===== ESTADO DOS FILTROS =====
   /**
    * Objeto que mantém o estado atual dos filtros selecionados
@@ -34,6 +48,36 @@ function setupFilterModal() {
     dataFim: "",
   };
 
+  // ===== VALIDAÇÃO DE DATAS =====
+  /**
+   * Valida se a data inicial é anterior ou igual à data final
+   * @returns {boolean} - Retorna true se as datas são válidas
+   */
+  function validarDatas() {
+    const inicio = dataInicio.value;
+    const fim = dataFim.value;
+
+    // Se ambos os campos estão preenchidos
+    if (inicio && fim) {
+      const dataInicioObj = new Date(inicio);
+      const dataFimObj = new Date(fim);
+
+      if (dataInicioObj > dataFimObj) {
+        // Data início é maior que data fim - ERRO
+        errorMessage.textContent =
+          "A data inicial não pode ser maior que a data final";
+        errorMessage.style.display = "block";
+        dataFim.style.borderColor = "#E66953"; // Borda vermelha
+        return false;
+      }
+    }
+
+    // Datas válidas ou campos vazios
+    errorMessage.style.display = "none";
+    dataFim.style.borderColor = "#63468C"; // Borda normal
+    return true;
+  }
+
   // ===== CONTROLE DE ABERTURA DO MODAL =====
   /**
    * Abre o modal de filtros quando qualquer botão de filtro é clicado
@@ -41,6 +85,9 @@ function setupFilterModal() {
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       modal.classList.add("visible");
+      // Limpar validação ao abrir o modal
+      errorMessage.style.display = "none";
+      dataFim.style.borderColor = "#63468C";
     });
   });
 
@@ -149,6 +196,8 @@ function setupFilterModal() {
   dataInicio.addEventListener("change", (e) => {
     filtrosAtuais.dataInicio = e.target.value;
     console.log("Data início:", filtrosAtuais.dataInicio);
+    // Validar datas sempre que alguma mudar
+    validarDatas();
   });
 
   /**
@@ -157,6 +206,8 @@ function setupFilterModal() {
   dataFim.addEventListener("change", (e) => {
     filtrosAtuais.dataFim = e.target.value;
     console.log("Data fim:", filtrosAtuais.dataFim);
+    // Validar datas sempre que alguma mudar
+    validarDatas();
   });
 
   // ===== LÓGICA DE LIMPEZA DE FILTROS =====
@@ -192,6 +243,10 @@ function setupFilterModal() {
       dataInicio: "",
       dataFim: "",
     };
+
+    // Limpar mensagem de erro
+    errorMessage.style.display = "none";
+    dataFim.style.borderColor = "#63468C";
 
     console.log("Filtros limpos:", filtrosAtuais);
   }
@@ -239,8 +294,14 @@ function setupFilterModal() {
    * Aplica os filtros selecionados e fecha o modal
    */
   btnAplicar.addEventListener("click", () => {
-    aplicarFiltros();
-    fecharModal();
+    // Validar datas antes de aplicar
+    if (validarDatas()) {
+      aplicarFiltros();
+      fecharModal();
+    } else {
+      // Mostrar mensagem de erro se as datas forem inválidas
+      mostrarPopupConfirmacao("Erro: Data inicial maior que data final!");
+    }
   });
 
   /**
