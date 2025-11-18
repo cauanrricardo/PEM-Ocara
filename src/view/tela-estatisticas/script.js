@@ -24,12 +24,12 @@ function setupFilterModal() {
   /**
    * Objeto que mantém o estado atual dos filtros selecionados
    * @type {Object}
-   * @property {string} regiao - Região selecionada ('todas' por padrão)
+   * @property {Set} regioes - Conjunto de regiões selecionadas
    * @property {string} dataInicio - Data inicial no formato string
    * @property {string} dataFim - Data final no formato string
    */
   let filtrosAtuais = {
-    regiao: "todas",
+    regioes: new Set(), // Agora é um Set para múltiplas seleções
     dataInicio: "",
     dataFim: "",
   };
@@ -63,24 +63,84 @@ function setupFilterModal() {
     }
   });
 
-  // ===== LÓGICA DE SELEÇÃO DE REGIÃO (CHIPS) =====
+  // ===== LÓGICA DE SELEÇÃO DE REGIÃO (CHIPS) - MODIFICADA PARA SELEÇÃO MÚLTIPLA =====
   /**
-   * Gerencia a seleção de chips de região com estado de seleção única
+   * Gerencia a seleção de chips de região com estado de seleção múltipla
    */
   chipsRegiao.forEach((chip) => {
     chip.addEventListener("click", () => {
-      // Remove estado ativo de todos os chips para garantir seleção única
-      chipsRegiao.forEach((c) => c.classList.remove("chip-active"));
+      const regiao = chip.getAttribute("data-regiao");
 
-      // Aplica estado ativo apenas ao chip clicado
-      chip.classList.add("chip-active");
+      // Lógica especial para "todas"
+      if (regiao === "todas") {
+        // Se clicar em "todas", limpa todas as outras seleções
+        filtrosAtuais.regioes.clear();
+        filtrosAtuais.regioes.add("todas");
 
-      // Atualiza o estado dos filtros com a região selecionada
-      filtrosAtuais.regiao = chip.getAttribute("data-regiao");
+        // Atualiza a interface
+        chipsRegiao.forEach((c) => {
+          const isTodas = c.getAttribute("data-regiao") === "todas";
+          c.classList.toggle("chip-active", isTodas);
+          updateCheckIcon(c, isTodas);
+        });
+      } else {
+        // Remove "todas" se estiver selecionada (seleção específica)
+        if (filtrosAtuais.regioes.has("todas")) {
+          filtrosAtuais.regioes.delete("todas");
+          document
+            .querySelector('[data-regiao="todas"]')
+            .classList.remove("chip-active");
+          updateCheckIcon(
+            document.querySelector('[data-regiao="todas"]'),
+            false
+          );
+        }
 
-      console.log("Região selecionada:", filtrosAtuais.regiao);
+        // Toggle da região específica
+        if (filtrosAtuais.regioes.has(regiao)) {
+          // Remove se já estiver selecionada
+          filtrosAtuais.regioes.delete(regiao);
+          chip.classList.remove("chip-active");
+          updateCheckIcon(chip, false);
+        } else {
+          // Adiciona se não estiver selecionada
+          filtrosAtuais.regioes.add(regiao);
+          chip.classList.add("chip-active");
+          updateCheckIcon(chip, true);
+        }
+
+        // Se nenhuma região estiver selecionada, seleciona "todas" automaticamente
+        if (filtrosAtuais.regioes.size === 0) {
+          filtrosAtuais.regioes.add("todas");
+          document
+            .querySelector('[data-regiao="todas"]')
+            .classList.add("chip-active");
+          updateCheckIcon(
+            document.querySelector('[data-regiao="todas"]'),
+            true
+          );
+        }
+      }
+
+      console.log("Regiões selecionadas:", Array.from(filtrosAtuais.regioes));
     });
   });
+
+  /**
+   * Atualiza a visibilidade do ícone de check nos chips
+   * @param {HTMLElement} chip - Elemento do chip
+   * @param {boolean} isSelected - Se o chip está selecionado
+   */
+  function updateCheckIcon(chip, isSelected) {
+    const checkIcon = chip.querySelector(".material-symbols-outlined");
+    if (checkIcon) {
+      if (isSelected) {
+        checkIcon.style.display = "inline-block";
+      } else {
+        checkIcon.style.display = "none";
+      }
+    }
+  }
 
   // ===== LÓGICA DE SELEÇÃO DE DATAS =====
   /**
@@ -117,11 +177,9 @@ function setupFilterModal() {
   function limparFiltros() {
     // Resetar seleção de região na interface
     chipsRegiao.forEach((chip) => {
-      chip.classList.remove("chip-active");
-      // Ativa apenas o chip "todas" por padrão
-      if (chip.getAttribute("data-regiao") === "todas") {
-        chip.classList.add("chip-active");
-      }
+      const isTodas = chip.getAttribute("data-regiao") === "todas";
+      chip.classList.toggle("chip-active", isTodas);
+      updateCheckIcon(chip, isTodas);
     });
 
     // Resetar campos de data
@@ -130,7 +188,7 @@ function setupFilterModal() {
 
     // Resetar estado interno dos filtros
     filtrosAtuais = {
-      regiao: "todas",
+      regioes: new Set(["todas"]), // Apenas "todas" selecionada por padrão
       dataInicio: "",
       dataFim: "",
     };
@@ -146,25 +204,35 @@ function setupFilterModal() {
    */
   function mostrarPopupConfirmacao(mensagem) {
     // Assume que popupMensagem e popupConfirmacao estão disponíveis globalmente
-    popupMensagem.textContent = mensagem;
-    popupConfirmacao.classList.add("visible");
+    const popupMensagem = document.getElementById("popupMensagem");
+    const popupConfirmacao = document.getElementById("popupConfirmacao");
+
+    if (popupMensagem && popupConfirmacao) {
+      popupMensagem.textContent = mensagem;
+      popupConfirmacao.classList.add("visible");
+    }
   }
 
   /**
    * Fecha o popup de confirmação quando o botão OK é clicado
    */
-  popupBtnOk.addEventListener("click", () => {
-    popupConfirmacao.classList.remove("visible");
-  });
+  const popupBtnOk = document.getElementById("popupBtnOk");
+  const popupConfirmacao = document.getElementById("popupConfirmacao");
 
-  /**
-   * Fecha o popup de confirmação quando clica fora do conteúdo
-   */
-  popupConfirmacao.addEventListener("click", (e) => {
-    if (e.target === popupConfirmacao) {
+  if (popupBtnOk && popupConfirmacao) {
+    popupBtnOk.addEventListener("click", () => {
       popupConfirmacao.classList.remove("visible");
-    }
-  });
+    });
+
+    /**
+     * Fecha o popup de confirmação quando clica fora do conteúdo
+     */
+    popupConfirmacao.addEventListener("click", (e) => {
+      if (e.target === popupConfirmacao) {
+        popupConfirmacao.classList.remove("visible");
+      }
+    });
+  }
 
   // ===== LÓGICA DE APLICAÇÃO DE FILTROS =====
   /**
@@ -185,10 +253,11 @@ function setupFilterModal() {
     // TODO: Implementar integração com sistema de dados
     // Exemplo: atualizar gráficos, tabelas, ou fazer requisições API
 
-    console.log("Aplicando filtros:", filtrosAtuais);
-
-    // Fechar modal de filtros (já é chamado no event handler)
-    // fecharModal();
+    console.log("Aplicando filtros:", {
+      regioes: Array.from(filtrosAtuais.regioes),
+      dataInicio: filtrosAtuais.dataInicio,
+      dataFim: filtrosAtuais.dataFim,
+    });
 
     // Feedback visual para o usuário
     mostrarPopupConfirmacao("Filtro aplicado com sucesso!");
@@ -200,6 +269,14 @@ function setupFilterModal() {
    */
   dataInicio.setAttribute("placeholder", "Selecione a data inicial");
   dataFim.setAttribute("placeholder", "Selecione a data final");
+
+  // Inicializar com "todas" selecionada
+  const chipTodas = document.querySelector('[data-regiao="todas"]');
+  if (chipTodas) {
+    chipTodas.classList.add("chip-active");
+    updateCheckIcon(chipTodas, true);
+    filtrosAtuais.regioes.add("todas");
+  }
 }
 
 // ===== INICIALIZAÇÃO DO SISTEMA =====

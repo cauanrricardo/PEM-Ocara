@@ -390,6 +390,20 @@ body {
     color: #63468C;
 }
 
+/* --- Estilos para o Ícone de Check nos Chips --- */
+.chip .material-symbols-outlined {
+    display: none;
+    /* Escondido por padrão */
+    font-size: 18px;
+    /* Tamanho do ícone */
+    font-weight: bold;
+}
+
+.chip.chip-active .material-symbols-outlined {
+    display: inline-block;
+    /* Mostra apenas quando selecionado */
+}
+
 /* --- Input de Data (Tempo) --- */
 .date-container {
     display: flex;
