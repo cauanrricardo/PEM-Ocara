@@ -39,11 +39,13 @@ class NameValidator {
 
 class EmailValidator {
     validate(novoEmail) {
-        if (novoEmail === '') {
+        const email = novoEmail.trim();
+
+        if (email === '') {
             return 'Por favor, preencha o campo de e-mail.';
         }
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(novoEmail)) {
+        if (!emailRegex.test(email)) {
             return 'Por favor, insira um formato de e-mail válido.';
         }
         return null;
