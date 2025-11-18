@@ -207,6 +207,7 @@
         </footer>
       </main>
     </div>
+
     <!-- Modal CADASTRAR NOVA REDE DE APOIO-->
     <div id="modalRedeApoio" class="modal-overlay">
       <div class="modal-content">
@@ -237,11 +238,57 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup de Confirmação -->
+    <div class="popup-confirmacao" id="popupConfirmacao">
+      <div class="popup-confirmacao-content">
+        <p id="popupMensagem">Rede cadastrada com sucesso!</p>
+        <button class="popup-btn-ok" id="popupBtnOk">OK</button>
+      </div>
+    </div>
+
     <script>
       const btnAbrir = document.getElementById("btnAbrirModalRede");
       const btnFechar = document.getElementById("fecharModalRede");
       const modal = document.getElementById("modalRedeApoio");
+      const popupConfirmacao = document.getElementById("popupConfirmacao");
+      const popupBtnOk = document.getElementById("popupBtnOk");
+      const popupMensagem = document.getElementById("popupMensagem");
+      const btnCadastrar = document.querySelector(".btn-atualizar");
 
+      // Classes de Validação
+      class NameValidator {
+        validate(novoNome) {
+          if (novoNome.trim() === "") {
+            return "Por favor, preencha o campo de nome.";
+          }
+          if (novoNome.trim().length < 3) {
+            return "O nome deve ter pelo menos 3 caracteres.";
+          }
+          return null;
+        }
+      }
+
+      class EmailValidator {
+        validate(novoEmail) {
+          const email = novoEmail.trim();
+
+          if (email === "") {
+            return "Por favor, preencha o campo de e-mail.";
+          }
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          if (!emailRegex.test(email)) {
+            return "Por favor, insira um formato de e-mail válido.";
+          }
+          return null;
+        }
+      }
+
+      // Instâncias dos validadores
+      const nameValidator = new NameValidator();
+      const emailValidator = new EmailValidator();
+
+      // Funções do Modal
       const abrirModal = () => {
         modal.classList.add("visible");
       };
@@ -250,13 +297,62 @@
         modal.classList.remove("visible");
       };
 
+      // Funções do Popup
+      const abrirPopup = () => {
+        popupConfirmacao.classList.add("visible");
+      };
+
+      const fecharPopup = () => {
+        popupConfirmacao.classList.remove("visible");
+      };
+
+      // Event Listeners
       btnAbrir.addEventListener("click", abrirModal);
       btnFechar.addEventListener("click", fecharModal);
+      popupBtnOk.addEventListener("click", fecharPopup);
 
+      // Fechar modal e popup clicando fora
       modal.addEventListener("click", (e) => {
         if (e.target === modal) {
           fecharModal();
         }
+      });
+
+      popupConfirmacao.addEventListener("click", (e) => {
+        if (e.target === popupConfirmacao) {
+          fecharPopup();
+        }
+      });
+
+      // Cadastrar rede
+      btnCadastrar.addEventListener("click", () => {
+        const nomeRede = document.getElementById("nomeRede").value;
+        const emailRede = document.getElementById("emailRede").value;
+
+        // Validação do nome
+        const erroNome = nameValidator.validate(nomeRede);
+        if (erroNome) {
+          popupMensagem.textContent = erroNome;
+          abrirPopup();
+          return;
+        }
+
+        // Validação do email
+        const erroEmail = emailValidator.validate(emailRede);
+        if (erroEmail) {
+          popupMensagem.textContent = erroEmail;
+          abrirPopup();
+          return;
+        }
+
+        // Sucesso - se passou por todas as validações
+        fecharModal();
+        popupMensagem.textContent = "Rede cadastrada com sucesso!";
+        abrirPopup();
+
+        // Limpar formulário
+        document.getElementById("nomeRede").value = "";
+        document.getElementById("emailRede").value = "";
       });
     </script>
   </body>
