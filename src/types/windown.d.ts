@@ -128,6 +128,12 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  gerarPdf: (protocloCaso: number) => Promise<{
+    sucess: boolean;
+    path?: string;
+    error?: string;
+  }>;
+
   obterCasosPorProtocoloAssistida: (protocoloAssistida: number) => Promise<{
     success: boolean;
     casos?: any[];
