@@ -1,9 +1,14 @@
 import { Assistida } from "../models/assistida/Assistida";
-import { Caso } from "../models/Caso/Caso";
+import { ICasoRepository } from "../repository/ICasoRepository";
 import { Logger } from "../utils/Logger";
 
 export class AssistidaService {
     private assistida: Assistida[] = [];
+    private casoRepository: ICasoRepository;
+
+    constructor(casoRepository: ICasoRepository) {
+        this.casoRepository = casoRepository;
+    }
 
     public criarAssistida(
         nome: string,
@@ -62,18 +67,25 @@ export class AssistidaService {
         return novaAssistida;
     }
 
-    public getTodasAssistidas(): Assistida[] {
-        return this.assistida;
+    public async getTodasAssistidas() {
+        try {
+            const assistidas = await this.casoRepository.getAllAssistidas();
+            Logger.info('Assistidas recuperadas do banco:', assistidas);
+            return assistidas;
+        } catch (error) {
+            Logger.error('Erro ao buscar assistidas:', error);
+            return [];
+        }
     }
 
-    public getAssistidaPorProtocolo(id: number): Assistida | undefined {
-        return this.assistida.find(assistida => assistida.getProtocolo() == id);
-    }
-
-    public addCasoAAssistida(protocolo: number, caso: Caso): void {
-        const assistida = this.getAssistidaPorProtocolo(protocolo);
-        if (assistida) {
-            assistida.addCaso(caso);
+    public async getCasosAssistida(idAssistida: number) {
+        try {
+            const casos = await this.casoRepository.getAllCasosAssistida(idAssistida);
+            Logger.info('Casos da assistida recuperados:', casos);
+            return casos;
+        } catch (error) {
+            Logger.error('Erro ao buscar casos da assistida:', error);
+            return [];
         }
     }
 

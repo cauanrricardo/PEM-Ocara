@@ -1,13 +1,14 @@
 import { CasoService } from "../services/CasoService";
 import { AssistidaService } from "../services/AssistidaService";
+import { ICasoRepository } from "../repository/ICasoRepository";
 import { Caso } from "../models/Caso/Caso";
 
 export class CasoController {
 
     private casoService: CasoService;
 
-    constructor(assistidaService?: AssistidaService) {
-        this.casoService = new CasoService(assistidaService);
+    constructor(assistidaService: AssistidaService, casoRepository: ICasoRepository) {
+        this.casoService = new CasoService(assistidaService, casoRepository);
     }
 
     handlerCriarCaso(dados: {

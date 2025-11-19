@@ -14,4 +14,24 @@ export interface ICasoRepository {
      * @throws Error - Se houver erro na persistência
      */
     salvar(caso: Caso): Promise<number>;
+
+    /**
+     * Recupera todas as assistidas do banco
+     * @returns Promise<any[]> - Lista de assistidas
+     */
+    getAllAssistidas(): Promise<any[]>;
+
+    /**
+     * Recupera todos os casos de uma assistida
+     * @param idAssistida - ID da assistida
+     * @returns Promise<any[]> - Lista de casos
+     */
+    getAllCasosAssistida(idAssistida: number): Promise<any[]>;
+
+    /**
+     * Recupera um caso específico com todas suas relações
+     * @param idCaso - ID do caso
+     * @returns Promise<any> - Dados completos do caso
+     */
+    getCaso(idCaso: number): Promise<any>;
 }

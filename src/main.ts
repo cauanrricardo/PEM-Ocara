@@ -11,11 +11,13 @@ import { CasoRepositoryPostgres } from './repository/CasoRepositoryPostgres';
 
 const windowManager = new WindowManager();
 const userController = new UserController();
-const assistidaController = new AssistidaController();
-const casoController = new CasoController(assistidaController.getAssistidaService());
+
+// Repository será inicializado na função bootstrap
+let casoRepository: CasoRepositoryPostgres;
+let assistidaController: AssistidaController;
+let casoController: CasoController;
 
 // Repository para salvar casos no BD
-let casoRepository: CasoRepositoryPostgres;
 
 // ==========================================
 // INITIALIZATION & BOOTSTRAP
@@ -43,6 +45,10 @@ async function bootstrap(): Promise<void> {
   const postgresInitializer = dbInitializer as any; // Cast para acessar a pool
   casoRepository = new CasoRepositoryPostgres(postgresInitializer.pool());
   Logger.info('Repository inicializado com sucesso!');
+  
+  // Inicializar controllers
+  assistidaController = new AssistidaController(casoRepository);
+  casoController = new CasoController(assistidaController.getAssistidaService(), casoRepository);
   
   createMainWindow();
   Logger.info('Aplicação iniciada com sucesso!');
@@ -89,10 +95,10 @@ ipcMain.handle('user:create', async (_event, data: { name: string; email: string
 ipcMain.handle('assistida:listarTodas', async () => {
   Logger.info("requisicao: listar Assistidas")
   try {
-    const assistidas = assistidaController.handlerListarTodasAssistidas();
+    const assistidas = await assistidaController.handlerListarTodasAssistidas();
     return {
       success: true,
-      assistidas: assistidas.map(u => u.toJSON())
+      assistidas: assistidas
     };
   } catch (error) {
     Logger.error('Erro ao buscar assistidas:', error);

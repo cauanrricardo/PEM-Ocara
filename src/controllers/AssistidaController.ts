@@ -1,20 +1,21 @@
 import { AssistidaService } from "../services/AssistidaService";
 import { Assistida } from "../models/assistida/Assistida";
+import { ICasoRepository } from "../repository/ICasoRepository";
 
 export class AssistidaController {
 
     private assistidaService: AssistidaService;
 
-    constructor() {
-        this.assistidaService = new AssistidaService();
+    constructor(casoRepository: ICasoRepository) {
+        this.assistidaService = new AssistidaService(casoRepository);
     }
 
     public getAssistidaService(): AssistidaService {
         return this.assistidaService;
     }
 
-    public handlerListarTodasAssistidas(): Assistida[] {
-        return this.assistidaService.getTodasAssistidas();
+    public async handlerListarTodasAssistidas() {
+        return await this.assistidaService.getTodasAssistidas();
     }
 
     public handlerCriarAssistida(
