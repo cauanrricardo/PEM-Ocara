@@ -160,10 +160,10 @@ export class PdfUtil {
     vLineWidth: (i: number, node: any) => (i === 0 || i === node.table.widths.length) ? 1 : 0.5,
     hLineColor: (i: number) => '#b0b0b0',
     vLineColor: (i: number) => '#b0b0b0',
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 4,
-    paddingRight: 4,
+    paddingTop: (i: number, node: any) => 4,
+    paddingBottom: (i: number, node: any) => 4,
+    paddingLeft: (i: number, node: any) => 4,
+    paddingRight: (i: number, node: any) => 4,
   };
 
   constructor() {

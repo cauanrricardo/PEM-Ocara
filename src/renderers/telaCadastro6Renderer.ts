@@ -55,7 +55,7 @@ function exibirPDF(caminhoArquivo: string) {
     embed.src = `file://${caminhoArquivo}#toolbar=0&navpanes=0&scrollbar=0`;
     embed.type = 'application/pdf';
     embed.width = '100%';
-    embed.height = '100%';
+    embed.style.height = '75vh';
     embed.style.borderRadius = '10px';
     embed.style.border = '1px solid #ccc';
 
