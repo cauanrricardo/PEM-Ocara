@@ -250,6 +250,27 @@ ipcMain.handle('caso:obterPorProtocoloAssistida', async(_event, protocoloAssisti
   }
 });
 
+// Novo handler para buscar casos do banco
+ipcMain.handle('caso:listarPorAssistida', async(_event, idAssistida: number) => {
+  try {
+    Logger.info('Requisição para buscar casos da assistida do BD:', idAssistida);
+    
+    const casos = await casoRepository.getAllCasosAssistida(idAssistida);
+    
+    return {
+      success: true,
+      casos: casos
+    };
+  } catch (error) {
+    Logger.error('Erro ao buscar casos da assistida do BD:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido',
+      casos: []
+    };
+  }
+});
+
 ipcMain.handle('caso:salvarBD', async(_event, dados: {
   assistida: any;
   caso: any;

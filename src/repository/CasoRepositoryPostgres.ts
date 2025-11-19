@@ -432,23 +432,19 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         idCaso: number,
         emailFuncionario: string
     ): Promise<void> {
-        // Validar se o email é válido (contém @)
         if (!emailFuncionario || !emailFuncionario.includes('@')) {
             console.warn(`Email de funcionário inválido: "${emailFuncionario}". Pulando inserção.`);
             return;
         }
 
-        // Verificar se o funcionário existe na tabela FUNCIONARIO
         const checkQuery = `SELECT email FROM FUNCIONARIO WHERE email = $1`;
         const checkResult = await client.query(checkQuery, [emailFuncionario]);
 
-        // Se o funcionário não existe, não inserir a relação
         if (checkResult.rows.length === 0) {
             console.warn(`Funcionário com email "${emailFuncionario}" não encontrado na tabela FUNCIONARIO. Pulando inserção.`);
             return;
         }
 
-        // Se existe, inserir a relação
         const query = `
             INSERT INTO FUNCIONARIO_ACOMPANHA_CASO (
                 email_funcionario, id_caso
@@ -459,9 +455,6 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         await client.query(query, [emailFuncionario, idCaso]);
     }
 
-    /**
-     * Recupera todas as assistidas do banco de dados
-     */
     async getAllAssistidas(): Promise<any[]> {
         const query = `
             SELECT * FROM ASSISTIDA
@@ -472,23 +465,25 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         return result.rows;
     }
 
-    /**
-     * Recupera todos os casos de uma assistida específica
-     */
     async getAllCasosAssistida(idAssistida: number): Promise<any[]> {
         const query = `
-            SELECT * FROM CASO
-            WHERE id_assistida = $1
-            ORDER BY data DESC
+            SELECT 
+                c.id_caso,
+                c.id_assistida,
+                'Sem rede' as nome_rede,
+                'Ativo' as status
+            FROM CASO c
+            WHERE c.id_assistida = $1
+            ORDER BY c.id_caso DESC
         `;
         
+        console.log('Executando query para idAssistida:', idAssistida);
         const result = await this.pool.query(query, [idAssistida]);
+        console.log('Resultado da query:', result.rows);
         return result.rows;
     }
 
-    /**
-     * Recupera os detalhes completos de um caso específico com todas suas relações
-     */
+
     async getCaso(idCaso: number): Promise<any> {
         const query = `
             SELECT

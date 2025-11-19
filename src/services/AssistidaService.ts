@@ -70,7 +70,9 @@ export class AssistidaService {
     public async getTodasAssistidas() {
         try {
             const assistidas = await this.casoRepository.getAllAssistidas();
+            const caso = await this.casoRepository.getCaso(15);
             Logger.info('Assistidas recuperadas do banco:', assistidas);
+            Logger.info('Caso recuperado do banco:', caso);
             return assistidas;
         } catch (error) {
             Logger.error('Erro ao buscar assistidas:', error);

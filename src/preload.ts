@@ -13,6 +13,9 @@ contextBridge.exposeInMainWorld('api', {
 
   listarAssistidas: () => ipcRenderer.invoke('assistida:listarTodas'),
   
+  listarCasosPorAssistida: (idAssistida: number) =>
+    ipcRenderer.invoke('caso:listarPorAssistida', idAssistida),
+  
   criarCaso: (data: any) =>
     ipcRenderer.invoke('caso:criar', data),
 

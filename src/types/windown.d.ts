@@ -122,6 +122,12 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  listarCasosPorAssistida: (idAssistida: number) => Promise<{
+    success: boolean;
+    casos?: any[];
+    error?: string;
+  }>;
+
   casosPorProtocolo: (protocolo: number) => Promise<{
     success: boolean;
     caso?: any[];
