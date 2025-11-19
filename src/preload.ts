@@ -16,6 +16,14 @@ contextBridge.exposeInMainWorld('api', {
   criarCaso: (data: any) =>
     ipcRenderer.invoke('caso:criar', data),
 
+  salvarCasoBD: (dados: {
+    assistida: any;
+    caso: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) =>
+    ipcRenderer.invoke('caso:salvarBD', dados),
+
   casosPorProtocolo: (protocolo: number) =>
     ipcRenderer.invoke('caso:getByProtocolo', protocolo),
 

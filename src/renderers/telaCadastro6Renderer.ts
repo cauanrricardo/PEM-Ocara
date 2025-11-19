@@ -115,36 +115,16 @@ pxmBtn.addEventListener('click', async (event) => {
             throw new Error(`Campos obrigatórios não preenchidos: ${camposFaltando.join(', ')}. Por favor, revise todas as telas anteriores.`);
         }
 
-
-        const dadosCompletos = {
-            nomeAssistida: dadosAssistida.nome,
-            idadeAssistida: dadosAssistida.idade,
-            identidadeGenero: dadosAssistida.identidadeGenero || '',
-            nomeSocial: dadosAssistida.nomeSocial || '',
-            endereco: dadosAssistida.endereco,
-            escolaridade: dadosAssistida.escolaridade || '',
-            religiao: dadosAssistida.religiao || '',
-            nacionalidade: dadosAssistida.nacionalidade,
-            zonaHabitacao: dadosAssistida.zonaHabitacao || '',
-            profissao: dadosAssistida.profissao,
-            limitacaoFisica: dadosAssistida.limitacaoFisica || '',
-            numeroCadastroSocial: dadosAssistida.numeroCadastroSocial || '',
-            quantidadeDependentes: dadosAssistida.quantidadeDependentes || 0,
-            temDependentes: dadosAssistida.temDependentes || false,
-            
-            // Dados do Caso (telas 2-6)
-            ...dadosCaso,
-            
-            // Data e responsável (tela 6)
-            data: new Date(),
-            profissionalResponsavel: 'Assistente Social', 
-            descricao: '' 
-        };
-
-        const result = await window.api.criarCaso(dadosCompletos);
+        // Chamar a API para salvar no banco de dados
+        const result = await window.api.salvarCasoBD({
+            assistida: dadosAssistida,
+            caso: dadosCaso,
+            profissionalResponsavel: 'Assistente Social',
+            data: new Date()
+        });
 
         if (!result.success) {
-            throw new Error(result.error || 'Erro desconhecido ao criar caso');
+            throw new Error(result.error || 'Erro desconhecido ao salvar caso no banco de dados');
         }
 
         sessionStorage.removeItem('dadosCaso');

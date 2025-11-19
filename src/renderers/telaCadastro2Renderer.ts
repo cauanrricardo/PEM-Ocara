@@ -158,18 +158,17 @@ window.addEventListener('DOMContentLoaded', () => {
         setCheckboxById('input[id^="q16-tem-filhos"]', dadosCaso._temFilhosIds || []);
         if (dadosCaso._q16QuantosAgressor) setInputValue('q16-quantos-agressor', dadosCaso._q16QuantosAgressor);
         if (dadosCaso._q16QuantosOutro) setInputValue('q16-quantos-outro', dadosCaso._q16QuantosOutro);
-        setCheckboxById('input[id^="q16-1-faixa-etaria"]', dadosCaso._q16FaixaEtariaIds || []);
+        setCheckboxValues('input[id^="q16-1-faixa-etaria"]', dadosCaso._q16FaixaEtariaIds || []);
         setRadioValue('q16-2-deficiencia', dadosCaso._q16Deficiencia);
         if (dadosCaso._q16QuantosDeficiencia) setInputValue('q16-2-quantos-deficiencia', dadosCaso._q16QuantosDeficiencia);
-        setCheckboxById('input[id^="q16-3-conflito"]', dadosCaso._q16ConflitosIds || []);
+        setCheckboxValues('input[id^="q16-3-conflito"]', dadosCaso._q16ConflitosIds || []);
         setRadioValue('q16-4-presenciaram-violencia', dadosCaso._q16Presenciaram);
         setRadioValue('q16-5-violencia-gravidez', dadosCaso._q16ViolenciaGravidez);
         
-        const deficienciaValue = dadosCaso.possuiDeficienciaDoenca === true || dadosCaso.possuiDeficienciaDoenca === 'Sim' ? 'Sim' : (dadosCaso.possuiDeficienciaDoenca === false ? 'Não' : undefined);
-        setRadioValue('q18-deficiencia', deficienciaValue);
+        setRadioValue('q18-deficiencia', dadosCaso.possuiDeficienciaDoenca || undefined);
         
         setRadioValue('cor', dadosCaso.corRaca);
-        setRadioValue('q20-local-risco', dadosCaso._moraEmAreaRisco);
+        setRadioValue('q20-local-risco', dadosCaso.moraEmAreaRisco ? 'Sim' : (dadosCaso.moraEmAreaRisco === false ? 'Não' : undefined));
         setRadioValue('q21-dependente-financeira', dadosCaso._dependenteFinanceira);
         setRadioValue('q22-abrigamento', dadosCaso.aceitaAbrigamentoTemporario ? 'Sim' : (dadosCaso.aceitaAbrigamentoTemporario === false ? 'Não' : undefined));
 
@@ -228,16 +227,10 @@ btnVoltar.addEventListener('click', async () => {
         dadosCaso._q16ViolenciaGravidez = getRadioValue('q16-5-violencia-gravidez');
         
         const deficiencia = getRadioValue('q18-deficiencia');
-        dadosCaso.possuiDeficienciaDoenca = deficiencia ? deficiencia === 'Sim' : undefined;
-        
-        dadosCaso.corRaca = getRadioValue('cor');
         
         dadosCaso._moraEmAreaRisco = getRadioValue('q20-local-risco');
         
         dadosCaso._dependenteFinanceira = getRadioValue('q21-dependente-financeira');
-        
-        const abrigamento = getRadioValue('q22-abrigamento');
-        dadosCaso.aceitaAbrigamentoTemporario = abrigamento ? abrigamento === 'Sim' : undefined;
 
         sessionStorage.setItem('dadosCaso', JSON.stringify(dadosCaso));
         await window.api.openWindow('telaCadastroAssistida');
@@ -280,10 +273,10 @@ btnProximo.addEventListener('click', async () => {
         const temFilhosIds = getCheckedIds('input[id^="q16-tem-filhos"]');
         const q16QuantosAgressor = getInputValue('q16-quantos-agressor');
         const q16QuantosOutro = getInputValue('q16-quantos-outro');
-        const q16FaixaEtariaIds = getCheckedIds('input[id^="q16-1-faixa-etaria"]');
+        const q16FaixaEtariaIds = getCheckedValues('input[id^="q16-1-faixa-etaria"]');
         const q16Deficiencia = getRadioValue('q16-2-deficiencia');
         const q16QuantosDeficiencia = getInputValue('q16-2-quantos-deficiencia');
-        const q16ConflitosIds = getCheckedIds('input[id^="q16-3-conflito"]');
+        const q16ConflitosIds = getCheckedValues('input[id^="q16-3-conflito"]');
         const q16Presenciaram = getRadioValue('q16-4-presenciaram-violencia');
         const q16ViolenciaGravidez = getRadioValue('q16-5-violencia-gravidez');
         
@@ -448,6 +441,17 @@ btnProximo.addEventListener('click', async () => {
         dadosCaso._q16Presenciaram = q16Presenciaram;
         dadosCaso._q16ViolenciaGravidez = q16ViolenciaGravidez;
 
+        // Converter dados Q16 para tipos corretos do modelo SobreVoce
+        dadosCaso.temFilhosComAgressor = temFilhosIds.some(id => id.includes('agressor'));
+        dadosCaso.qntFilhosComAgressor = dadosCaso.temFilhosComAgressor ? (parseInt(q16QuantosAgressor) || 0) : 0;
+        dadosCaso.temFilhosOutroRelacionamento = temFilhosIds.some(id => id.includes('outro'));
+        dadosCaso.qntFilhosOutroRelacionamento = dadosCaso.temFilhosOutroRelacionamento ? (parseInt(q16QuantosOutro) || 0) : 0;
+        dadosCaso.faixaFilhos = q16FaixaEtariaIds || [];
+        dadosCaso.filhosComDeficiencia = parseInt(q16QuantosDeficiencia) || 0;
+        dadosCaso.conflitoAgressor = q16ConflitosIds.length > 0 ? q16ConflitosIds.join('; ') : '';
+        dadosCaso.filhosPresenciaramViolencia = q16Presenciaram === 'Sim';
+        dadosCaso.violenciaDuranteGravidez = q16ViolenciaGravidez === 'Sim';
+
         // Valores convertidos para envio ao backend
         dadosCaso.ameacaFamiliar = ameacas;
         dadosCaso.agressaoFisica = agressoesGraves;
@@ -465,9 +469,9 @@ btnProximo.addEventListener('click', async () => {
         dadosCaso.agressorAmeacouAlguem = ameacouAgrediu;
         dadosCaso.separacaoRecente = separacao;
         dadosCaso.novoRelacionamentoAumentouAgressao = novoRelacionamento === 'Sim';
-        dadosCaso.possuiDeficienciaDoenca = deficiencia === 'Sim';
+        dadosCaso.possuiDeficienciaDoenca = deficiencia || '';
         dadosCaso.corRaca = corRaca;
-        dadosCaso.moraEmAreaRisco = moraEmAreaRisco;
+        dadosCaso.moraEmAreaRisco = moraEmAreaRisco === 'Sim';
         dadosCaso._moraEmAreaRisco = moraEmAreaRisco;
         dadosCaso._dependenteFinanceira = dependenteFinanceira;
         dadosCaso.aceitaAbrigamentoTemporario = abrigamento === 'Sim';

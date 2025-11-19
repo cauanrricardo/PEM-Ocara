@@ -134,6 +134,17 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  salvarCasoBD: (dados: {
+    assistida: any;
+    caso: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) => Promise<{
+    success: boolean;
+    idCaso?: number;
+    error?: string;
+  }>;
+
   openWindow: (windowName: string) => void;
   closeWindow: () => void;
   onUserCreated: (callback: (user: any) => void) => void;

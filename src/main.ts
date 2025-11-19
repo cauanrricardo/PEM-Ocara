@@ -7,11 +7,15 @@ import { AssistidaController } from './controllers/AssistidaController';
 import { CasoController } from './controllers/CasoController';
 import { PostgresInitializer } from './db/PostgresInitializer';
 import { IDataBase } from './db/IDataBase';
+import { CasoRepositoryPostgres } from './repository/CasoRepositoryPostgres';
 
 const windowManager = new WindowManager();
 const userController = new UserController();
 const assistidaController = new AssistidaController();
 const casoController = new CasoController(assistidaController.getAssistidaService());
+
+// Repository para salvar casos no BD
+let casoRepository: CasoRepositoryPostgres;
 
 // ==========================================
 // INITIALIZATION & BOOTSTRAP
@@ -34,6 +38,11 @@ async function bootstrap(): Promise<void> {
   // Inicializar banco de dados
   const dbInitializer: IDataBase = new PostgresInitializer();
   await dbInitializer.initialize();
+  
+  // Inicializar repository com a pool existente do PostgreSQL
+  const postgresInitializer = dbInitializer as any; // Cast para acessar a pool
+  casoRepository = new CasoRepositoryPostgres(postgresInitializer.pool());
+  Logger.info('Repository inicializado com sucesso!');
   
   createMainWindow();
   Logger.info('Aplicação iniciada com sucesso!');
@@ -235,6 +244,57 @@ ipcMain.handle('caso:obterPorProtocoloAssistida', async(_event, protocoloAssisti
   }
 });
 
+ipcMain.handle('caso:salvarBD', async(_event, dados: {
+  assistida: any;
+  caso: any;
+  profissionalResponsavel: string;
+  data: Date;
+}) => {
+  try {
+    Logger.info('Requisição para salvar caso no banco de dados via Repository');
+    
+    // 1. Criar o objeto Caso usando o controller
+    const casoCriado = casoController.handlerCriarCaso({
+      nomeAssistida: dados.assistida.nome,
+      idadeAssistida: dados.assistida.idade,
+      identidadeGenero: dados.assistida.identidadeGenero || '',
+      nomeSocial: dados.assistida.nomeSocial || '',
+      endereco: dados.assistida.endereco,
+      escolaridade: dados.assistida.escolaridade || '',
+      religiao: dados.assistida.religiao || '',
+      nacionalidade: dados.assistida.nacionalidade,
+      zonaHabitacao: dados.assistida.zonaHabitacao || '',
+      profissao: dados.assistida.profissao,
+      limitacaoFisica: dados.assistida.limitacaoFisica || '',
+      numeroCadastroSocial: dados.assistida.numeroCadastroSocial || '',
+      quantidadeDependentes: dados.assistida.quantidadeDependentes || 0,
+      temDependentes: dados.assistida.temDependentes || false,
+      
+      // Dados do caso
+      ...dados.caso,
+      
+      data: dados.data,
+      profissionalResponsavel: dados.profissionalResponsavel,
+      descricao: ''
+    });
+    
+    // 2. Salvar no BD usando o repository
+    const idCasoSalvo = await casoRepository.salvar(casoCriado);
+    
+    Logger.info('Caso salvo com sucesso no BD com ID:', idCasoSalvo);
+    return {
+      success: true,
+      idCaso: idCasoSalvo
+    };
+  } catch (error) {
+    Logger.error('Erro ao salvar caso no BD:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao salvar caso'
+    };
+  }
+});
+
 ipcMain.handle('assistida:criar', async(
   _event,
   data: {
@@ -372,6 +432,9 @@ ipcMain.on('window:open', (_event, windowName: string) => {
       break;
     case 'telaCasosRegistrados':
       windowManager.loadContent('main', 'tela-casos-registrados/index.html');
+      break;
+    case 'telaVisualizarCasosBD':
+      windowManager.loadContent('main', 'tela-visualizar-casos-bd/index.html');
       break;
     case 'testeForm':
       windowManager.loadContent('main', 'telaAssistidas.html');
