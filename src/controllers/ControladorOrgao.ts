@@ -34,7 +34,7 @@ export class ControladorOrgao {
     }
 
     // Por enquanto, só temos nome e email vindos da tela
-    const orgao = new OrgaoRedeApoio(nomeTrim, "", emailTrim, "", "");
+    const orgao = new OrgaoRedeApoio(nomeTrim, emailTrim);
 
     const criado = await this.orgaoRepository.criar(orgao);
 

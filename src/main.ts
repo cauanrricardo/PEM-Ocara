@@ -6,7 +6,8 @@ import { UserController } from './controllers/userController';
 import { AssistidaController } from './controllers/AssistidaController';
 import { CasoController } from './controllers/CasoController';
 import { ControladorOrgao } from './controllers/ControladorOrgao';
-import { MockOrgaoRepository } from './repositories/MockOrgaoRepository';
+import { PostgresOrgaoRepository } from './repositories/PostgresOrgaoRepository';
+import './database/db';
 
 
 const windowManager = new WindowManager();
@@ -14,7 +15,7 @@ const userController = new UserController();
 const assistidaController = new AssistidaController();
 const casoController = new CasoController(assistidaController.getAssistidaService());
 
-const orgaoRepository = new MockOrgaoRepository();
+const orgaoRepository = new PostgresOrgaoRepository();
 const orgaoController = new ControladorOrgao(orgaoRepository);
 
 // ==========================================
@@ -316,10 +317,7 @@ ipcMain.handle('orgao:create', async (_event, data: { nome: string; email: strin
       success: true,
       orgao: orgao.toJSON ? orgao.toJSON() : {
         nome: orgao.getNome(),
-        objetivo: orgao.getObjetivo(),
         email: orgao.getEmail(),
-        telefone: orgao.getTelefone(),
-        endereco: orgao.getEndereco(),
       },
     };
   } catch (error) {
@@ -341,10 +339,7 @@ ipcMain.handle('orgao:listarTodos', async () => {
       orgaos: orgaos.map(orgao =>
         orgao.toJSON ? orgao.toJSON() : {
           nome: orgao.getNome(),
-          objetivo: orgao.getObjetivo(),
           email: orgao.getEmail(),
-          telefone: orgao.getTelefone(),
-          endereco: orgao.getEndereco(),
         }
       ),
     };
