@@ -44,11 +44,11 @@ export interface IElectronAPI {
     agressorTentativaSuicidio: boolean;
     agressorDesempregado: string;
     agressorPossuiArmaFogo: string;
-    agressorAmeacouAlguem: string;
+    agressorAmeacouAlguem: string[];
     // Historico Violencia
-    ameacaFamiliar: boolean;
-    agressaoFisica: boolean;
-    outrasFormasViolencia: string;
+    ameacaFamiliar: string[];
+    agressaoFisica: string[];
+    outrasFormasViolencia: string[];
     abusoSexual: boolean;
     comportamentosAgressor: string[];
     ocorrenciaPolicialMedidaProtetivaAgressor: boolean;
@@ -123,6 +123,18 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  getInformacoesGeraisDoCaso: (idCaso: number) => Promise<{
+    success: boolean;
+    informacoes?: any;
+    error?: string;
+  }>;
+
+  listarCasosPorAssistida: (idAssistida: number) => Promise<{
+    success: boolean;
+    casos?: any[];
+    error?: string;
+  }>;
+
   casosPorProtocolo: (protocolo: number) => Promise<{
     success: boolean;
     caso?: any[];
@@ -138,6 +150,17 @@ export interface IElectronAPI {
   obterCasosPorProtocoloAssistida: (protocoloAssistida: number) => Promise<{
     success: boolean;
     casos?: any[];
+    error?: string;
+  }>;
+
+  salvarCasoBD: (dados: {
+    assistida: any;
+    caso: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) => Promise<{
+    success: boolean;
+    idCaso?: number;
     error?: string;
   }>;
 

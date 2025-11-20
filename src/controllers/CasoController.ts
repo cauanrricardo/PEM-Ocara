@@ -1,5 +1,6 @@
 import { CasoService } from "../services/CasoService";
 import { AssistidaService } from "../services/AssistidaService";
+import { ICasoRepository } from "../repository/ICasoRepository";
 import { Caso } from "../models/Caso/Caso";
 import { PdfService } from "../services/PDFService";
 
@@ -8,9 +9,9 @@ export class CasoController {
     private PdfService: PdfService
     private casoService: CasoService;
 
-    constructor(assistidaService?: AssistidaService) {
-        this.casoService = new CasoService(assistidaService);
-        this.PdfService = new PdfService(this.casoService)
+    constructor(assistidaService: AssistidaService, casoRepository: ICasoRepository) {
+        this.casoService = new CasoService(assistidaService, casoRepository);
+        this.PdfService = new PdfService(this.casoService);
     }
 
     handlerCriarCaso(dados: {
@@ -41,11 +42,11 @@ export class CasoController {
         agressorTentativaSuicidio: boolean;
         agressorDesempregado: string;
         agressorPossuiArmaFogo: string;
-        agressorAmeacouAlguem: string;
+        agressorAmeacouAlguem: string[];
         // Historico Violencia
-        ameacaFamiliar: boolean;
-        agressaoFisica: boolean;
-        outrasFormasViolencia: string;
+        ameacaFamiliar: string[];
+        agressaoFisica: string[];
+        outrasFormasViolencia: string[];
         abusoSexual: boolean;
         comportamentosAgressor: string[];
         ocorrenciaPolicialMedidaProtetivaAgressor: boolean;
@@ -114,5 +115,9 @@ export class CasoController {
             console.error("Erro no controller preview:", error);
             throw error;
         }
+    }
+    
+    async getInformacoesGeraisDoCaso(idCaso: number): Promise<any> {
+        return await this.casoService.getInformacoesGeraisDoCaso(idCaso);
     }
 }

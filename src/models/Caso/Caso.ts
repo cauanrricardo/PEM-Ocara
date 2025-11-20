@@ -65,12 +65,12 @@ export class Caso {
         agressorTentativaSuicidio: boolean,
         agressorDesempregado: string,
         agressorPossuiArmaFogo: string,
-        agressorAmeacouAlguem: string,
+        agressorAmeacouAlguem: string[],
 
         //Historico Violencia
-        ameacaFamiliar: boolean,
-        agressaoFisica: boolean,
-        outrasFormasViolencia: string,
+        ameacaFamiliar: string[],
+        agressaoFisica: string[],
+        outrasFormasViolencia: string[],
         abusoSexual: boolean,
         comportamentosAgressor: string[],
         ocorrenciaPolicialMedidaProtetivaAgressor: boolean,
@@ -85,7 +85,7 @@ export class Caso {
         assistidaSemCondicoes: boolean,
         assistidaRecusou: boolean,
         terceiroComunicante: boolean,
-        tipoViolencia: string,
+        tipoViolencia: string[],
 
         //Outras Infor Importantes
         moraEmAreaRisco: string,
@@ -327,7 +327,7 @@ export class Caso {
                 agressorTentativaSuicidio: this.sobreAgressor?.getAgressorTentativaSuicidio() ?? false,
                 agressorDesempregado: this.sobreAgressor?.getAgressorDesempregado() ?? "",
                 agressorPossuiArmaFogo: this.sobreAgressor?.getAgressorPossuiArmaFogo() ?? "",
-                agressorAmeacouAlguem: this.sobreAgressor?.getAgressorAmeacouAlguem() ?? ""
+                agressorAmeacouAlguem: this.sobreAgressor?.getAgressorAmeacouAlguem() ?? []
             },
             historicoViolencia: {
                 ameacaFamiliar: this.historicoViolencia?.getAmeacaFamiliar() ?? false,
@@ -367,7 +367,7 @@ export class Caso {
                 assistidaSemCondicoes: this.preenchimentoProfissional?.getAssistidaSemCondicoes() ?? false,
                 assistidaRecusou: this.preenchimentoProfissional?.getAssistidaRecusou() ?? false,
                 terceiroComunicante: this.preenchimentoProfissional?.getTerceiroComunicante() ?? false,
-                tipoViolencia: this.preenchimentoProfissional?.getTipoViolencia() ?? ""
+                tipoViolencia: this.preenchimentoProfissional?.getTipoViolencia() ?? []
             },
             anexos: this.anexos ?? [],
             encaminhamentos: this.encaminhamentos ?? []

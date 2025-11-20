@@ -49,8 +49,11 @@ async function carregarCasos() {
             return;
         }
 
-        const protocoloNum = parseInt(protocoloAssistida);
-        const resultado = await window.api.obterCasosPorProtocoloAssistida(protocoloNum);
+        const idAssistida = parseInt(protocoloAssistida);
+        console.log('Carregando casos para assistida:', idAssistida);
+        const resultado = await window.api.listarCasosPorAssistida(idAssistida);
+        sessionStorage.removeItem('protocoloAssistidaSelecionada');
+        console.log('Resultado da API:', resultado);
         
         if (resultado.success && resultado.casos && resultado.casos.length > 0) {
             exibirCasos(resultado.casos);
@@ -83,17 +86,20 @@ function exibirCasos(casos: any[]) {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'col-md-6';
         
-        const protocoloCaso = caso.protocoloCaso || 'N/A';
+        const idCaso = caso.id_caso || 'N/A';
+        const nomeRede = caso.nome_rede || 'Sem rede';
+        const status = caso.status || 'N/A';
+        const statusColor = status === 'Encaminhada' ? '#5cb85c' : '#d9534f';
         
         cardDiv.innerHTML = `
-            <div class="text-center card-paciente" data-protocolo="${protocoloCaso}">
-                <h3 class="mb-2">Protocolo: ${protocoloCaso}</h3>
+            <div class="text-center card-paciente" data-id="${idCaso}">
+                <h3 class="mb-2">ID Caso: ${idCaso}</h3>
                 <p>
-                    <span class="card-label">Rede:</span>
+                    <span class="card-label">Rede:</span> ${nomeRede}
                 </p>
                 <p class="status-text">
                     <span class="card-label">Status:</span> 
-                    <span style="color: #5cb85c;">Ativo</span>
+                    <span style="color: ${statusColor};">${status}</span>
                 </p>
             </div>
         `;
@@ -107,8 +113,10 @@ function exibirCasos(casos: any[]) {
                 cardElement.style.transform = 'scale(1)';
             });
             cardElement.addEventListener('click', () => {
-                window.api.obterCasosPorProtocoloAssistida(protocoloCaso);
-                console.log('Caso clicado:', protocoloCaso, caso);
+                sessionStorage.setItem('idCasoAtual', idCaso.toString());
+                window.api.openWindow("telaInformacoesCaso");
+                console.log(`Caso selecionado: ID ${idCaso}`);
+                console.log(caso);
             });
         }
         

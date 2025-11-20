@@ -1,4 +1,5 @@
 import { contextBridge, ipcRenderer, webUtils } from 'electron';
+import { get } from 'http';
 
 contextBridge.exposeInMainWorld('api', {
   createUser: (name: string, email: string) =>  
@@ -21,8 +22,19 @@ contextBridge.exposeInMainWorld('api', {
 
   listarAssistidas: () => ipcRenderer.invoke('assistida:listarTodas'),
   
+  listarCasosPorAssistida: (idAssistida: number) =>
+    ipcRenderer.invoke('caso:listarPorAssistida', idAssistida),
+  
   criarCaso: (data: any) =>
     ipcRenderer.invoke('caso:criar', data),
+
+  salvarCasoBD: (dados: {
+    assistida: any;
+    caso: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) =>
+    ipcRenderer.invoke('caso:salvarBD', dados),
 
   casosPorProtocolo: (protocolo: number) =>
     ipcRenderer.invoke('caso:getByProtocolo', protocolo),
@@ -32,6 +44,9 @@ contextBridge.exposeInMainWorld('api', {
 
   gerarPdf: (protocoloCaso: number) =>
     ipcRenderer.invoke('caso:gerarPdf', protocoloCaso),
+  
+  getInformacoesGeraisDoCaso: (idCaso: number) =>
+    ipcRenderer.invoke('caso:obterInformacoesGerais', idCaso),
 
   criarAssistida: (
     nome: string,

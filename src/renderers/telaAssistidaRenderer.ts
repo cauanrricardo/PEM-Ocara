@@ -43,8 +43,8 @@ function exibirAssistidas(assistidas: any[]) {
         const cardDiv = document.createElement('div');
         cardDiv.className = 'col-md-6';
         cardDiv.innerHTML = `
-            <div class="text-center card-paciente";" data-protocolo="${assistida.protocolo}">
-                <h3 class="mb-2">ID: ${assistida.protocolo || 'N/A'}</h3>
+            <div class="text-center card-paciente" data-id="${assistida.id}">
+                <h3 class="mb-2">ID: ${assistida.id || 'N/A'}</h3>
                 <p>${assistida.nome || 'N/A'}</p>
             </div>
         `;
@@ -58,8 +58,8 @@ function exibirAssistidas(assistidas: any[]) {
                 cardElement.style.transform = 'scale(1)';
             });
             cardElement.addEventListener('click', () => {
-                console.log('Assistida clicada:', assistida.protocolo, assistida);
-                sessionStorage.setItem('protocoloAssistidaSelecionada', String(assistida.protocolo));
+                console.log('Assistida clicada:', assistida.id, assistida);
+                sessionStorage.setItem('protocoloAssistidaSelecionada', String(assistida.id));
                 window.api.openWindow("telaCasosRegistrados");
             });
         }

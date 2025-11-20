@@ -6,14 +6,70 @@ import { UserController } from './controllers/UserController';
 import { PdfService } from './services/PDFService';
 import { AssistidaController } from './controllers/AssistidaController';
 import { CasoController } from './controllers/CasoController';
+import { PostgresInitializer } from './db/PostgresInitializer';
+import { IDataBase } from './db/IDataBase';
+import { CasoRepositoryPostgres } from './repository/CasoRepositoryPostgres';
 import { CasoService } from './services/CasoService';
+
+
+
 
 const windowManager = new WindowManager();
 const userController = new UserController();
-const assistidaController = new AssistidaController();
-const casoService = new CasoService(assistidaController.getAssistidaService());
-const casoController = new CasoController(assistidaController.getAssistidaService());
-const pdfService = new PdfService(casoService);
+
+// Repository será inicializado na função bootstrap
+let casoRepository: CasoRepositoryPostgres;
+let assistidaController: AssistidaController;
+let casoController: CasoController;
+
+// Repository para salvar casos no BD
+
+// ==========================================
+// INITIALIZATION & BOOTSTRAP
+// ==========================================
+
+function createMainWindow(): void {
+  Logger.info('Criando janela principal...');
+  
+  windowManager.createWindow('main', {
+    width: 900,
+    height: 700,
+    htmlFile: 'tela-login/index.html',
+    preloadFile: 'preload.js'
+  });
+}
+
+async function bootstrap(): Promise<void> {
+  Logger.info('Iniciando aplicação...');
+  
+  // Inicializar banco de dados
+  const dbInitializer: IDataBase = new PostgresInitializer();
+  await dbInitializer.initialize();
+  
+  // Inicializar repository com a pool existente do PostgreSQL
+  const postgresInitializer = dbInitializer as PostgresInitializer;
+  casoRepository = new CasoRepositoryPostgres(postgresInitializer.pool());
+  Logger.info('Repository inicializado com sucesso!');
+  
+  // Inicializar controllers
+  assistidaController = new AssistidaController(casoRepository);
+
+  casoController = new CasoController(assistidaController.getAssistidaService(), casoRepository);
+  
+  createMainWindow();
+  Logger.info('Aplicação iniciada com sucesso!');
+}
+
+app.whenReady().then(() => {
+  Logger.info('App pronto!');
+  bootstrap();
+
+  app.on('activate', () => {
+    if (BrowserWindow.getAllWindows().length === 0) {
+      createMainWindow();
+    }
+  });
+});
 
 // ==========================================
 // IPC HANDLERS - Backend Logic
@@ -45,10 +101,10 @@ ipcMain.handle('user:create', async (_event, data: { name: string; email: string
 ipcMain.handle('assistida:listarTodas', async () => {
   Logger.info("requisicao: listar Assistidas")
   try {
-    const assistidas = assistidaController.handlerListarTodasAssistidas();
+    const assistidas = await assistidaController.handlerListarTodasAssistidas();
     return {
       success: true,
-      assistidas: assistidas.map(u => u.toJSON())
+      assistidas: assistidas
     };
   } catch (error) {
     Logger.error('Erro ao buscar assistidas:', error);
@@ -90,12 +146,12 @@ ipcMain.handle('caso:criar', async(
     agressorTentativaSuicidio: boolean,
     agressorDesempregado: string,
     agressorPossuiArmaFogo: string,
-    agressorAmeacouAlguem: string,
+    agressorAmeacouAlguem: string[],
 
     //Historico Violencia
-    ameacaFamiliar: boolean,
-    agressaoFisica: boolean,
-    outrasFormasViolencia: string,
+    ameacaFamiliar: string[],
+    agressaoFisica: string[],
+    outrasFormasViolencia: string[],
     abusoSexual: boolean,
     comportamentosAgressor: string[],
     ocorrenciaPolicialMedidaProtetivaAgressor: boolean,
@@ -138,17 +194,20 @@ ipcMain.handle('caso:criar', async(
 
   }) => {
   try {
+    Logger.info('Criando novo caso...');
     const result = casoController.handlerCriarCaso(data);
     
+    Logger.info('Caso criado com sucesso:', result.getProtocoloCaso());
     return {
       success: true,
       caso: result.toJSON()
     };
   } catch (error) {
     Logger.error('Erro ao criar Caso:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido ao criar caso';
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Erro desconhecido'
+      error: errorMessage
     };
   }
     
@@ -201,7 +260,7 @@ ipcMain.handle('caso:gerarPdf', async(_event, protocoloCaso: number) => {
   try {
     Logger.info('Requisição para gerar PDF do caso:', protocoloCaso);
 
-    const caminhoDoPdf = await pdfService.criarPdfDeFormulario(protocoloCaso);
+    const caminhoDoPdf = await casoController.handlerCriarPdfCaso(protocoloCaso);
 
     return {
       sucess: true,
@@ -214,6 +273,94 @@ ipcMain.handle('caso:gerarPdf', async(_event, protocoloCaso: number) => {
         error: error instanceof Error ? error.message : 'Erro desconhecido'
       };
     }
+});
+// Novo handler para buscar casos do banco
+ipcMain.handle('caso:listarPorAssistida', async(_event, idAssistida: number) => {
+  try {
+    Logger.info('Requisição para buscar casos da assistida do BD:', idAssistida);
+    
+    const casos = await casoRepository.getAllCasosAssistida(idAssistida);
+    
+    return {
+      success: true,
+      casos: casos
+    };
+  } catch (error) {
+    Logger.error('Erro ao buscar casos da assistida do BD:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido',
+      casos: []
+    };
+  }
+});
+
+ipcMain.handle('caso:obterInformacoesGerais', async(_event, idCaso: number) => {
+  try {
+    Logger.info('Requisição para obter informações gerais do caso:', idCaso);
+    const infosCaso = await casoController.getInformacoesGeraisDoCaso(idCaso);
+    return {
+      success: true,
+      informacoes: infosCaso
+    };
+  } catch (error) {
+    Logger.error('Erro ao obter informações gerais do caso:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao obter informações gerais do caso'
+    };
+  }
+});
+
+ipcMain.handle('caso:salvarBD', async(_event, dados: {
+  assistida: any;
+  caso: any;
+  profissionalResponsavel: string;
+  data: Date;
+}) => {
+  try {
+    Logger.info('Requisição para salvar caso no banco de dados via Repository');
+    
+    // 1. Criar o objeto Caso usando o controller
+    const casoCriado = casoController.handlerCriarCaso({
+      nomeAssistida: dados.assistida.nome,
+      idadeAssistida: dados.assistida.idade,
+      identidadeGenero: dados.assistida.identidadeGenero || '',
+      nomeSocial: dados.assistida.nomeSocial || '',
+      endereco: dados.assistida.endereco,
+      escolaridade: dados.assistida.escolaridade || '',
+      religiao: dados.assistida.religiao || '',
+      nacionalidade: dados.assistida.nacionalidade,
+      zonaHabitacao: dados.assistida.zonaHabitacao || '',
+      profissao: dados.assistida.profissao,
+      limitacaoFisica: dados.assistida.limitacaoFisica || '',
+      numeroCadastroSocial: dados.assistida.numeroCadastroSocial || '',
+      quantidadeDependentes: dados.assistida.quantidadeDependentes || 0,
+      temDependentes: dados.assistida.temDependentes || false,
+      
+      // Dados do caso
+      ...dados.caso,
+      
+      data: dados.data,
+      profissionalResponsavel: dados.profissionalResponsavel,
+      descricao: ''
+    });
+    
+    // 2. Salvar no BD usando o repository
+    const idCasoSalvo = await casoRepository.salvar(casoCriado);
+    
+    Logger.info('Caso salvo com sucesso no BD com ID:', idCasoSalvo);
+    return {
+      success: true,
+      idCaso: idCasoSalvo
+    };
+  } catch (error) {
+    Logger.error('Erro ao salvar caso no BD:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao salvar caso'
+    };
+  }
 });
 
 ipcMain.handle('assistida:criar', async(
@@ -365,6 +512,15 @@ ipcMain.on('window:open', (_event, windowName: string) => {
     case 'telaCasosRegistrados':
       windowManager.loadContent('main', 'tela-casos-registrados/index.html');
       break;
+    case 'telaVisualizarCasosBD':
+      windowManager.loadContent('main', 'tela-visualizar-casos-bd/index.html');
+      break;
+    case 'testeForm':
+      windowManager.loadContent('main', 'telaAssistidas.html');
+      break;
+    case 'telaInformacoesCaso':
+      windowManager.loadContent('main', 'tela-informacoes-caso/index.html');
+      break;
     default:
       console.log('tela desconhecida:', windowName);
   }
@@ -378,28 +534,6 @@ ipcMain.on('window:close', (event) => {
 // ==========================================
 // APP LIFECYCLE
 // ==========================================
-
-function createMainWindow() {
-  Logger.info('Criando janela principal...');
-  
-  windowManager.createWindow('main', {
-    width: 900,
-    height: 700,
-    htmlFile: 'tela-login/index.html',
-    preloadFile: 'preload.js'
-  });
-}
-
-app.whenReady().then(() => {
-  Logger.info('App inicializado!');
-  createMainWindow();
-
-  app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
-      createMainWindow();
-    }
-  });
-});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

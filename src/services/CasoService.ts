@@ -1,13 +1,16 @@
 import { Caso } from "../models/Caso/Caso";
 import { AssistidaService } from "./AssistidaService";
+import { ICasoRepository } from "../repository/ICasoRepository";
 
 export class CasoService {
 
     private assistidaService: AssistidaService;
+    private casoRepository: ICasoRepository;
     private casos: Caso[] = [];
 
-    constructor(assistidaService?: AssistidaService) {
-        this.assistidaService = assistidaService || new AssistidaService();
+    constructor(assistidaService: AssistidaService, casoRepository: ICasoRepository) {
+        this.assistidaService = assistidaService;
+        this.casoRepository = casoRepository;
     }
     criarCaso(dados: {
         // Assistida
@@ -37,11 +40,11 @@ export class CasoService {
         agressorTentativaSuicidio: boolean;
         agressorDesempregado: string;
         agressorPossuiArmaFogo: string;
-        agressorAmeacouAlguem: string;
+        agressorAmeacouAlguem: string[];
         // Historico Violencia
-        ameacaFamiliar: boolean;
-        agressaoFisica: boolean;
-        outrasFormasViolencia: string;
+        ameacaFamiliar: string[];
+        agressaoFisica: string[];
+        outrasFormasViolencia: string[];
         abusoSexual: boolean;
         comportamentosAgressor: string[];
         ocorrenciaPolicialMedidaProtetivaAgressor: boolean;
@@ -79,31 +82,23 @@ export class CasoService {
         descricao: string;
     
     }) {
-        // Se foi passado um protocoloAssistida, busca a assistida existente
-        // Senão, cria uma nova
-        let assistida = null;
-        if ((dados as any).protocoloAssistida) {
-            assistida = this.assistidaService.getAssistidaPorProtocolo((dados as any).protocoloAssistida);
-        }
-        
-        if (!assistida) {
-            assistida = this.assistidaService.criarAssistida(
-                dados.nomeAssistida,
-                dados.idadeAssistida,
-                dados.identidadeGenero,
-                dados.nomeSocial,
-                dados.endereco,
-                dados.escolaridade,
-                dados.religiao,
-                dados.nacionalidade,
-                dados.zonaHabitacao,
-                dados.profissao,
-                dados.limitacaoFisica,
-                dados.numeroCadastroSocial,
-                dados.quantidadeDependentes,
-                dados.temDependentes
-            );
-        }
+        // Criar nova assistida sempre
+        const assistida = this.assistidaService.criarAssistida(
+            dados.nomeAssistida,
+            dados.idadeAssistida,
+            dados.identidadeGenero,
+            dados.nomeSocial,
+            dados.endereco,
+            dados.escolaridade,
+            dados.religiao,
+            dados.nacionalidade,
+            dados.zonaHabitacao,
+            dados.profissao,
+            dados.limitacaoFisica,
+            dados.numeroCadastroSocial,
+            dados.quantidadeDependentes,
+            dados.temDependentes
+        );
 
         const novoCaso = new Caso(assistida);
 
@@ -146,7 +141,7 @@ export class CasoService {
             dados.assistidaSemCondicoes,
             dados.assistidaRecusou,
             dados.terceiroComunicante,
-            dados.tipoViolencia,
+            Array.isArray(dados.tipoViolencia) ? dados.tipoViolencia : [dados.tipoViolencia],
             dados.moraEmAreaRisco,
             dados.dependenteFinanceiroAgressor,
             dados.aceitaAbrigamentoTemporario,
@@ -171,7 +166,6 @@ export class CasoService {
 
         const protocoloAssistida = novoCaso.getAssistida()?.getProtocolo() || 0;
         
-        this.assistidaService.addCasoAAssistida(protocoloAssistida, novoCaso);
         this.casos.push(novoCaso);
 
         return novoCaso;
@@ -273,5 +267,93 @@ export class CasoService {
         const casosFiltrados = this.casos.filter(caso => caso.getAssistida()?.getProtocolo() === protocoloAssistida);
         
         return casosFiltrados;
-    } 
+    }
+
+    public mapearCasoDoBanco(dados: any): any {
+        return {
+            assistida: {
+                id: dados.assistida?.id,
+                nome: dados.assistida?.nome,
+                idade: dados.assistida?.idade,
+                identidadeGenero: dados.assistida?.identidadegenero,
+                nomeSocial: dados.assistida?.n_social,
+                endereco: dados.assistida?.endereco,
+                escolaridade: dados.assistida?.escolaridade,
+                religiao: dados.assistida?.religiao,
+                nacionalidade: dados.assistida?.nacionalidade,
+                zona: dados.assistida?.zona,
+                ocupacao: dados.assistida?.ocupacao,
+                cadSocial: dados.assistida?.cad_social,
+                dependentes: dados.assistida?.dependentes,
+                corRaca: dados.assistida?.cor_raca
+            },
+            // Dados do Caso
+            caso: {
+                idCaso: dados.caso?.id_caso,
+                data: dados.caso?.data,
+                separacao: dados.caso?.separacao,
+                novoRelacionamento: dados.caso?.novo_relac,
+                abrigo: dados.caso?.abrigo,
+                dependenteFinanceiro: dados.caso?.depen_finc,
+                moraAreaRisco: dados.caso?.mora_risco,
+                medida: dados.caso?.medida,
+                frequencia: dados.caso?.frequencia,
+                anotacoesLivres: dados.caso?.anotacoes_livres
+            },
+            // Dados do Agressor
+            agressor: {
+                id: dados.agressor?.id_agressor,
+                nome: dados.agressor?.nome,
+                idade: dados.agressor?.idade,
+                vinculo: dados.agressor?.vinculo,
+                doenca: dados.agressor?.doenca,
+                medidaProtetiva: dados.agressor?.medida_protetiva,
+                suicidio: dados.agressor?.suicidio,
+                financeiro: dados.agressor?.financeiro,
+                armaFogo: dados.agressor?.arma_de_fogo
+            },
+            // Substâncias e ameaças do agressor
+            substanciasAgressor: dados.substanciasAgressor || [],
+            ameacasAgressor: dados.ameacasAgressor || [],
+            // Violência
+            violencia: {
+                id: dados.violencia?.id_violencia,
+                estupro: dados.violencia?.estupro,
+                dataOcorrencia: dados.violencia?.data_ocorrencia
+            },
+            tiposViolencia: dados.tiposViolencia || [],
+            ameacasViolencia: dados.ameacasViolencia || [],
+            agressoesViolencia: dados.agressoesViolencia || [],
+            comportamentosViolencia: dados.comportamentosViolencia || [],
+            // Filhos
+            filhos: (dados.filhos || []).map((f: any) => ({
+                seqFilho: f.seq_filho,
+                faixaEtaria: f.faixa_etaria,
+                deficiencia: f.qtd_filhos_deficiencia,
+                viuViolencia: f.viu_violencia,
+                violenciaGravidez: f.violencia_gravidez,
+                qtdAgressor: f.qtd_filho_agressor,
+                qtdOutroRelacionamento: f.qtd_filho_outro_relacionamento
+            })),
+            // Anexos
+            anexos: (dados.anexos || []).map((a: any) => ({
+                id: a.id_anexo,
+                nome: a.nome,
+                tipo: a.tipo,
+                dados: a.dados
+            })),
+            // Funcionário responsável
+            funcionarioResponsavel: dados.funcionario
+        };
+    }
+
+    async getInformacoesGeraisDoCaso(idCaso: number): Promise<any> {
+        try {
+            const infosCaso = await this.casoRepository.getInformacoesGeraisDoCaso(idCaso);
+            return infosCaso;
+        } catch (error) {
+            console.error('Erro ao obter informações gerais do caso:', error);
+            throw error;
+        }
+    }
 }
