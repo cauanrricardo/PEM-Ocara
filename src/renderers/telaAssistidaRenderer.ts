@@ -4,6 +4,7 @@ export {}
 
 const telaInicialBtn = document.getElementById('telaInicial') as HTMLLIElement;
 const cadastroAssistidaBtn = document.getElementById('telaCadastroAssistida') as HTMLButtonElement;
+const telaEstatisticasBtn = document.getElementById('telaEstatisticas') as HTMLLIElement;
 
 telaInicialBtn.addEventListener('click', async (event) => {
     const mudarTela = await window.api.openWindow("telaInicial");
@@ -13,9 +14,16 @@ cadastroAssistidaBtn.addEventListener('click', async (event) => {
     const mudarTela = await window.api.openWindow("telaCadastroAssistida");
 })
 
+telaEstatisticasBtn.addEventListener('click', async (event) => {
+    const mudarTela = await window.api.openWindow("telaEstatisticas");
+})
+
 document.addEventListener('DOMContentLoaded', async () => {
     await carregarAssistidas();
 });
+
+
+
 
 async function carregarAssistidas() {
     try {

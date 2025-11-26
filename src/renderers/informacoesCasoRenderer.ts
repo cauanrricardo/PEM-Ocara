@@ -332,7 +332,12 @@ class UIManager {
             const tipos = Array.isArray(dados.tipoviolencia) 
                 ? dados.tipoviolencia.filter((v: any) => v).join(', ')
                 : dados.tipoviolencia;
-            tipoViolencia.textContent = tipos;
+
+            if(tipos === '') {
+                tipoViolencia.textContent = "Não informado";
+            } else {
+                tipoViolencia.textContent = tipos;
+            }
         }
     }
 }

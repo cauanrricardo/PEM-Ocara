@@ -571,6 +571,24 @@ ipcMain.handle('user:getById', async (_event, id: string) => {
   }
 });
 
+ipcMain.handle('assistida:listarTodas', async () => {
+  try {
+    Logger.info('Requisição para listar todas as assistidas');
+    const assistidas = await assistidaController.handlerListarTodasAssistidas();
+    
+    return {
+      success: true,
+      assistidas
+    };
+  } catch (error) {
+    Logger.error('Erro ao listar assistidas:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido'
+    };
+  }
+});
+
 // ==========================================
 // WINDOW MANAGEMENT
 // ==========================================
