@@ -111,4 +111,41 @@ export class FuncionarioService {
             // Senha é propositalmente omitida aqui
         };
     }
+
+    async atualizarPerfil(
+        email: string, 
+        nome: string, 
+        senhaAtual: string, 
+        novaSenha?: string
+    ): Promise<any> {
+        // 1. Buscar usuário no banco
+        const funcionario = await this.repository.findByEmail(email);
+        if (!funcionario) {
+            throw new Error('Usuário não encontrado.');
+        }
+
+        // 2. VERIFICAÇÃO DE SEGURANÇA (Obrigatória)
+        // Compara a senha informada com o hash salvo no banco
+        const senhaValida = await bcrypt.compare(senhaAtual, funcionario.senha);
+        if (!senhaValida) {
+            throw new Error('A senha atual está incorreta.');
+        }
+
+        // 3. Preparar dados para atualização
+        // Só permitimos mudar Nome e Senha (Cargo e Email são protegidos)
+        const dadosAtualizacao: Partial<Funcionario> = {
+            nome: nome
+        };
+
+        // 4. Se o usuário quiser trocar a senha
+        if (novaSenha && novaSenha.trim() !== '') {
+            const novaSenhaHash = await bcrypt.hash(novaSenha, this.SALT_ROUNDS);
+            dadosAtualizacao.senha = novaSenhaHash;
+        }
+
+        // 5. Salvar alterações
+        const atualizado = await this.repository.update(email, dadosAtualizacao);
+
+        return this.removerSenha(atualizado);
+    }
 }
