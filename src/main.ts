@@ -10,7 +10,10 @@ import { PostgresInitializer } from './db/PostgresInitializer';
 import { IDataBase } from './db/IDataBase';
 import { CasoRepositoryPostgres } from './repository/CasoRepositoryPostgres';
 import { CasoService } from './services/CasoService';
-
+// Imports do Módulo de Funcionários
+import { FuncionarioRepositoryPostgres } from './repository/FuncionarioRepositoryPostgres';
+import { FuncionarioService } from './services/FuncionarioService';
+import { ControladorFuncionario } from './controllers/FuncionarioController';
 
 
 
@@ -21,6 +24,7 @@ const userController = new UserController();
 let casoRepository: CasoRepositoryPostgres;
 let assistidaController: AssistidaController;
 let casoController: CasoController;
+let funcionarioController: ControladorFuncionario;
 
 // Repository para salvar casos no BD
 
@@ -49,13 +53,15 @@ async function bootstrap(): Promise<void> {
   // Inicializar repository com a pool existente do PostgreSQL
   const postgresInitializer = dbInitializer as PostgresInitializer;
   casoRepository = new CasoRepositoryPostgres(postgresInitializer.pool());
+  const funcionarioRepository = new FuncionarioRepositoryPostgres(postgresInitializer.pool());
   Logger.info('Repository inicializado com sucesso!');
   
   // Inicializar controllers
   assistidaController = new AssistidaController(casoRepository);
+  const funcionarioService = new FuncionarioService(funcionarioRepository);
 
   casoController = new CasoController(assistidaController.getAssistidaService(), casoRepository);
-  
+  funcionarioController = new ControladorFuncionario(funcionarioService);
   createMainWindow();
   Logger.info('Aplicação iniciada com sucesso!');
 }
@@ -586,6 +592,68 @@ ipcMain.handle('assistida:listarTodas', async () => {
       success: false,
       error: error instanceof Error ? error.message : 'Erro desconhecido'
     };
+  }
+});
+
+
+// ==========================================
+// IPC HANDLERS - MÓDULO FUNCIONÁRIO
+// ==========================================
+
+// 1. Criar Funcionário
+ipcMain.handle('create-funcionario', async (_event, data) => {
+  try {
+    Logger.info('Requisição para criar funcionário:', data.email);
+    return await funcionarioController.cadastrarFuncionario(data);
+  } catch (error) {
+    Logger.error('Erro no handler create-funcionario:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' };
+  }
+});
+
+// 2. Listar Todos
+ipcMain.handle('get-funcionarios', async () => {
+  try {
+    Logger.info('Requisição para listar funcionários');
+    const resultado = await funcionarioController.listarFuncionarios();
+    if (resultado.success) return resultado.lista;
+    throw new Error(resultado.error);
+  } catch (error) {
+    Logger.error('Erro no handler get-funcionarios:', error);
+    throw error;
+  }
+});
+
+// 3. Buscar por Email
+ipcMain.handle('get-funcionario-email', async (_event, email: string) => {
+  try {
+    Logger.info('Requisição para buscar funcionário por email:', email);
+    return await funcionarioController.buscarPorEmail(email);
+  } catch (error) {
+    Logger.error('Erro no handler get-funcionario-email:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' };
+  }
+});
+
+// 4. Atualizar
+ipcMain.handle('update-funcionario', async (_event, { email, dados }) => {
+  try {
+    Logger.info('Requisição para atualizar funcionário:', email);
+    return await funcionarioController.atualizarFuncionario(email, dados);
+  } catch (error) {
+    Logger.error('Erro no handler update-funcionario:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' };
+  }
+});
+
+// 5. Deletar
+ipcMain.handle('delete-funcionario', async (_event, email: string) => {
+  try {
+    Logger.info('Requisição para deletar funcionário:', email);
+    return await funcionarioController.deletarFuncionario(email);
+  } catch (error) {
+    Logger.error('Erro no handler delete-funcionario:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' };
   }
 });
 
