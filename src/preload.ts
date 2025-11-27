@@ -114,6 +114,8 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.on('caso:criado', (_event, caso) => callback(caso));
   },
 
+  excluirAnexo: (idAnexo: number) => ipcRenderer.invoke('caso:deletarAnexo', idAnexo),
+
   removeUserCreatedListener: () => {
     ipcRenderer.removeAllListeners('user:created');
   },

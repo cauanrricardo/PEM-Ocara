@@ -462,6 +462,20 @@ export class CasoService {
     /**
      * Recupera anexos de um caso do banco de dados
      */
+
+    async excluirAnexo(idAnexo: number): Promise<boolean> {
+        try {
+            if (!this.anexoRepository) {
+                return false;
+            }
+            const success = await this.anexoRepository.deletarAnexo(idAnexo);
+            return success;
+        } catch (error) {
+            console.error('Erro ao excluir anexo:', error);
+            throw error;
+        }
+    }
+
     async recuperarAnexosDoCaso(idCaso: number): Promise<Anexo[]> {
         try {
             if (!this.anexoRepository) {

@@ -150,9 +150,7 @@ export class CasoController {
 
     async handlerRecuperarAnexosDoCaso(idCaso: number): Promise<any[]> {
         try {
-            console.log(`🔍 CasoController: Recuperando anexos do caso ${idCaso}`);
             const anexos = await this.casoService.recuperarAnexosDoCaso(idCaso);
-            console.log(`✓ CasoController: ${anexos.length} anexo(s) recuperado(s)`);
             return anexos;
         } catch (error) {
             console.error(`✗ CasoController: Erro ao recuperar anexos:`, error);
@@ -176,4 +174,13 @@ export class CasoController {
         }
     }
 
+    async handlerExcluirAnexo(idAnexo: number): Promise<boolean> {
+        try {
+            const success = await this.casoService.excluirAnexo(idAnexo);
+            return success;
+        } catch (error) {
+            console.error(`CasoController: Erro ao excluir anexo:`, error);
+            throw error;
+        }
+    }
 }

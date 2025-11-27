@@ -147,6 +147,11 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  excluirAnexo: (idAnexo: number) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
+
   recuperarAnexosDoCaso: (idCaso: number) => Promise<{
     success: boolean;
     anexos?: any[];
@@ -155,6 +160,7 @@ export interface IElectronAPI {
 
   salvarAnexo: (anexo: any, idCaso: number, idAssistida: number) => Promise<{
     success: boolean;
+    idAnexo?: number;
     error?: string;
   }>;
 

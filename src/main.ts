@@ -364,6 +364,22 @@ ipcMain.handle('caso:obterInformacoesGerais', async(_event, idCaso: number) => {
   }
 });
 
+ipcMain.handle('caso:deletarAnexo', async(_event, idAnexo: number) => {
+  try {
+    Logger.info('Requisição para deletar anexo:', idAnexo);
+    const sucesso = await casoController.handlerExcluirAnexo(idAnexo);
+    return {
+      success: sucesso
+    };
+  } catch (error) {
+    Logger.error('Erro ao deletar anexo:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao deletar anexo'
+    };
+  }
+});
+
 ipcMain.handle('caso:getTotalCasosNoAno', async() => {
   try {
     Logger.info('Requisição para obter total de casos no ano');

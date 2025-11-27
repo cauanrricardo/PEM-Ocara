@@ -211,7 +211,7 @@ class UIManager {
                         <span class="nome-arquivo" title="${arquivo.nome}" data-action="download" style="cursor: pointer;">${nomeExibicao}</span>
                         <span class="tamanho-arquivo">${arquivo.tamanho}</span>
                     </div>
-                    <button class="btn-apagar" type="button" data-action="delete"><span class="material-symbols-outlined">delete_forever</span></button>
+                    <button class="btn-apagar" id="deletar-anexo" type="button" data-action="delete"><span class="material-symbols-outlined">delete_forever</span></button>
                 `;
             }
             container.appendChild(li);
@@ -431,13 +431,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     };
 
 
-
     const acoesArquivo = {
         onDelete: async (id: any) => {
+            console.log('🗑️ Iniciando deleção do arquivo com ID:', id, 'tipo:', typeof id);
+            console.log('Arquivos antes:', fileManager.obterTodosCombinados());
+            
             const confirmar = await uiManager.mostrarConfirmacao('Tem certeza que deseja apagar este arquivo?');
             if (confirmar) {
-                fileManager.remover(id);
-                atualizarTela();
+                try {
+                    console.log('Deletando do banco...');
+                    await window.api.excluirAnexo(id);
+                    console.log('Removendo da memória com ID:', Number(id));
+                    fileManager.remover(Number(id));
+                    console.log('Arquivos depois:', fileManager.obterTodosCombinados());
+                    atualizarTela();
+                    uiManager.mostrarPopup('Arquivo deletado com sucesso!');
+                } catch (erro) {
+                    console.error('Erro ao deletar:', erro);
+                    uiManager.mostrarPopup('Erro ao deletar arquivo');
+                }
             }
         },
         onCancel: async (id: any) => {
@@ -529,6 +541,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (resultado.success) {
                 arquivo.status = 'upado';
                 arquivo.progresso = 100;
+                // Atualizar o ID do arquivo com o ID retornado do banco
+                if (resultado.idAnexo) {
+                    arquivo.id = resultado.idAnexo;
+                    console.log('Arquivo salvo com novo ID:', resultado.idAnexo);
+                }
             } else {
                 arquivo.status = 'erro';
             }
