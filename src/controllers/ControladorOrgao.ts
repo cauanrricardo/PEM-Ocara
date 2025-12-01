@@ -1,6 +1,6 @@
 // src/controllers/ControladorOrgao.ts
 import { OrgaoRedeApoio } from "../models/Rede-Apoio/OrgaoRedeApoio";
-import { IOrgaoRepository } from "../repositories/IOrgaoRepository";
+import { IOrgaoRepository } from "../repository/IOrgaoRepository";
 
 interface CadastrarOrgaoResult {
   success: boolean;

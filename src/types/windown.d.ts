@@ -20,6 +20,7 @@ export interface IElectronAPI {
   }>;
 
   criarCaso: (dados: {
+    anexo: string[]
     // Assistida
     nomeAssistida: string;
     idadeAssistida: number;
@@ -47,11 +48,11 @@ export interface IElectronAPI {
     agressorTentativaSuicidio: boolean;
     agressorDesempregado: string;
     agressorPossuiArmaFogo: string;
-    agressorAmeacouAlguem: string;
+    agressorAmeacouAlguem: string[];
     // Historico Violencia
-    ameacaFamiliar: boolean;
-    agressaoFisica: boolean;
-    outrasFormasViolencia: string;
+    ameacaFamiliar: string[];
+    agressaoFisica: string[];
+    outrasFormasViolencia: string[];
     abusoSexual: boolean;
     comportamentosAgressor: string[];
     ocorrenciaPolicialMedidaProtetivaAgressor: boolean;
@@ -66,7 +67,7 @@ export interface IElectronAPI {
     terceiroComunicante: boolean;
     tipoViolencia: string;
     // Outras Infor Importantes
-    moraEmAreaRisco: boolean;
+    moraEmAreaRisco: string; //arrumar
     dependenteFinanceiroAgressor: boolean;
     aceitaAbrigamentoTemporario: boolean;
     // Sobre voce
@@ -76,7 +77,7 @@ export interface IElectronAPI {
     temFilhosOutroRelacionamento: boolean;
     qntFilhosOutroRelacionamento: number;
     faixaFilhos: string[];
-    filhosComDeficiencia: boolean;
+    filhosComDeficiencia: number;
     conflitoAgressor: string;
     filhosPresenciaramViolencia: boolean;
     violenciaDuranteGravidez: boolean;
@@ -126,9 +127,93 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  getEnderecosAssistidas: () => Promise<{
+    success: boolean;
+    enderecos?: any[];
+    error?: string;
+  }>;
+
+  getTotalCasos: () => Promise<{
+    success: boolean;
+    totalCasos?: number;
+    error?: string;
+  }>;
+
+  getTotalCasosMes: (mes: number, ano: number) => Promise<{
+    success: boolean;
+    totalCasosMes?: number;
+    error?: string;
+  }>;
+
+  getTotalCasosNoAnoFiltrado: (regioes: string[], dataInicio?: string, dataFim?: string) => Promise<{
+    success: boolean;
+    totalCasos?: any[];
+    error?: string;
+  }>;
+
+  excluirAnexo: (idAnexo: number) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
+
+  recuperarAnexosDoCaso: (idCaso: number) => Promise<{
+    success: boolean;
+    anexos?: any[];
+    error?: string;
+  }>;
+
+  salvarAnexo: (anexo: any, idCaso: number, idAssistida: number) => Promise<{
+    success: boolean;
+    idAnexo?: number;
+    error?: string;
+  }>;
+
+  downloadAnexo: (idAnexo: string, nomeArquivo: string) => Promise<{
+    success: boolean;
+    message?: string;
+    path?: string;
+    error?: string;
+  }>;
+
+  getEnderecosAssistidasFiltrado: (dataInicio?: string, dataFim?: string) => Promise<{
+    success: boolean;
+    enderecos?: any[];
+    error?: string;
+  }>;
+
+  getTotalCasosFiltrado: (regioes: string[], dataInicio?: string, dataFim?: string) => Promise<{
+    success: boolean;
+    totalCasos?: number;
+    error?: string;
+  }>;
+
+  getInformacoesGeraisDoCaso: (idCaso: number) => Promise<{
+    success: boolean;
+    informacoes?: any;
+    error?: string;
+  }>;
+
+  getTotalCasosNoAno: () => Promise<{
+    success: boolean;
+    totalCasos?: any[];
+    error?: string;
+  }>;
+
+  listarCasosPorAssistida: (idAssistida: number) => Promise<{
+    success: boolean;
+    casos?: any[];
+    error?: string;
+  }>;
+
   casosPorProtocolo: (protocolo: number) => Promise<{
     success: boolean;
     caso?: any[];
+    error?: string;
+  }>;
+
+  gerarPdf: (protocloCaso: number) => Promise<{
+    sucess: boolean;
+    path?: string;
     error?: string;
   }>;
 
@@ -138,13 +223,24 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  salvarCasoBD: (dados: {
+    assistida: any;
+    caso: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) => Promise<{
+    success: boolean;
+    idCaso?: number;
+    idAssistida?: number;
+    error?: string;
+  }>;
+
   openWindow: (windowName: string) => void;
   closeWindow: () => void;
   onUserCreated: (callback: (user: any) => void) => void;
   removeUserCreatedListener: () => void;
-
   // ============================
-  // REDE DE APOIO (NOVO)
+  // REDE DE APOIO 
   // ============================
   criarOrgaoRedeApoio: (
     nome: string,
@@ -160,8 +256,27 @@ export interface IElectronAPI {
     orgaos?: any[];
     error?: string;
   }>;
-}
 
+  getPathForFile: (file: File) => string;
+  
+  gerarPreviewCaso: (dados: any) => Promise<{
+      success: boolean;
+      path?: string;
+      error?: string;
+    }>;
+
+  salvarHistoricoBD: (dados: {
+    caso: any;
+    assistida: any;
+    profissionalResponsavel: string;
+    data: Date;
+  }) => Promise<{
+    success: boolean;
+    historicoId?: number;
+    error?: string;
+  }>;
+
+}
 declare global {
   interface Window {
     api: IElectronAPI;

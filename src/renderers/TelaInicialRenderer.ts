@@ -1,28 +1,38 @@
 export {};
 
-const cadastroAssistidaBtn = document.getElementById(
-  'telaCadastroAssistida'
-) as HTMLButtonElement;
+// 1. Captura dos Elementos
+const cadastroAssistidaBtn = document.getElementById('telaCadastroAssistida') as HTMLButtonElement;
+const assistidasBtn = document.getElementById('listarAssistidas') as HTMLLIElement;
+const redeApoioBtn = document.getElementById('telaRedeApoio') as HTMLLIElement;
+const estatisticasBtn = document.getElementById('telaEstatisticas') as HTMLLIElement;
 
-const assistidasBtn = document.getElementById(
-  'listarAssistidas'
-) as HTMLLIElement;
+// 2. Lógica do Botão Estatísticas (Da outra branch)
+if (estatisticasBtn) {
+    estatisticasBtn.addEventListener('click', async (event) => {
+        await window.api.openWindow("telaEstatisticas");
+    });
+}
 
-const redeApoioBtn = document.getElementById(
-  'telaRedeApoio'
-) as HTMLLIElement;
+// 3. Lógica do Botão Rede de Apoio (Sua funcionalidade)
+if (redeApoioBtn) {
+    redeApoioBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        await window.api.openWindow('telaRedeApoio');
+    });
+}
 
-assistidasBtn.addEventListener('click', async (event) => {
-  event.preventDefault();
-  await window.api.openWindow('telaListarAssistidas');
-});
+// 4. Lógica do Botão Listar Assistidas
+if (assistidasBtn) {
+    assistidasBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        await window.api.openWindow('telaListarAssistidas');
+    });
+}
 
-cadastroAssistidaBtn.addEventListener('click', async (event) => {
-  event.preventDefault();
-  await window.api.openWindow('telaCadastroAssistida');
-});
-
-redeApoioBtn.addEventListener('click', async (event) => {
-  event.preventDefault();
-  await window.api.openWindow('telaRedeApoio');
-});
+// 5. Lógica do Botão Cadastrar Assistida (Corrigido)
+if (cadastroAssistidaBtn) {
+    cadastroAssistidaBtn.addEventListener('click', async (event) => {
+        event.preventDefault(); 
+        await window.api.openWindow('telaCadastroAssistida');
+    });
+}

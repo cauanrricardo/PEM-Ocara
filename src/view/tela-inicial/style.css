@@ -208,6 +208,17 @@ body {
     align-items: center;
 }
 
+.btn-visualizar {
+    background: linear-gradient(135deg, #63468C, #8B5FBF);
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-visualizar:hover {
+    background: linear-gradient(135deg, #523677, #7B4FAF);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(99, 70, 140, 0.3);
+}
+
 /* Informações */
 .informacoes {
     margin-top: 60px;

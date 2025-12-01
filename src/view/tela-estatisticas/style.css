@@ -560,3 +560,9 @@ body {
     width: 100%;
     text-align: left;
 }
+
+#grafico-evolucao {
+  width: 100%;
+  max-width: 1200px;
+  height: 400px;
+}

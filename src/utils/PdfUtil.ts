@@ -10,7 +10,7 @@ import { app } from 'electron';
 export interface IAtendimentoData {
   codigo: number;
   data: string;
-  nucleo: 'JURIDICO' | 'PSICOSSOCIAL' | 'NENHUM';
+  nucleo: 'JURIDICO' | 'PSICOSSOCIAL';
   responsavel: string;
 }
 
@@ -160,10 +160,10 @@ export class PdfUtil {
     vLineWidth: (i: number, node: any) => (i === 0 || i === node.table.widths.length) ? 1 : 0.5,
     hLineColor: (i: number) => '#b0b0b0',
     vLineColor: (i: number) => '#b0b0b0',
-    paddingTop: 4,
-    paddingBottom: 4,
-    paddingLeft: 4,
-    paddingRight: 4,
+    paddingTop: (i: number, node: any) => 4,
+    paddingBottom: (i: number, node: any) => 4,
+    paddingLeft: (i: number, node: any) => 4,
+    paddingRight: (i: number, node: any) => 4,
   };
 
   constructor() {
@@ -205,7 +205,8 @@ export class PdfUtil {
 
   public async gerarPdfFormulario(
     assistida: Assistida,
-    data: IFormularioCompleto
+    data: IFormularioCompleto,
+    customDirectory?: string
   ): Promise<string> {
     
     const { atendimento, agressor, blocoI, blocoII, blocoIII, blocoIV, outrasInformacoes, preenchimentoProfissional } = data;
@@ -903,8 +904,11 @@ export class PdfUtil {
     };
 
     const pdfDoc = this.printer.createPdfKitDocument(docDefinition);
+
+    const directory = customDirectory || app.getPath('desktop')
     const desktopPath = app.getPath('desktop');
-    const filePath = path.join(desktopPath, `formulario-assistida-${assistida.getProtocolo()}-${Date.now()}.pdf`);
+    const fileName = `formulario-assistida-${assistida.getProtocolo()}-${Date.now()}.pdf`;
+    const filePath = path.join(directory, fileName);
 
     return new Promise((resolve, reject) => {
       const stream = fs.createWriteStream(filePath);

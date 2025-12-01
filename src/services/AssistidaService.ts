@@ -1,9 +1,14 @@
 import { Assistida } from "../models/assistida/Assistida";
-import { Caso } from "../models/Caso/Caso";
+import { ICasoRepository } from "../repository/ICasoRepository";
 import { Logger } from "../utils/Logger";
 
 export class AssistidaService {
     private assistida: Assistida[] = [];
+    private casoRepository: ICasoRepository;
+
+    constructor(casoRepository: ICasoRepository) {
+        this.casoRepository = casoRepository;
+    }
 
     public criarAssistida(
         nome: string,
@@ -22,15 +27,23 @@ export class AssistidaService {
         temDependentes: boolean
     ) {
         if (!nome || nome.trim() === '') {
-            throw new Error('Nome e obrigatorio');
+            throw new Error('Nome da assistida é obrigatório');
         }
 
         if (!endereco || endereco.trim() === '') {
-            throw new Error('Endereco e obrigatorio');
+            throw new Error('Endereço da assistida é obrigatório');
         }
 
-        if (!idade) {
-            throw new Error('Idade e obrigatorio');
+        if (!idade || idade <= 0) {
+            throw new Error('Idade da assistida é obrigatória e deve ser maior que zero');
+        }
+
+        if (!profissao || profissao.trim() === '') {
+            throw new Error('Profissão da assistida é obrigatória');
+        }
+
+        if (!nacionalidade || nacionalidade.trim() === '') {
+            throw new Error('Nacionalidade da assistida é obrigatória');
         }
 
         const novaAssistida = new Assistida(
@@ -54,18 +67,33 @@ export class AssistidaService {
         return novaAssistida;
     }
 
-    public getTodasAssistidas(): Assistida[] {
-        return this.assistida;
+    public async getTodasAssistidas() {
+        try {
+            const assistidas = await this.casoRepository.getAllAssistidas();
+            return assistidas;
+        } catch (error) {
+            Logger.error('Erro ao buscar assistidas:', error);
+            return [];
+        }
     }
 
-    public getAssistidaPorProtocolo(id: number): Assistida | undefined {
-        return this.assistida.find(assistida => assistida.getProtocolo() == id);
+    public async getCasosAssistida(idAssistida: number) {
+        try {
+            const casos = await this.casoRepository.getAllCasosAssistida(idAssistida);
+            return casos;
+        } catch (error) {
+            Logger.error('Erro ao buscar casos da assistida:', error);
+            return [];
+        }
     }
 
-    public addCasoAAssistida(protocolo: number, caso: Caso): void {
-        const assistida = this.getAssistidaPorProtocolo(protocolo);
-        if (assistida) {
-            assistida.addCaso(caso);
+    public async getEnderecosAssistidas(): Promise<any[]> {
+        try {
+            const enderecos = await this.casoRepository.getEnderecosAssistidas();
+            return enderecos;
+        } catch (error) {
+            Logger.error('Erro ao obter endereços das assistidas:', error);
+            return [];
         }
     }
 

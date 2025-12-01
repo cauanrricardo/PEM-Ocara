@@ -1,4 +1,5 @@
 import { CasoService } from "../services/CasoService";
+import { app } from 'electron';
 import { Caso } from "../models/Caso/Caso";
 import { Assistida } from "../models/assistida/Assistida";
 import { PdfUtil, IFormularioCompleto, IAtendimentoData, IAgressorData, IBlocoIData, IBlocoIIData, IBlocoIIIData, IBlocoIVData, IPreenchimentoProfissional } from "../utils/PdfUtil";
@@ -11,6 +12,18 @@ export class PdfService {
   constructor(casoService: CasoService) {
     this.casoService = casoService;
     this.pdfUtil = new PdfUtil();
+  }
+
+  public async gerarPdfPreview(caso: Caso): Promise<string> {
+    const assistida = caso.getAssistida();
+    
+    if (!assistida) {
+      throw new Error("Caso não possui uma assistida vinculada para o preview.");
+    }
+
+    const dadosFormulario: IFormularioCompleto = this.mapFormularioCompleto(caso, assistida);
+
+    return this.pdfUtil.gerarPdfFormulario(assistida, dadosFormulario, app.getPath('temp'));
   }
 
   public async criarPdfDeFormulario(protocoloCaso: number): Promise<string> {
@@ -54,34 +67,36 @@ export class PdfService {
       dataFato: agressor?.getDataOcorrida()?.toLocaleDateString('pt-BR') || '',
     };
     
-    const formasViolencia = historicoViolencia?.getOutrasFormasViolencia().toUpperCase() || '';
+    const ameacas = (historicoViolencia?.getAmeacaFamiliar() || []).map(a => a.toUpperCase());
+    const agressoesGraves = (historicoViolencia?.getAgressaoFisica() || []).map(a => a.toUpperCase());
+    const outrasAgressoes = (historicoViolencia?.getOutrasFormasViolencia() || []).map(f => f.toUpperCase());
     const comportamentos = historicoViolencia?.getComportamentosAgressor() || [];
 
     const blocoI: IBlocoIData = {
-     p_ameaca: !historicoViolencia?.getAmeacaFamiliar()
+     p_ameaca: ameacas.length === 0
         ? 'NAO'
-        : formasViolencia.includes('ARMA_FOGO')
+        : ameacas.includes('ARMA_FOGO')
         ? 'ARMA_FOGO'
-        : formasViolencia.includes('FACA')
+        : ameacas.includes('FACA')
         ? 'FACA'
         : 'OUTRA',
      p_agressoes: {
-        queimadura: formasViolencia.includes('QUEIMADURA'),
-        enforcamento: formasViolencia.includes('ENFORCAMENTO'),
-        sufocamento: formasViolencia.includes('SUFOCAMENTO'),
-        tiro: formasViolencia.includes('TIRO'),
-        afogamento: formasViolencia.includes('AFOGAMENTO'),
-        facada: formasViolencia.includes('FACADA'),
-        paulada: formasViolencia.includes('PAULADA'),
-        nenhuma: !historicoViolencia?.getAgressaoFisica()
+        queimadura: agressoesGraves.includes('QUEIMADURA'),
+        enforcamento: agressoesGraves.includes('ENFORCAMENTO'),
+        sufocamento: agressoesGraves.includes('SUFOCAMENTO'),
+        tiro: agressoesGraves.includes('TIRO'),
+        afogamento: agressoesGraves.includes('AFOGAMENTO'),
+        facada: agressoesGraves.includes('FACADA'),
+        paulada: agressoesGraves.includes('PAULADA'),
+        nenhuma: agressoesGraves.length === 0
      },
      p2_agressoes: {
-        socos: formasViolencia.includes('SOCOS'),
-        chutes: formasViolencia.includes('CHUTES'),
-        tapas: formasViolencia.includes('TAPAS'),
-        empurroes: formasViolencia.includes('EMPURROES'),
-        puxoesCabelo: formasViolencia.includes('PUXOESCABELO'),
-        nenhuma: !historicoViolencia?.getAgressaoFisica()
+        socos: outrasAgressoes.includes('SOCOS'),
+        chutes: outrasAgressoes.includes('CHUTES'),
+        tapas: outrasAgressoes.includes('TAPAS'),
+        empurroes: outrasAgressoes.includes('EMPURROES'),
+        puxoesCabelo: outrasAgressoes.includes('PUXOESCABELO'),
+        nenhuma: outrasAgressoes.length === 0
      },
      p_sexoForcado: historicoViolencia?.getAbusoSexual() || false,
      p_comportamentos: {
@@ -104,7 +119,7 @@ export class PdfService {
   const desempregado = sobreAgressor?.getAgressorDesempregado() || 'NAO_SEI';
   const tentativa_suicidio = sobreAgressor?.getAgressorTentativaSuicidio() || false;
   const arma_fogo = sobreAgressor?.getAgressorPossuiArmaFogo() || 'NAO_SEI';
-  const agrediu_outros = sobreAgressor?.getAgressorAmeacouAlguem() || 'NAO_SEI';
+  const agrediu_outros = sobreAgressor?.getAgressorAmeacouAlguem() || [];
 
   const blocoII: IBlocoIIData = {
      p_uso_drogas: {
@@ -218,12 +233,12 @@ export class PdfService {
       : 'BRANCA'
   };
 
-  const mora_risco = outrasInformacoes?.getMoraEmAreaRisco() || 'NAO';
+  const mora_risco = String(outrasInformacoes?.getMoraEmAreaRisco() || 'NAO').toUpperCase();
   const dependente_financeiro = outrasInformacoes?.getDependenteFinanceiroAgressor() || false;
   const aceita_abrigamento = outrasInformacoes?.getAceitaAbrigamentoTemporario() || false;
 
   const blocoIV: IBlocoIVData = {
-     p_mora_risco: mora_risco.includes('SIM')
+     p_mora_risco: mora_risco.includes('SIM') || mora_risco == 'TRUE'
      ? 'SIM'
      : 'NAO',
 
@@ -233,7 +248,8 @@ export class PdfService {
 
  const outrasInformacoesTexto = outrasInformacoesEncaminhamentos?.getAnotacoesLivres() || '';
 
-  const tipoViolencia = preenchimentoProfissional?.getTipoViolencia()?.toUpperCase() || '';
+  const tiposViolenciaArray = preenchimentoProfissional?.getTipoViolencia() || [];
+  const tipoViolencia = tiposViolenciaArray.map(t => t.toUpperCase()).join(', ') || '';
 
   const preenchimento: IPreenchimentoProfissional = {
       assistida_respondeu: preenchimentoProfissional?.getAssistidaRespondeuSemAjuda()
