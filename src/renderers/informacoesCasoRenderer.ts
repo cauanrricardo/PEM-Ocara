@@ -4,6 +4,9 @@ export {}
 
 const telaInicialBtn = document.getElementById('telaInicial') as HTMLLIElement | null;
 const cadastroAssistidaBtn = document.getElementById('telaCadastroAssistida') as HTMLButtonElement | null;
+const listarAssistidasBtn = document.getElementById('listarAssistidas') as HTMLLIElement | null;
+const telaRedeApoioBtn = document.getElementById('telaRedeApoio') as HTMLLIElement | null;
+const telaEstatisticasBtn = document.getElementById('telaEstatisticas') as HTMLLIElement | null;
 const nomeAssistida = document.getElementById('Assistida') as HTMLSpanElement | null;
 const nomeAgressor = document.getElementById('Agressor') as HTMLSpanElement | null;
 const dataAberturaCaso = document.getElementById('DataCadastro') as HTMLSpanElement | null;
@@ -18,6 +21,24 @@ if (telaInicialBtn) {
 if (cadastroAssistidaBtn) {
     cadastroAssistidaBtn.addEventListener('click', async (event) => {
         const mudarTela = await window.api.openWindow("telaCadastroAssistida");
+    })
+}
+
+if (listarAssistidasBtn) {
+    listarAssistidasBtn.addEventListener('click', async (event) => {
+        const mudarTela = await window.api.openWindow("telaListarAssistidas");
+    })
+}
+
+if (telaRedeApoioBtn) {
+    telaRedeApoioBtn.addEventListener('click', async (event) => {
+        const mudarTela = await window.api.openWindow("telaRedeApoio");
+    })
+}
+
+if (telaEstatisticasBtn) {
+    telaEstatisticasBtn.addEventListener('click', async (event) => {
+        const mudarTela = await window.api.openWindow("telaEstatisticas");
     })
 }
 
@@ -945,6 +966,31 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     // 🔄 CARREGAR ANEXOS DO BANCO QUANDO A PÁGINA INICIA
     await recuperarAnexosDoBanco();
+    
+    // ❌ BOTÃO FECHAR - VOLTAR PARA LISTAGEM DE CASOS DA ASSISTIDA
+    const btnFecharInformacoes = document.getElementById('fecharInformacoes') as HTMLButtonElement | null;
+    if (btnFecharInformacoes) {
+        btnFecharInformacoes.addEventListener('click', async () => {
+            console.log('[informaçõesCaso] Botão fechar clicado - voltando para casos da assistida ID:', idAssistida);
+            
+            // Guardar ID da assistida para retornar à lista de casos dela
+            sessionStorage.setItem('protocoloAssistidaSelecionada', String(idAssistida));
+            
+            // Limpar sessionStorage (exceto o que será usado na próxima página)
+            sessionStorage.removeItem('dadosAssistida');
+            sessionStorage.removeItem('dadosCaso');
+            sessionStorage.removeItem('modoEdicao');
+            sessionStorage.removeItem('idAssistidaSelecionada');
+            sessionStorage.removeItem('cadastro_anexos');
+            
+            // Limpar localStorage
+            localStorage.removeItem('configuracaoPrivacidadeFormulario');
+            
+            console.log('[informaçõesCaso] Dados limpos do storage, voltando para assistida ID:', idAssistida);
+            
+            await window.api.openWindow('telaCasosRegistrados');
+        });
+    }
     
     atualizarTela();
 });
