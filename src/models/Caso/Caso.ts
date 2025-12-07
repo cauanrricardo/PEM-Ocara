@@ -420,7 +420,7 @@ export class Caso {
                 anotacoesLivres: this.outrasInformacoesEncaminhamento?.getAnotacoesLivres() ?? ""
             },
             outrasInformacoesImportantes: {
-                moraEmAreaRisco: this.outrasInformacoesImportantes?.getMoraEmAreaRisco() ?? false,
+                moraEmAreaRisco: this.outrasInformacoesImportantes?.getMoraEmAreaRisco() ?? "Não",
                 dependenteFinanceiroAgressor: this.outrasInformacoesImportantes?.getDependenteFinanceiroAgressor() ?? false,
                 aceitaAbrigamentoTemporario: this.outrasInformacoesImportantes?.getAceitaAbrigamentoTemporario() ?? false
             },

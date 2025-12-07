@@ -177,15 +177,15 @@ window.addEventListener('DOMContentLoaded', () => {
         setRadioValue('q16-4-presenciaram-violencia', dadosCaso._q16Presenciaram);
         setRadioValue('q16-5-violencia-gravidez', dadosCaso._q16ViolenciaGravidez);
         
-        setRadioValue('q18-deficiencia', dadosCaso.possuiDeficienciaDoenca ? 'Sim' : (dadosCaso.possuiDeficienciaDoenca === false ? 'Não' : undefined));
+        setRadioValue('q18-deficiencia', dadosCaso.possuiDeficienciaDoenca);
         if (dadosCaso.possuiDeficienciaDoenca && dadosCaso.possuiDeficienciaDoenca !== 'Sim' && dadosCaso.possuiDeficienciaDoenca !== 'Não') {
             setInputValue('q18-qual-deficiencia', dadosCaso.possuiDeficienciaDoenca);
         }
         
-        setRadioValue('cor', dadosCaso.corRaca);
-        setRadioValue('q20-local-risco', dadosCaso.moraEmAreaRisco ? 'Sim' : (dadosCaso.moraEmAreaRisco === false ? 'Não' : undefined));
-        setRadioValue('q21-dependente-financeira', dadosCaso._dependenteFinanceira);
-        setRadioValue('q22-abrigamento', dadosCaso.aceitaAbrigamentoTemporario ? 'Sim' : (dadosCaso.aceitaAbrigamentoTemporario === false ? 'Não' : undefined));
+        if (dadosCaso.corRaca) setRadioValue('cor', dadosCaso.corRaca);
+        if (dadosCaso._moraEmAreaRisco) setRadioValue('q20-local-risco', dadosCaso._moraEmAreaRisco);
+        if (dadosCaso._dependenteFinanceira) setRadioValue('q21-dependente-financeira', dadosCaso._dependenteFinanceira);
+        if (dadosCaso._abrigamentoTemporario) setRadioValue('q22-abrigamento', dadosCaso._abrigamentoTemporario);
 
     } catch (error) {
         console.error('Erro ao prefill telaCadastro2:', error);
@@ -245,9 +245,10 @@ btnVoltar.addEventListener('click', async () => {
         const deficienciaDescricao = getInputValue('q18-qual-deficiencia');
         dadosCaso.possuiDeficienciaDoenca = deficienciaResposta === 'Sim' ? deficienciaDescricao : deficienciaResposta;
         
+        dadosCaso.corRaca = getRadioValue('cor');
         dadosCaso._moraEmAreaRisco = getRadioValue('q20-local-risco');
-        
         dadosCaso._dependenteFinanceira = getRadioValue('q21-dependente-financeira');
+        dadosCaso._abrigamentoTemporario = getRadioValue('q22-abrigamento');
 
         sessionStorage.setItem('dadosCaso', JSON.stringify(dadosCaso));
         await window.api.openWindow('telaCadastroAssistida');
@@ -490,9 +491,10 @@ btnProximo.addEventListener('click', async () => {
         dadosCaso.novoRelacionamentoAumentouAgressao = novoRelacionamento === 'Sim';
         dadosCaso.possuiDeficienciaDoenca = deficiencia || '';
         dadosCaso.corRaca = corRaca;
-        dadosCaso.moraEmAreaRisco = moraEmAreaRisco === 'Sim';
+        // Manter como string para suportar "Sim", "Não", "Não sei"
         dadosCaso._moraEmAreaRisco = moraEmAreaRisco;
         dadosCaso._dependenteFinanceira = dependenteFinanceira;
+        dadosCaso._abrigamentoTemporario = abrigamento;
         dadosCaso.aceitaAbrigamentoTemporario = abrigamento === 'Sim';
 
         sessionStorage.setItem('dadosCaso', JSON.stringify(dadosCaso));

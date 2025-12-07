@@ -56,6 +56,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         atualizarVisibilidade();
     });
+    
+    // Chamar atualizarVisibilidade() ao carregar a página para prefill correto
+    // Isso garante que a seção de filhos seja mostrada/escondida mesmo se preenchida fora de ordem
+    atualizarVisibilidade();
 
 // Função genérica para tornar opções "Não", "Não sei" e "Nenhuma" exclusivas
     function configurarCheckboxExclusivo(idCheckboxExclusivo, idsOutrosCheckboxes) {
