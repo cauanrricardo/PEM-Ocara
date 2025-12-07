@@ -1067,6 +1067,16 @@ ipcMain.handle('user:update-profile', async (_event, data) => {
   }
 });
 
+ipcMain.handle('auth:login', async (_event, credenciais: { email: string; senha: string }) => {
+  try {
+    Logger.info('Tentativa de login para:', credenciais.email);
+    return await funcionarioController.autenticarFuncionario(credenciais.email, credenciais.senha);
+  } catch (error) {
+    Logger.error('Erro no handler auth:login:', error);
+    return { success: false, error: error instanceof Error ? error.message : 'Erro desconhecido' };
+  }
+});
+
 // ==========================================
 // IPC HANDLERS - MÓDULO CREDENCIAIS
 // ==========================================
@@ -1148,6 +1158,12 @@ ipcMain.on('window:open', (_event, windowName: string) => {
       break;
     case 'telaEstatisticas':
       windowManager.loadContent('main', 'tela-estatisticas/index.html');
+      break;
+    case 'telaConfiguracoesConta':
+      windowManager.loadContent('main', 'tela-configuracoes-conta/index.html');
+      break;
+    case 'telaLogin':
+      windowManager.loadContent('main', 'tela-login/index.html');
       break;
     default:
       console.log('tela desconhecida:', windowName);

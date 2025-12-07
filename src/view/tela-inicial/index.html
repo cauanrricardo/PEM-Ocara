@@ -13,7 +13,6 @@
 
   <body>
     <div class="app-container">
-      <!-- sidebar -->
       <aside class="sidebar">
         <header class="sidebar-header">
           <h1>PEM OCARA</h1>
@@ -21,8 +20,7 @@
         </header>
         <nav class="sidebar-nav">
           <ul>
-            <!-- assistidas -->
-            <li id="listarAssistidas">
+            <li id="listarAssistidas" data-window-target="telaListarAssistidas">
               <a href="#">
                 <svg
                   viewBox="0 0 34 34"
@@ -39,9 +37,7 @@
               >
             </li>
 
-            <!-- rede de apoio -->
-            <!-- rede de apoio -->
-            <li id="telaRedeApoio">
+            <li id="telaRedeApoio" data-window-target="telaRedeApoio">
               <a href="#">
                 <svg
                   class="icone-material"
@@ -59,8 +55,7 @@
               </a>
             </li>
 
-            <!-- inicial -->
-            <li>
+            <li id="telaInicial" data-window-target="telaInicial">
               <a href="#" class="active">
                 <svg
                   viewBox="0 0 34 38"
@@ -77,8 +72,7 @@
               >
             </li>
 
-            <!-- estatisticas -->
-            <li id="telaEstatisticas">
+            <li id="telaEstatisticas" data-window-target="telaEstatisticas">
               <a href="#">
                 <svg
                   viewBox="0 0 38 38"
@@ -95,8 +89,7 @@
               >
             </li>
 
-            <!-- conta -->
-            <li>
+            <li id="telaConta" data-window-target="telaConfiguracoesConta">
               <a href="#">
                 <svg
                   viewBox="0 0 42 36"
@@ -115,7 +108,7 @@
           </ul>
         </nav>
       </aside>
-      <!--============= MAIN ==============-->
+
       <main class="main-content">
         <section class="cabecalho">
           <div class="titulo">
@@ -179,7 +172,6 @@
       </main>
     </div>
 
-    <!--============== MODAL ==================-->
     <div id="modalSelectOverlay" class="modal-overlay">
       <div class="modal-select-container">
         <div class="modal-select-header">
@@ -195,80 +187,10 @@
             <input
               type="radio"
               name="assistida-selecionada"
-              value="id_assistida_1"
+              value="id_exemplo"
             />
             <span class="radio-custom"></span>
-
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
-          </label>
-
-          <label class="assistida-item">
-            <input
-              type="radio"
-              name="assistida-selecionada"
-              value="id_assistida_2"
-            />
-            <span class="radio-custom"></span>
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
-          </label>
-
-          <label class="assistida-item">
-            <input
-              type="radio"
-              name="assistida-selecionada"
-              value="id_assistida_3"
-              checked
-            />
-            <span class="radio-custom"></span>
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
-          </label>
-
-          <label class="assistida-item">
-            <input
-              type="radio"
-              name="assistida-selecionada"
-              value="id_assistida_4"
-            />
-            <span class="radio-custom"></span>
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
-          </label>
-
-          <label class="assistida-item">
-            <input
-              type="radio"
-              name="assistida-selecionada"
-              value="id_assistida_5"
-            />
-            <span class="radio-custom"></span>
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
-          </label>
-
-          <label class="assistida-item">
-            <input
-              type="radio"
-              name="assistida-selecionada"
-              value="id_assistida_6"
-            />
-            <span class="radio-custom"></span>
-            <span class="item-text"
-              >[id da assistida cadastrada]: [nome completo da assistida
-              cadastrada]</span
-            >
+            <span class="item-text">Exemplo de Assistida</span>
           </label>
         </div>
 
@@ -280,12 +202,11 @@
         </button>
       </div>
     </div>
-    <!--====================-->
+    <script src="../../../dist/utils/sidebarNavigation.js"></script>
     <script
       type="module"
       src="../../../dist/renderers/TelaInicialRenderer.js"
     ></script>
-
     <script src="script.js"></script>
   </body>
 </html>
