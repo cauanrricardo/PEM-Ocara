@@ -8,9 +8,7 @@
     <title>Informações do Caso</title>
 </head>
 <body>
-    <!-- Página Inteira -->
     <div class="app-container">
-        <!-- Menu Lateral -->
         <aside class="sidebar">
             <header class="sidebar-header">
                 <h1>PEM OCARA</h1>
@@ -19,8 +17,7 @@
 
             <nav class="sidebar-nav">
                 <ul>
-                    <!-- assistidas -->
-                    <li id="listarAssistidas">
+                    <li id="listarAssistidas" data-window-target="telaListarAssistidas">
                         <a href="#" class="active">
                             <svg viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Assistidas">
                                 <path
@@ -33,8 +30,7 @@
                         </a>
                     </li>
 
-                    <!-- rede de apoio -->
-                    <li id="telaRedeApoio">
+                    <li id="telaRedeApoio" data-window-target="telaRedeApoio">
                         <a href="#">
                             <svg class="icone-rede-apoio" viewBox="0 0 50 25" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Rede de Apoio">
                                 <path
@@ -47,8 +43,7 @@
                         </a>
                     </li>
 
-                    <!-- inicial -->
-                    <li id="telaInicial">
+                    <li id="telaInicial" data-window-target="telaInicial">
                         <a href="#">
                             <svg viewBox="0 0 34 38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Inicial">
                                 <path
@@ -61,8 +56,7 @@
                         </a>
                     </li>
 
-                    <!-- estatisticas -->
-                    <li id="telaEstatisticas">
+                    <li id="telaEstatisticas" data-window-target="telaEstatisticas">
                         <a href="#">
                             <svg viewBox="0 0 38 38" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Estatísticas">
                                 <path
@@ -75,8 +69,7 @@
                         </a>
                     </li>
 
-                    <!-- conta -->
-                    <li>
+                    <li id="telaConta" data-window-target="telaConfiguracoesConta">
                         <a href="#">
                             <svg viewBox="0 0 42 36" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Conta">
                                 <path
@@ -92,7 +85,6 @@
             </nav>
         </aside>
 
-        <!-- Conteúdo da Página -->
         <main class="main-content">
             <div class="title">
                 <h1>Informações sobre o Caso <span id="Protocolo"></span></h1>
@@ -139,7 +131,6 @@
                 <button id="encaminhamento">GERAR NOVO ENCAMINHAMENTO PARA A REDE</button>
             </div>
 
-            <!-- Rodapé -->
             <footer class="rodape d-flex justify-content-between align-items-center flex-wrap mt-auto px-5">
                 <img
                     src="img/logo-ocara.png"
@@ -162,7 +153,6 @@
         </main>
     </div>
 
-    <!-- Popup de Upload -->
     <div id="popup-upload" class="popup-overlay">
         <div class="popup-content">
             <button id="fechar-popup" class="btn-fechar-popup">
@@ -183,7 +173,6 @@
         </div>
     </div>
 
-    <!-- Popup de Confirmação -->
     <div class="popup-confirmacao" id="popupConfirmacao">
         <div class="popup-confirmacao-content">
             <p id="popupMensagem"></p>
@@ -191,7 +180,6 @@
         </div>
     </div>
 
-    <!-- Popup de Confirmação com o Cancelar também -->
     <div class="popup-confirmacao" id="popupConfirmar">
         <div class="popup-confirmacao-content">
             <p id="popupConfirmarMensagem"></p>
@@ -202,10 +190,6 @@
         </div>
     </div>
 
-    <!-- Modal de Privacidade do anexo -->
-
-
-    <!-- Modal de Encaminhamento -->
     <div class="modal-overlay" id="modalEncaminhamento">
         <div class="modal-content"> 
             <div class="modal-header">
@@ -240,7 +224,6 @@
                 <button class="btn-enviar" id="btnEnviarEncaminhamento" type="button">Enviar</button>
             </div>
             
-            <!-- Menu de seleção de anexos -->
             <div class="menu-anexos" id="menuAnexos" style="display: none;">
                 <div class="menu-anexos-header">
                     <h4>Selecionar Anexos do Caso</h4>
@@ -252,7 +235,6 @@
         </div> 
     </div>
 
-    <!-- Modal de Privacidade -->
     <div class="modal-overlay" id="modalPrivacidade">
         <div class="modal-privacidade-content">
             <span class="modal-close" id="fecharModalPrivacidade">&times;</span>
@@ -274,7 +256,6 @@
         </div>
     </div>
 
-    <!-- Modal de Editar Formulário -->
     <div class="modal-overlay" id="modalEditarFormulario">
         <div class="modal-editar-formulario-content">
             <span class="modal-close" id="fecharModalEditarFormulario">&times;</span>
@@ -308,7 +289,6 @@
         </div>
     </div>
 
-    <!-- Modal de Privacidade do Formulário -->
     <div class="modal-overlay" id="modalPrivacidadeFormulario">
         <div class="modal-privacidade-formulario-content">
             <div class="title">
@@ -378,6 +358,8 @@
         </div>
     </div>
 
+    <script src="../../../dist/utils/sidebarNavigation.js"></script>
+    <script src="script.js"></script>
     <script type="module" src="../../../dist/renderers/informacoesCasoRenderer.js"></script>
 </body>
 </html>

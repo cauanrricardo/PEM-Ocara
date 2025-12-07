@@ -4,10 +4,12 @@ const cadastroExistenteBtn = document.getElementById('telaCadastroExistente') as
 const assistidasBtn = document.getElementById('listarAssistidas') as HTMLLIElement;
 const redeApoioBtn = document.getElementById('telaRedeApoio') as HTMLLIElement;
 const estatisticasBtn = document.getElementById('telaEstatisticas') as HTMLLIElement;
+const contaBtn = document.getElementById('telaConta') as HTMLLIElement;
 const modalSelectOverlay = document.getElementById('modalSelectOverlay') as HTMLElement;
 const closeSelectModal = document.getElementById('closeSelectModal') as HTMLElement;
 const assistidaListContainer = document.querySelector('.assistida-list-container') as HTMLElement;
 const btnAdicionarCaso = document.getElementById('btnAdicionarCaso') as HTMLButtonElement;
+
 
 // 2. Função para carregar assistidas
 const carregarAssistidas = async () => {
@@ -127,5 +129,12 @@ if (cadastroAssistidaBtn) {
     cadastroAssistidaBtn.addEventListener('click', async (event) => {
         event.preventDefault(); 
         await window.api.openWindow('telaCadastroAssistida');
+    });
+}
+
+if (contaBtn) {
+    contaBtn.addEventListener('click', async (event) => {
+        event.preventDefault();
+        await window.api.openWindow('telaConfiguracoesConta');
     });
 }
