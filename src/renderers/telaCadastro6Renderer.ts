@@ -242,6 +242,7 @@ pxmBtn.addEventListener('click', async () => {
             idAssistida: Number(idAssistidaRetornado),
             emailFuncionario: emailFuncionario,
             nomeFuncionario: nomeFuncionario,
+            ...dadosAssistida,  // Adicionar dados da assistida (Tela 1)
             ...dadosCaso // Dados completos do caso
         };
 

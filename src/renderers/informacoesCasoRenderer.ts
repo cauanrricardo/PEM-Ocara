@@ -485,10 +485,56 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (confirmar) {
                 try {
                     console.log('Deletando do banco...');
+                    
+                    // Obter informações do arquivo antes de deletar
+                    const arquivo = fileManager.buscarPorId(id);
+                    const nomeArquivo = arquivo?.nome || 'Arquivo';
+                    
                     await window.api.excluirAnexo(id);
                     console.log('Removendo da memória com ID:', Number(id));
                     fileManager.remover(Number(id));
                     console.log('Arquivos depois:', fileManager.obterTodosCombinados());
+                    
+                    // 📝 Registrar a deleção no histórico
+                    try {
+                        const dadosHistorico = {
+                            caso: {
+                                idCaso: Number(idCaso),
+                                id_caso: Number(idCaso),
+                                id_assistida: idAssistida,
+                                idAssistida: idAssistida,
+                                nomeAssistida: dadosDoCaso.nome_assistida || dadosDoCaso.nomeAssistida,
+                                idadeAssistida: dadosDoCaso.idade_assistida || dadosDoCaso.idadeAssistida,
+                                identidadeGenero: dadosDoCaso.identidade_genero || dadosDoCaso.identidadeGenero,
+                                nomeSocial: dadosDoCaso.nome_social || dadosDoCaso.nomeSocial,
+                                endereco: dadosDoCaso.endereco,
+                                escolaridade: dadosDoCaso.escolaridade,
+                                religiao: dadosDoCaso.religiao,
+                                nacionalidade: dadosDoCaso.nacionalidade,
+                                zonaHabitacao: dadosDoCaso.zona_habitacao || dadosDoCaso.zonaHabitacao,
+                                profissao: dadosDoCaso.ocupacao || dadosDoCaso.profissao,
+                                limitacaoFisica: dadosDoCaso.deficiencia || dadosDoCaso.limitacaoFisica,
+                                numeroCadastroSocial: dadosDoCaso.cad_social || dadosDoCaso.numeroCadastroSocial,
+                                quantidadeDependentes: dadosDoCaso.dependentes || dadosDoCaso.quantidadeDependentes,
+                                nomeAgressor: dadosDoCaso.nome_agressor || dadosDoCaso.nomeAgressor,
+                                idadeAgresssor: dadosDoCaso.idade_agressor || dadosDoCaso.idadeAgresssor,
+                                dataOcorrida: dadosDoCaso.data || dadosDoCaso.dataOcorrida,
+                                ...dadosDoCaso // Incluir todos os outros dados também
+                            },
+                            assistida: {
+                                id: idAssistida,
+                                nome: dadosDoCaso.nome_assistida || dadosDoCaso.nomeAssistida
+                            },
+                            profissionalResponsavel: sessionStorage.getItem('nomeFuncionario') || 'N/A',
+                            data: new Date()
+                        };
+                        
+                        await window.api.salvarHistoricoBD(dadosHistorico);
+                        console.log('✅ Histórico registrado: Arquivo deletado', dadosHistorico);
+                    } catch (erroHistorico) {
+                        console.warn('Aviso: Histórico não foi registrado:', erroHistorico);
+                    }
+                    
                     atualizarTela();
                     uiManager.mostrarPopup('Arquivo deletado com sucesso!');
                 } catch (erro) {

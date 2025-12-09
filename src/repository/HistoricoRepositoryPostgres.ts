@@ -56,8 +56,8 @@ export class HistoricoRepositoryPostgres implements IHistoricoRepository {
             
             const camposParaRegistrar = [
                 // Dados da Assistida
-                { campo: 'nome_assistida', valor: (caso as any).nomeAssistida },
-                { campo: 'idade_assistida', valor: (caso as any).idadeAssistida },
+                { campo: 'nome_assistida', valor: (caso as any).nomeAssistida || (caso as any).nome },
+                { campo: 'idade_assistida', valor: (caso as any).idadeAssistida || (caso as any).idade },
                 { campo: 'identidade_genero', valor: (caso as any).identidadeGenero },
                 { campo: 'nome_social', valor: (caso as any).nomeSocial },
                 { campo: 'endereco', valor: (caso as any).endereco },
