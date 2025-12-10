@@ -323,6 +323,49 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  cadastrarFuncionario: (dados: {
+    nome: string;
+    email: string;
+    cargo: string;
+    senha: string;
+  }) => Promise<{
+    success: boolean;
+    funcionario?: any;
+    error?: string;
+  }>;
+
+  listarFuncionarios: () => Promise<{
+    success: boolean;
+    funcionarios?: any[];
+    error?: string;
+  }>;
+
+  buscarFuncionarioPorEmail: (email: string) => Promise<{
+    success: boolean;
+    funcionario?: any;
+    error?: string;
+  }>;
+
+  atualizarFuncionario: (email: string, dados: {
+    nome?: string;
+    cargo?: string;
+    email?: string;
+    senha?: string;
+  }) => Promise<{
+    success: boolean;
+    funcionario?: any;
+    error?: string;
+  }>;
+
+  deletarFuncionario: (email: string) => Promise<{
+    success: boolean;
+    error?: string;
+  }>;
+
+  logout: () => Promise<{
+    success: boolean;
+  }>;
+
   autenticar: (email: string, senha: string) => Promise<{
     success: boolean;
     funcionario?: any;
