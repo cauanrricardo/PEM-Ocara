@@ -72,7 +72,7 @@ function setupFilterModal(): void {
   });
 
   navConta?.addEventListener('click', async (event) => {
-    await navigateToTelaConta();
+  
   });
 
   navFuncionarios?.addEventListener('click', async (event) => {
