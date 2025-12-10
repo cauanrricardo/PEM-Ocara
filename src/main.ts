@@ -1123,6 +1123,21 @@ ipcMain.handle('get-funcionarios', async () => {
   }
 });
 
+ipcMain.handle('funcionario:listar', async () => {
+  try {
+    Logger.info('Requisição para listar funcionários (novo handler)');
+    const resultado = await funcionarioController.listarFuncionarios();
+    if (!resultado.success) {
+      return { success: false, error: resultado.error ?? 'Não foi possível listar os funcionários.' };
+    }
+    return { success: true, funcionarios: resultado.lista ?? [] };
+  } catch (error) {
+    Logger.error('Erro no handler funcionario:listar:', error);
+    const message = error instanceof Error ? error.message : 'Erro desconhecido';
+    return { success: false, error: message };
+  }
+});
+
 // 3. Buscar por Email
 ipcMain.handle('get-funcionario-email', async (_event, email: string) => {
   try {
@@ -1302,6 +1317,9 @@ ipcMain.on('window:open', (_event, windowName: string) => {
       break;
     case 'telaCadastrarFuncionario':
       windowManager.loadContent('main', 'tela-cadastrar-funcionario/index.html');
+      break;
+    case 'telaDadosFuncionario':
+      windowManager.loadContent('main', 'tela-dados-funcionario/index.html');
       break;
     default:
       console.log('tela desconhecida:', windowName);

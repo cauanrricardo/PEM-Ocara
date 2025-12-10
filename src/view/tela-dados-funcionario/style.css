@@ -203,6 +203,14 @@ header .material-symbols-outlined {
     background-color: rgba(99, 70, 140, 0.05);
 }
 
+.info-item.info-item-disabled,
+.info-item.info-item-disabled:hover {
+    opacity: 0.6;
+    cursor: default;
+    pointer-events: none;
+    background-color: transparent;
+}
+
 .info-label {
     font-weight: 400;
     font-size: 32px;

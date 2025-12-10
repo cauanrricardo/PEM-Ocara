@@ -154,6 +154,16 @@ contextBridge.exposeInMainWorld('api', {
   cadastrarFuncionario: (dados: { nome: string; email: string; cargo: string; senha: string }) =>
     ipcRenderer.invoke('create-funcionario', dados),
 
+  listarFuncionarios: () => ipcRenderer.invoke('funcionario:listar'),
+
+  buscarFuncionarioPorEmail: (email: string) =>
+    ipcRenderer.invoke('get-funcionario-email', email),
+
+  atualizarFuncionario: (email: string, dados: { nome?: string; cargo?: string; email?: string; senha?: string }) =>
+    ipcRenderer.invoke('update-funcionario', { email, dados }),
+
+  deletarFuncionario: (email: string) => ipcRenderer.invoke('delete-funcionario', email),
+
   logout: () => ipcRenderer.invoke('auth:logout'),
 
   autenticar: (email: string, senha: string) =>

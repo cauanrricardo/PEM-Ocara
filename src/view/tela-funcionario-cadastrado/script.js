@@ -1,5 +1,7 @@
 const STORAGE_KEY = 'usuarioLogado';
 const SIDEBAR_TYPE_KEY = 'sidebarType';
+const LIST_CONTAINER_SELECTOR = '.row.gy-4.gx-5';
+const FUNCIONARIO_SELECIONADO_KEY = 'funcionarioSelecionado';
 
 function getUsuarioLogado() {
     const raw = sessionStorage.getItem(STORAGE_KEY);
@@ -68,6 +70,69 @@ function configureSidebarNavigation(sidebarType) {
     });
 }
 
+function createFuncionarioCard(funcionario) {
+    const col = document.createElement('div');
+    col.className = 'col-md-6';
+
+    const card = document.createElement('div');
+    card.className = 'text-center card-paciente';
+    card.innerHTML = `
+        <h3 class="mb-2">${funcionario.nome}</h3>
+        <p>${funcionario.cargo}</p>
+    `;
+
+    card.addEventListener('click', () => abrirDetalhesFuncionario(funcionario));
+
+    col.appendChild(card);
+    return col;
+}
+
+function abrirDetalhesFuncionario(funcionario) {
+    if (!funcionario) return;
+    sessionStorage.setItem(FUNCIONARIO_SELECIONADO_KEY, JSON.stringify(funcionario));
+    window.api.openWindow('telaDadosFuncionario');
+}
+
+function renderEstadoLista(container, mensagem, classe = 'text-muted') {
+    if (!container) return;
+    container.innerHTML = `
+        <div class="col-12">
+            <p class="text-center ${classe}">${mensagem}</p>
+        </div>
+    `;
+}
+
+async function carregarFuncionarios() {
+    const container = document.querySelector(LIST_CONTAINER_SELECTOR);
+    if (!container) {
+        console.warn('Container da lista de funcionários não encontrado.');
+        return;
+    }
+
+    renderEstadoLista(container, 'Carregando funcionários...');
+
+    try {
+        const resposta = await window.api.listarFuncionarios();
+        if (!resposta?.success) {
+            throw new Error(resposta?.error || 'Não foi possível carregar os funcionários.');
+        }
+
+        const funcionarios = resposta.funcionarios ?? [];
+        if (!funcionarios.length) {
+            renderEstadoLista(container, 'Nenhum funcionário encontrado.');
+            return;
+        }
+
+        container.innerHTML = '';
+        funcionarios.forEach((funcionario) => {
+            container.appendChild(createFuncionarioCard(funcionario));
+        });
+    } catch (error) {
+        console.error('Erro ao carregar funcionários:', error);
+        renderEstadoLista(container, 'Erro ao carregar funcionários. Tente novamente mais tarde.', 'text-danger');
+    }
+}
+
 function configurarBotaoCadastro(usuario) {
     const botao = document.querySelector('.btn-assistida');
     if (!botao) return;
@@ -118,4 +183,5 @@ document.addEventListener('DOMContentLoaded', async () => {
     const sidebarType = resolveSidebarType(usuarioAtual);
     configureSidebarNavigation(sidebarType);
     configurarBotaoCadastro(usuarioAtual);
+    await carregarFuncionarios();
 });
