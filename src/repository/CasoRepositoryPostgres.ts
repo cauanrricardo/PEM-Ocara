@@ -16,6 +16,15 @@ export class CasoRepositoryPostgres implements ICasoRepository {
     }
 
     /**
+     * Converte valores para boolean, tratando strings como "Sim"/"Não"
+     */
+    private toBoolean(value: any): boolean {
+        if (typeof value === 'boolean') return value;
+        if (typeof value === 'string') return value.toLowerCase() === 'sim';
+        return !!value;
+    }
+
+    /**
      * Salva um novo caso no banco de dados com uma assistida existente.
      * Utiliza transação para garantir consistência dos dados.
      * 
@@ -58,12 +67,12 @@ export class CasoRepositoryPostgres implements ICasoRepository {
             const valuesCaso = [
                 dataOcorrida,
                 sobreVoce?.getSeparacaoRecente() || 'Não',
-                sobreVoce?.getNovoRelacionamentoAumentouAgressao() || false,
-                outrasInfo?.getAceitaAbrigamentoTemporario() || false,
-                outrasInfo?.getDependenteFinanceiroAgressor() || false,
+                this.toBoolean(sobreVoce?.getNovoRelacionamentoAumentouAgressao?.()),
+                this.toBoolean(outrasInfo?.getAceitaAbrigamentoTemporario?.()),
+                this.toBoolean(outrasInfo?.getDependenteFinanceiroAgressor?.()),
                 outrasInfo?.getMoraEmAreaRisco() || 'Não sei',
-                caso.getSobreAgressor()?.getAgressorCumpriuMedidaProtetiva() || false,
-                caso.getHistoricoViolencia()?.getAgressoesMaisFrequentesUltimamente() || false,
+                this.toBoolean(caso.getSobreAgressor()?.getAgressorCumpriuMedidaProtetiva?.()),
+                this.toBoolean(caso.getHistoricoViolencia()?.getAgressoesMaisFrequentesUltimamente?.()),
                 idAssistida,
                 caso.getOutrasInformacoesEncaminhamento()?.anotacoesLivres || ''
             ];
@@ -81,11 +90,11 @@ export class CasoRepositoryPostgres implements ICasoRepository {
 
             // 4. Salvar Agressor
             const agressor = caso.getAgressor();
-            if (agressor) {
-                const idAgressor = await this.salvarAgressor(client, idCaso, idAssistida, agressor);
+            const sobreAgressor = caso.getSobreAgressor();
+            if (agressor && sobreAgressor) {
+                const idAgressor = await this.salvarAgressor(client, idCaso, idAssistida, agressor, sobreAgressor);
                 
                 // 5. Salvar multivalorados do Agressor
-                const sobreAgressor = caso.getSobreAgressor();
                 if (sobreAgressor) {
                     await this.salvarSubstanciasAgressor(client, idCaso, idAssistida, idAgressor, sobreAgressor);
                     await this.salvarAmeacasAgressor(client, idCaso, idAssistida, idAgressor, sobreAgressor);
@@ -181,12 +190,12 @@ export class CasoRepositoryPostgres implements ICasoRepository {
             const valuesCaso = [
                 dataOcorrida,
                 sobreVoce?.getSeparacaoRecente() || 'Não',
-                sobreVoce?.getNovoRelacionamentoAumentouAgressao() || false,
-                outrasInfo?.getAceitaAbrigamentoTemporario() || false,
-                outrasInfo?.getDependenteFinanceiroAgressor() || false,
+                this.toBoolean(sobreVoce?.getNovoRelacionamentoAumentouAgressao?.()),
+                this.toBoolean(outrasInfo?.getAceitaAbrigamentoTemporario?.()),
+                this.toBoolean(outrasInfo?.getDependenteFinanceiroAgressor?.()),
                 outrasInfo?.getMoraEmAreaRisco() || 'Não sei',
-                caso.getSobreAgressor()?.getAgressorCumpriuMedidaProtetiva() || false,
-                caso.getHistoricoViolencia()?.getAgressoesMaisFrequentesUltimamente() || false,
+                this.toBoolean(caso.getSobreAgressor()?.getAgressorCumpriuMedidaProtetiva?.()),
+                this.toBoolean(caso.getHistoricoViolencia()?.getAgressoesMaisFrequentesUltimamente?.()),
                 idAssistida,
                 caso.getOutrasInformacoesEncaminhamento()?.anotacoesLivres || ''
             ];
@@ -202,11 +211,11 @@ export class CasoRepositoryPostgres implements ICasoRepository {
 
             // 4. Salvar Agressor
             const agressor = caso.getAgressor();
-            if (agressor) {
-                const idAgressor = await this.salvarAgressor(client, idCaso, idAssistida, agressor);
+            const sobreAgressor = caso.getSobreAgressor();
+            if (agressor && sobreAgressor) {
+                const idAgressor = await this.salvarAgressor(client, idCaso, idAssistida, agressor, sobreAgressor);
                 
                 // 5. Salvar multivalorados do Agressor
-                const sobreAgressor = caso.getSobreAgressor();
                 if (sobreAgressor) {
                     await this.salvarSubstanciasAgressor(client, idCaso, idAssistida, idAgressor, sobreAgressor);
                     await this.salvarAmeacasAgressor(client, idCaso, idAssistida, idAgressor, sobreAgressor);
@@ -319,8 +328,8 @@ export class CasoRepositoryPostgres implements ICasoRepository {
 
         const valuesFilho = [
             sobreVoce.getFilhosComDeficiencia?.() ? `${sobreVoce.getFilhosComDeficiencia()}` : '0',
-            sobreVoce.getFilhosPresenciaramViolencia() || false,
-            sobreVoce.getViolenciaDuranteGravidez() || false,
+            this.toBoolean(sobreVoce.getFilhosPresenciaramViolencia?.()),
+            this.toBoolean(sobreVoce.getViolenciaDuranteGravidez?.()),
             idAssistida,
             sobreVoce.getTemFilhosComAgressor() ? sobreVoce.getQntFilhosComAgressor() : 0,
             sobreVoce.getTemFilhosOutroRelacionamento() ? sobreVoce.getQntFilhosOutroRelacionamento() : 0
@@ -358,7 +367,7 @@ export class CasoRepositoryPostgres implements ICasoRepository {
     /**
      * Salva os dados do Agressor
      */
-    private async salvarAgressor(client: PoolClient, idCaso: number, idAssistida: number, agressor: any): Promise<number> {
+    private async salvarAgressor(client: PoolClient, idCaso: number, idAssistida: number, agressor: any, sobreAgressor: any): Promise<number> {
         const queryAgressor = `
             INSERT INTO AGRESSOR (
                 id_caso, id_assistida, Nome, Idade, Vinculo,
@@ -368,19 +377,17 @@ export class CasoRepositoryPostgres implements ICasoRepository {
             ) RETURNING id_agressor
         `;
 
-        const sobreAgressor = agressor._sobreAgressor || {};
-        
         const valuesAgressor = [
             idCaso,
             idAssistida,
             agressor.getNome() || '',
             agressor.getIdade() || 0,
             agressor.getVinculoAssistida() || '',
-            sobreAgressor.getDoencaMental?.() ? String(sobreAgressor.getDoencaMental?.()) : '',
-            sobreAgressor.getAgressorCumpriuMedidaProtetiva?.() || false,
-            sobreAgressor.getAgressorTentativaSuicidio?.() || false,
-            sobreAgressor.getAgressorDesempregado?.() || false,
-            sobreAgressor.getAgressorPossuiArmaFogo?.() || false
+            sobreAgressor.getDoencaMental ? String(sobreAgressor.getDoencaMental()) : '',
+            this.toBoolean(sobreAgressor.getAgressorCumpriuMedidaProtetiva?.()),
+            this.toBoolean(sobreAgressor.getAgressorTentativaSuicidio?.()),
+            this.toBoolean(sobreAgressor.getAgressorDesempregado?.()),
+            this.toBoolean(sobreAgressor.getAgressorPossuiArmaFogo?.())
         ];
 
         const result = await client.query(queryAgressor, valuesAgressor);
@@ -451,7 +458,7 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         const valuesViolencia = [
             idCaso,
             idAssistida,
-            historicoViolencia.getAbusoSexual() || false,
+            this.toBoolean(historicoViolencia.getAbusoSexual?.()),
             new Date()
         ];
 
@@ -631,11 +638,11 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         const valuesPreenchimento = [
             idCaso,
             idAssistida,
-            preenchimentoProfissional.getAssistidaRespondeuSemAjuda() || false,
-            preenchimentoProfissional.getAssistidaRespondeuComAuxilio() || false,
-            preenchimentoProfissional.getAssistidaSemCondicoes() || false,
-            preenchimentoProfissional.getAssistidaRecusou() || false,
-            preenchimentoProfissional.getTerceiroComunicante() || false
+            this.toBoolean(preenchimentoProfissional.getAssistidaRespondeuSemAjuda?.()),
+            this.toBoolean(preenchimentoProfissional.getAssistidaRespondeuComAuxilio?.()),
+            this.toBoolean(preenchimentoProfissional.getAssistidaSemCondicoes?.()),
+            this.toBoolean(preenchimentoProfissional.getAssistidaRecusou?.()),
+            this.toBoolean(preenchimentoProfissional.getTerceiroComunicante?.())
         ];
 
         const resultPreenchimento = await client.query(queryPreenchimento, valuesPreenchimento);

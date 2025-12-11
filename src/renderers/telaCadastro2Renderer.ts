@@ -481,19 +481,21 @@ btnProximo.addEventListener('click', async () => {
         dadosCaso.ocorrenciaPolicialMedidaProtetivaAgressor = boMedida === 'Sim';
         dadosCaso.agressoesMaisFrequentesUltimamente = frequenciaAumento === 'Sim';
         dadosCaso.usoDrogasAlcool = usoDrogas;
-        dadosCaso.doencaMental = doencaMental;
+        dadosCaso.doencaMental = doencaMental; // String "Sim"/"Não" - vem do Q9 para SobreAgressor
         dadosCaso.agressorCumpriuMedidaProtetiva = descumpriuMedida === 'Sim';
         dadosCaso.agressorTentativaSuicidio = tentativaSuicidio === 'Sim';
-        dadosCaso.agressorDesempregado = desempregadoDificuldades;
-        dadosCaso.agressorPossuiArmaFogo = acessoArmas;
-        dadosCaso.agressorAmeacouAlguem = ameacouAgrediu;
-        dadosCaso.separacaoRecente = separacao;
+        dadosCaso.agressorDesempregado = desempregadoDificuldades; // String "Sim"/"Não" - campo especial do agressor
+        dadosCaso.agressorPossuiArmaFogo = acessoArmas; // String "Sim"/"Não" - campo especial do agressor
+        dadosCaso.agressorAmeacouAlguem = ameacouAgrediu; // Array de strings - campo especial do agressor
+        dadosCaso.separacaoRecente = separacao; // String "Sim"/"Não" - campo especial
         dadosCaso.novoRelacionamentoAumentouAgressao = novoRelacionamento === 'Sim';
         dadosCaso.possuiDeficienciaDoenca = deficiencia || '';
         dadosCaso.corRaca = corRaca;
         // Manter como string para suportar "Sim", "Não", "Não sei"
         dadosCaso._moraEmAreaRisco = moraEmAreaRisco;
+        dadosCaso.moraEmAreaRisco = moraEmAreaRisco;
         dadosCaso._dependenteFinanceira = dependenteFinanceira;
+        dadosCaso.dependenteFinanceiroAgressor = dependenteFinanceira === 'Sim';
         dadosCaso._abrigamentoTemporario = abrigamento;
         dadosCaso.aceitaAbrigamentoTemporario = abrigamento === 'Sim';
 
