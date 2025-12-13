@@ -190,8 +190,14 @@ body {
   transition: opacity 0.2s ease;
 }
 
+.button button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
 .button button:active {
   transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 .button button.loading {
