@@ -11,6 +11,8 @@ import { CasoController } from './controllers/CasoController';
 // --- Módulo Rede de Apoio (Seus Imports) ---
 import { ControladorOrgao } from './controllers/ControladorOrgao';
 import { PostgresOrgaoRepository } from './repository/PostgresOrgaoRepository';
+import { CasoRedeApoioContatoRepository } from './repository/CasoRedeApoioContatoRepository';
+import { ICasoRedeApoioContatoRepository } from './repository/ICasoRedeApoioContatoRepository';
 
 // --- Módulos da Branch backend-dev ---
 import { PdfService } from './services/PDFService';
@@ -50,6 +52,7 @@ let funcionarioController: ControladorFuncionario;
 let credencialController: ControladorCredencial;
 let historicoController: HistoricoController;
 let orgaoController: ControladorOrgao;
+let casoRedeApoioContatoRepository: ICasoRedeApoioContatoRepository;
 type UsuarioSessaoAtiva = {
   email: string;
   nome: string;
@@ -135,6 +138,7 @@ async function bootstrap(): Promise<void> {
   // 3. Inicializar Repositórios (Injeção de Dependência)
   casoRepository = new CasoRepositoryPostgres(dbPool);
   anexoRepository = new AnexoRepositorioPostgres(dbPool);
+  casoRedeApoioContatoRepository = new CasoRedeApoioContatoRepository(dbPool);
   
   const funcionarioRepository = new FuncionarioRepositoryPostgres(dbPool);
   const credencialRepository = new CredencialRepositoryPostgres(dbPool);
@@ -922,6 +926,20 @@ ipcMain.handle('encaminhamento:enviarEmail', async (_event, dados: {
       return { success: false, error: resultadoEnvio.error ?? 'Falha ao enviar o e-mail.' };
     }
 
+    if (casoRedeApoioContatoRepository) {
+      try {
+        await casoRedeApoioContatoRepository.registrarContato({
+          idCaso,
+          emailRede: emailDestino,
+          assunto,
+          mensagem: dados?.mensagem ?? '',
+          dataEnvio: new Date()
+        });
+      } catch (erroRegistro) {
+        Logger.warn('Falha ao registrar a rede de apoio contatada:', erroRegistro);
+      }
+    }
+
     Logger.info(`E-mail de encaminhamento enviado com sucesso para ${emailDestino} (caso ${idCaso}).`);
     return {
       success: true,
@@ -936,6 +954,37 @@ ipcMain.handle('encaminhamento:enviarEmail', async (_event, dados: {
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Erro desconhecido ao enviar o e-mail.'
+    };
+  }
+});
+
+ipcMain.handle('caso:listarRedesContatadas', async (_event, payload: { idCaso?: number } | number) => {
+  try {
+    if (!casoRedeApoioContatoRepository) {
+      return { success: false, error: 'Repositório de contatos não está disponível.' };
+    }
+
+    let idCaso: number;
+    if (typeof payload === 'number') {
+      idCaso = payload;
+    } else {
+      idCaso = Number(payload?.idCaso);
+    }
+
+    if (!Number.isInteger(idCaso) || idCaso <= 0) {
+      return { success: false, error: 'Caso inválido para consulta.' };
+    }
+
+    const redes = await casoRedeApoioContatoRepository.obterNomesRedesContatadas(idCaso);
+    return {
+      success: true,
+      redes
+    };
+  } catch (error) {
+    Logger.error('Erro ao listar redes contatadas:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao listar redes contatadas.'
     };
   }
 });

@@ -188,6 +188,12 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  listarRedesContatadas: (idCaso: number) => Promise<{
+    success: boolean;
+    redes?: string[];
+    error?: string;
+  }>;
+
   enviarEmailEncaminhamento: (dados: {
     idCaso: number;
     idRedeDestino: number;

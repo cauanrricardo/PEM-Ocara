@@ -431,6 +431,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     let idAssistida: number = 0;
 
     const redesCadastradas: any[] = [];
+    const redesContatadasElement = document.getElementById('redes-contatadas') as HTMLParagraphElement | null;
+
+    const atualizarRedesContatadas = async () => {
+        if (!redesContatadasElement) {
+            return;
+        }
+
+        try {
+            const resposta = await window.api.listarRedesContatadas(Number(idCaso));
+
+            if (resposta?.success && Array.isArray(resposta.redes) && resposta.redes.length > 0) {
+                redesContatadasElement.textContent = resposta.redes.join(', ');
+            } else {
+                redesContatadasElement.textContent = 'Nenhuma rede de apoio foi contatada até o momento';
+            }
+        } catch (erro) {
+            console.error('Erro ao carregar redes contatadas:', erro);
+            redesContatadasElement.textContent = 'Não foi possível carregar as redes contatadas.';
+        }
+    };
 
     const carregarRedesApoio = async () => {
         try {
@@ -972,6 +992,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 uiManager.toggleModalEncaminhamento(false);
                 uiManager.mostrarPopup('E-mail enviado com sucesso!');
+                await atualizarRedesContatadas();
 
                 if (emailParaInput) {
                     emailParaInput.selectedIndex = 0;
@@ -1016,6 +1037,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (redesContatadas && !redesContatadas.textContent.trim()) {
         redesContatadas.textContent = 'Nenhuma rede de apoio foi contatada até o momento';
     }
+
+    await atualizarRedesContatadas();
 
     // Controle de Visibilidade Padrão e Etapas Específicas
     const radiosPadrao = document.querySelectorAll('input[name="visibilidade-padrao"]');
