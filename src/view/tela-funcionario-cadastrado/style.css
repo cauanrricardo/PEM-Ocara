@@ -195,29 +195,37 @@ body {
 
 /* --- 5. BOTÕES --- */
 .btn-assistida {
-    width: 70%;
-    padding: 39px 0;
     background-color: #F2B872;
-    border: 1px solid #865D2B;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    border: 0.5px solid #E0AC6E;
     border-radius: 25px;
-    color: white;
-    font-size: clamp(24px, 2.5vw, 35px);
-    font-family: 'Poppins', sans-serif;
-    letter-spacing: 0.17em;
-    font-weight: 800;
-    text-align: center;
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 2%;
+    letter-spacing: 0.05em;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    height: 100px;
+    width: 500px;
+
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 0 auto;
 }
 
 .btn-assistida:hover {
-    transform: scale(1.03);
-    box-shadow: 0 14px 26px rgba(0, 0, 0, 0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 .btn-assistida:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 /* --- 6. MODAL (CADASTRAR/ATUALIZAR) --- */
