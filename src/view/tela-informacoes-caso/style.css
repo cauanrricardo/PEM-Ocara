@@ -163,7 +163,7 @@ body {
 /* Container dos Botões Principais */
 .botoes-principais {
     display: flex;
-    gap: auto;
+    gap: 20px;
     justify-content: space-between;
     margin-bottom: 28px;
     flex-wrap: nowrap;
@@ -174,28 +174,38 @@ body {
 #editar-form,
 #alterar-privacidade {
     background-color: #F2B872;
-    border: 1px solid #A8783E;
+    border: 0.5px solid #E0AC6E;
     border-radius: 25px;
     color: #FFFFFF;
-    font-size: 20px;
-    font-weight: 700;
-    letter-spacing: 0.10em;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 2%;
+    letter-spacing: 0.05em;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 90px;
-    width: 320px;
+
+    height: 100px;
+    flex: 1;
+
     cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    flex-shrink: 0;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+}
+
+#acessar-form:hover,
+#editar-form:hover,
+#alterar-privacidade:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 #acessar-form:active,
 #editar-form:active,
 #alterar-privacidade:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -421,48 +431,65 @@ body {
     height: 50px;
 }
 
-
 /* Botões de Anexar Arquivos */
 #anexar-prova {
     background-color: #63468C;
-    border: 1px solid #865D2B;
-    color: #FFFFFF;
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+    border: 0.5px solid #2f1f44;
     border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 2%;
+    letter-spacing: 0.05em;
+
+    display: flex;
     align-items: center;
-    width: 100%;
-    height: 109px;
+    justify-content: center;
+
+    height: 100px;
+    width: 500px;
+
     cursor: pointer;
-    display: block;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    margin-bottom: 46px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 0 auto;
 }
 
 #anexar-relatorio {
     background-color: #63468C;
-    border: 1px solid #865D2B;
-    color: #FFFFFF;
-    font-size: 32px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
+    border: 0.5px solid #2f1f44;
     border-radius: 25px;
+    color: #FFFFFF;
+    font-size: 24px;
+    font-weight: 600;
+    padding: 2%;
+    letter-spacing: 0.05em;
+
+    display: flex;
     align-items: center;
-    width: 100%;
-    height: 109px;
+    justify-content: center;
+
+    height: 100px;
+    width: 500px;
+
     cursor: pointer;
-    display: block;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    margin-bottom: 28px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+#anexar-prova:hover,
+#anexar-relatorio:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 #anexar-prova:active,
 #anexar-relatorio:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -493,25 +520,36 @@ body {
 
 #encaminhamento {
     background-color: #B291DE;
-    border: 1px solid #9A78C6;
+    border: 0.5px solid #9A78C6;
+    border-radius: 25px;
     color: #FFFFFF;
     font-size: 24px;
-    font-weight: 700;
-    letter-spacing: 0.15em;
-    border-radius: 15px;
+    font-weight: 600;
+    padding: 2%;
+    letter-spacing: 0.05em;
+
+    display: flex;
     align-items: center;
-    height: 73px;
-    width: 100%;
+    justify-content: center;
+
+    height: 100px;
+    width: 500px;
+
     cursor: pointer;
-    display: block;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
-    transition: transform 0.1s ease, box-shadow 0.1s ease;
-    margin-bottom: 28px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    margin: 0 auto;
+}
+
+#encaminhamento:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 #encaminhamento:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
 
