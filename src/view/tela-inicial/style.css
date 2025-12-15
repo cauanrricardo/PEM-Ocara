@@ -183,25 +183,27 @@ body {
 }
 
 .btn {
-    width: 300px;
-    height: 150px;
-    padding: 2%;
     background-color: #F2B872;
-    border-radius: 25px;
     border: 0.5px solid #E0AC6E;
-    cursor: pointer;
+    border-radius: 25px;
     color: #FFFFFF;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
     font-size: 24px;
+    font-weight: 600;
+    padding: 2%;
     letter-spacing: 0.05em;
-    text-align: center;
+
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+
+    height: 100px;
+    width: 500px;
+
+    cursor: pointer;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
     transition: all 0.3s ease;
     flex-shrink: 0;
+    margin: 0 auto;
 }
 
 .btn:hover {
