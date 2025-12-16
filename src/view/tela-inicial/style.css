@@ -19,7 +19,7 @@ body {
 
 /* --- Barra Lateral / Sidebar ============) --- */
 .sidebar {
-    width: clamp(280px, 25vw, 480px);
+    width: clamp(340px, 28vw, 480px);
     background-color: #63468C;
     color: #FFFFFF;
     flex-shrink: 0;
@@ -29,7 +29,6 @@ body {
     box-sizing: border-box;
     border-top-right-radius: 25px;
     border-bottom-right-radius: 25px;
-
 }
 
 .sidebar-header {
@@ -37,7 +36,7 @@ body {
     width: 84%;
     margin: 0 auto;
     flex-shrink: 0;
-
+    padding-top: 8px;
 }
 
 .sidebar-header h1 {
@@ -49,10 +48,12 @@ body {
 }
 
 .sidebar-divider {
-    border: 2px solid #FFFFFF;
-    width: 99%;
-    margin-top: 13px;
+    border: none;
+    height: 4px;
+    background-color: #FFFFFF;
     opacity: 1;
+    width: 100%;
+    margin-top: 20px;
 }
 
 .sidebar-nav {
@@ -62,7 +63,6 @@ body {
     align-items: center;
     justify-content: center;
 }
-
 
 .sidebar-nav ul {
     list-style: none;
@@ -89,19 +89,44 @@ body {
     transition: background-color 0.2s ease-in-out;
 }
 
+.sidebar-nav .material-symbols-outlined {
+    font-size: 40px; 
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 40;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
 .sidebar-nav a.active {
     background-color: #FFFFFF;
     color: #63468C;
+}
+
+.sidebar-nav a.active .material-symbols-outlined {
+    font-variation-settings:
+    'FILL' 1,
+    'wght' 500,
+    'GRAD' 0,
+    'opsz' 40;
 }
 
 .sidebar-nav a:not(.active):hover {
     background-color: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar-nav svg {
-    width: 40px;
-    height: 40px;
-    flex-shrink: 0;
+.main-content {
+    flex-grow: 10;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 50px 80px;
+    box-sizing: border-box;
+    max-width: 1920px;
+    margin: 0 auto;
 }
 
 /*=======================MAIN =================*/
@@ -432,7 +457,7 @@ body {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
-.material-symbols-outlined {
+.main-content .material-symbols-outlined {
     color: #63468C;
     font-size: 38px;
     font-variation-settings: 'FILL'0, 'wght'400, 'GRAD'0, 'opsz'38;
