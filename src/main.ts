@@ -769,14 +769,15 @@ ipcMain.handle('caso:salvarAnexo', async(_event, { anexo, idCaso, idAssistida }:
       anexoParaSalvar.dados = null;
     }
     
-    const success = await casoController.handlerSalvarAnexo(anexoParaSalvar, idCaso, idAssistida);
+    const { success, idAnexo } = await casoController.handlerSalvarAnexo(anexoParaSalvar, idCaso, idAssistida);
     
     if (success) {
-      Logger.info(`Anexo '${anexo.nome}' salvo no caso ${idCaso}`);
+      Logger.info(`Anexo '${anexo.nome}' salvo no caso ${idCaso} (ID ${idAnexo})`);
     }
     
     return {
-      success: success,
+      success,
+      idAnexo: idAnexo ?? undefined,
       message: success ? 'Anexo salvo com sucesso' : 'Falha ao salvar anexo'
     };
   } catch (error) {

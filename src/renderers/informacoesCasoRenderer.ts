@@ -687,6 +687,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (resultado.idAnexo) {
                     arquivo.id = resultado.idAnexo;
                     console.log('Arquivo salvo com novo ID:', resultado.idAnexo, 'Relatório:', isRelatorio);
+
+                    // Registrar o nome do anexo recém-criado no mapa utilizado pelo histórico/deleção
+                    const mapaAnexosJSON = sessionStorage.getItem('mapaAnexosCaso');
+                    const mapaAnexos = mapaAnexosJSON ? JSON.parse(mapaAnexosJSON) : {};
+                    mapaAnexos[resultado.idAnexo] = arquivo.nome;
+                    sessionStorage.setItem('mapaAnexosCaso', JSON.stringify(mapaAnexos));
                 }
             } else {
                 arquivo.status = 'erro';

@@ -158,16 +158,22 @@ export class CasoController {
         }
     }
 
-    async handlerSalvarAnexo(anexo: any, idCaso: number, idAssistida: number): Promise<boolean> {
+    async handlerSalvarAnexo(anexo: any, idCaso: number, idAssistida: number): Promise<{ success: boolean; idAnexo?: number }> {
         try {
             console.log(`📎 CasoController: Salvando anexo '${anexo.nome}' para caso ${idCaso}`);
-            const success = await this.casoService.salvarAnexo(anexo, idCaso, idAssistida);
+            const idAnexo = await this.casoService.salvarAnexo(anexo, idCaso, idAssistida);
+            const success = typeof idAnexo === 'number' && idAnexo > 0;
+
             if (success) {
-                console.log(`✓ CasoController: Anexo salvo com sucesso`);
+                console.log(`✓ CasoController: Anexo salvo com sucesso (ID ${idAnexo})`);
             } else {
                 console.warn(`⚠ CasoController: Falha ao salvar anexo`);
             }
-            return success;
+
+            return {
+                success,
+                idAnexo: success ? idAnexo : undefined
+            };
         } catch (error) {
             console.error(`✗ CasoController: Erro ao salvar anexo:`, error);
             throw error;
