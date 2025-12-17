@@ -476,3 +476,142 @@ body {
     height: 100px;
     object-fit: contain;
 }
+
+/* --- Responsividade Específica --- */
+
+/* Para tela 1707 x 1067 */
+@media screen and (max-width: 1707px) and (max-height: 1067px) {
+    .main-content {
+        padding: 45px 72px;
+        max-width: 1600px;
+    }
+    
+    .sidebar-header h1 {
+        font-size: 44px;
+    }
+    
+    .sidebar-nav a {
+        font-size: 30px;
+        padding: 14px 36px;
+        gap: 18px;
+    }
+    
+    .sidebar-nav .material-symbols-outlined {
+        font-size: 38px;
+    }
+    
+    .barra-busca-full {
+        padding-left: 72px;
+        padding-right: 72px;
+    }
+    
+    .barra-busca-full .material-symbols-outlined {
+        font-size: 36px !important;
+    }
+    
+    .input-busca-prototipo {
+        font-size: 18px !important;
+    }
+    
+    .tabela-funcionarios {
+        font-size: 20px;
+    }
+    
+    .tabela-funcionarios th,
+    .tabela-funcionarios td {
+        padding: 13px;
+    }
+    
+    .tabela-funcionarios th {
+        font-size: 22px;
+    }
+    
+    .btn-voltar {
+        height: 52px;
+        font-size: 22px;
+        padding: 0 36px;
+    }
+    
+    .rodape p {
+        font-size: 15px;
+    }
+    
+    .logo-esquerda {
+        width: 100px;
+        height: 72px;
+    }
+    
+    .logo-direita {
+        width: 120px;
+        height: 90px;
+    }
+}
+
+/* Para tela 1440 x 900 */
+@media screen and (max-width: 1440px) and (max-height: 900px) {
+    .main-content {
+        padding: 40px 64px;
+        max-width: 1400px;
+    }
+    
+    .sidebar-header h1 {
+        font-size: 40px;
+    }
+    
+    .sidebar-nav a {
+        font-size: 28px;
+        padding: 12px 32px;
+        gap: 16px;
+    }
+    
+    .sidebar-nav .material-symbols-outlined {
+        font-size: 36px;
+    }
+    
+    .barra-busca-full {
+        padding-left: 64px;
+        padding-right: 64px;
+    }
+    
+    .barra-busca-full .material-symbols-outlined {
+        font-size: 34px !important;
+    }
+    
+    .input-busca-prototipo {
+        font-size: 16px !important;
+    }
+    
+    .tabela-funcionarios {
+        font-size: 18px;
+    }
+    
+    .tabela-funcionarios th,
+    .tabela-funcionarios td {
+        padding: 12px;
+    }
+    
+    .tabela-funcionarios th {
+        font-size: 20px;
+    }
+    
+    .btn-voltar {
+        height: 48px;
+        font-size: 20px;
+        padding: 0 32px;
+        border-radius: 8px;
+    }
+    
+    .rodape p {
+        font-size: 14px;
+    }
+    
+    .logo-esquerda {
+        width: 90px;
+        height: 64px;
+    }
+    
+    .logo-direita {
+        width: 108px;
+        height: 80px;
+    }
+}
