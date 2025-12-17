@@ -87,6 +87,28 @@ contextBridge.exposeInMainWorld('api', {
   getCasoCompletoVisualizacao: (idCaso: number) =>
     ipcRenderer.invoke('caso:getCasoCompletoVisualizacao', idCaso),
 
+  salvarPrivacidadeCaso: (idCaso: number, privacidade: string) =>
+    ipcRenderer.invoke('caso:salvarPrivacidade', { idCaso, privacidade }),
+
+  obterPrivacidadeCaso: (idCaso: number) =>
+    ipcRenderer.invoke('caso:obterPrivacidade', idCaso),
+
+  verificarPermissaoTela: (idCaso: number, numTela: number) => {
+    return (async () => {
+      try {
+        const resultado = await ipcRenderer.invoke('caso:obterPrivacidade', idCaso);
+        if (!resultado.success) return true; // Se erro, permite acesso
+        
+        const privacidade = resultado.privacidade || '';
+        const telaAutorizada = privacidade.includes(numTela.toString());
+        return telaAutorizada;
+      } catch (error) {
+        console.error('Erro ao verificar permissão:', error);
+        return true; // Se erro, permite acesso
+      }
+    })();
+  },
+
   criarAssistida: (
     nome: string,
     idade: number,

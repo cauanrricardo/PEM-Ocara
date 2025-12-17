@@ -529,4 +529,26 @@ export class CasoService {
             throw error;
         }
     }
+
+    async salvarPrivacidade(idCaso: number, privacidade: string): Promise<boolean> {
+        try {
+            console.log(`🔒 [Service] Salvando privacidade para caso ${idCaso}:`, privacidade);
+            const success = await this.casoRepository.salvarPrivacidade(idCaso, privacidade);
+            console.log(`✅ [Service] Privacidade salva:`, success);
+            return success;
+        } catch (error) {
+            console.error('❌ [Service] Erro ao salvar privacidade:', error);
+            throw error;
+        }
+    }
+
+    async obterPrivacidade(idCaso: number): Promise<string> {
+        try {
+            const privacidade = await this.casoRepository.obterPrivacidade(idCaso);
+            return privacidade;
+        } catch (error) {
+            console.error('❌ [Service] Erro ao obter privacidade:', error);
+            throw error;
+        }
+    }
 }

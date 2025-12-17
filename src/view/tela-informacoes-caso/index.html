@@ -386,6 +386,13 @@
     </div>
 
     <script src="../../../dist/utils/sidebarNavigation.js"></script>
+    <script>
+      console.log('📄 Página HTML carregando...');
+      console.log('window.api disponível?', typeof window.api !== 'undefined');
+      if (window.api) {
+        console.log('Métodos disponíveis em window.api:', Object.keys(window.api).filter(k => k.includes('Privacidade') || k.includes('privacidade')));
+      }
+    </script>
     <script src="script.js"></script>
     <script type="module" src="../../../dist/renderers/informacoesCasoRenderer.js"></script>
 </body>

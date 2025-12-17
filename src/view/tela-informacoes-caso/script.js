@@ -327,6 +327,9 @@ class UIManager {
 
 // Inicialização da página
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🚀 Script de tela-informacoes-caso iniciado!');
+    console.log('window.api disponível?', typeof window.api !== 'undefined');
+    
     const fileManager = new FileManager();
     const uiManager = new UIManager();
     
@@ -699,6 +702,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Controle de Visibilidade Padrão e Etapas Específicas
     const radiosPadrao = document.querySelectorAll('input[name="visibilidade-padrao"]');
     const radiosEtapas = document.querySelectorAll('.visibilidade-etapa');
+    const secaoEtapasEspecificas = document.querySelector('.opcoes-padrao:nth-of-type(2)'); // Segunda seção de opcoes-padrao
 
     // Quando clicar em qualquer opção da Visibilidade Padrão, ativa/desativa todas as etapas
     radiosPadrao.forEach(radio => {
@@ -713,6 +717,16 @@ document.addEventListener('DOMContentLoaded', async () => {
                     etapa.checked = true;
                 }
             });
+
+            // Oculta o campo "Campo para o preenchimento profissional" quando usando visibilidade padrão
+            // Apenas mostra as 3 primeiras opções (assistida, caso, outras informações)
+            const todasOpcoes = document.querySelectorAll('[opcao]');
+            if (todasOpcoes.length > 3) {
+                const opcaoPreenchimento = todasOpcoes[3];
+                if (opcaoPreenchimento) {
+                    opcaoPreenchimento.style.display = isPublico ? 'none' : 'flex';
+                }
+            }
         });
     });
 
@@ -757,29 +771,73 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Botão Salvar Alterações do Modal de Privacidade do Formulário
     const btnSalvarPrivacidadeForm = document.getElementById('modal-privacidade-form');
+    console.log('🔍 Botão encontrado:', btnSalvarPrivacidadeForm);
     if (btnSalvarPrivacidadeForm) {
-        btnSalvarPrivacidadeForm.addEventListener('click', () => {
+        btnSalvarPrivacidadeForm.addEventListener('click', async () => {
+            console.log('✅ Click no botão de salvar privacidade detectado!');
             // Captura todas as configurações selecionadas
+            const padrao = document.querySelector('input[name="visibilidade-padrao"]:checked')?.id || 'privado-padrao';
+            const assistida = document.querySelector('input[name="visibilidade-assistida"]:checked')?.id || 'privado-assistida';
+            const caso = document.querySelector('input[name="visibilidade-caso"]:checked')?.id || 'privado-caso';
+            const outras = document.querySelector('input[name="visibilidade-outras"]:checked')?.id || 'privado-outras';
+            const profissional = document.querySelector('input[name="visibilidade-profissional"]:checked')?.id || 'privado-profissional';
+
+            // Monta o array de permissões: 1 = cadastro assistida, 2 = cadastro caso, 3 = outras informações
+            // Apenas as telas com "publico" são adicionadas
+            const telaPublicas = [];
+            if (assistida.includes('publico')) telaPublicas.push(1);  // Cadastro da Assistida
+            if (caso.includes('publico')) telaPublicas.push(2);       // Cadastro do Caso
+            if (outras.includes('publico')) telaPublicas.push(3);     // Outras Informações
+
             const configuracao = {
-                padrao: document.querySelector('input[name="visibilidade-padrao"]:checked')?.id || 'privado-padrao',
-                assistida: document.querySelector('input[name="visibilidade-assistida"]:checked')?.id || 'privado-assistida',
-                caso: document.querySelector('input[name="visibilidade-caso"]:checked')?.id || 'privado-caso',
-                outras: document.querySelector('input[name="visibilidade-outras"]:checked')?.id || 'privado-outras',
-                profissional: document.querySelector('input[name="visibilidade-profissional"]:checked')?.id || 'privado-profissional'
+                padrao,
+                assistida,
+                caso,
+                outras,
+                profissional,
+                privacidade: telaPublicas.join(',') || '' // "1,2,3" ou vazio se tudo privado
             };
 
-            // Salva no localStorage
-            localStorage.setItem('configuracaoPrivacidadeFormulario', JSON.stringify(configuracao));
+            console.log('🔒 Configurações de privacidade:', configuracao);
 
-            console.log('Configurações de privacidade salvas:', configuracao);
+            try {
+                // Salva no banco de dados
+                const idCasoStr = sessionStorage.getItem('idCasoAtual');
+                const idCaso = idCasoStr ? parseInt(idCasoStr) : null;
+                
+                console.log('📱 window.api disponível?', typeof window.api !== 'undefined');
+                console.log('📱 window.api.salvarPrivacidadeCaso disponível?', typeof window.api?.salvarPrivacidadeCaso !== 'undefined');
+                
+                if (!idCaso) {
+                    throw new Error('ID do caso não encontrado no sessionStorage');
+                }
 
-            // Fecha o modal
-            if (modalPrivacidadeFormulario) {
-                modalPrivacidadeFormulario.classList.remove('visible');
+                console.log('🔒 Salvando privacidade para caso:', idCaso, 'com valor:', configuracao.privacidade);
+
+                const resultado = await window.api.salvarPrivacidadeCaso(idCaso, configuracao.privacidade);
+                
+                console.log('📡 Resposta da API:', resultado);
+
+                if (resultado.success) {
+                    // Salva também no localStorage para sincronização
+                    localStorage.setItem('configuracaoPrivacidadeFormulario', JSON.stringify(configuracao));
+
+                    console.log('✅ Privacidade salva no banco de dados');
+
+                    // Fecha o modal
+                    if (modalPrivacidadeFormulario) {
+                        modalPrivacidadeFormulario.classList.remove('visible');
+                    }
+
+                    // Mostra mensagem de sucesso
+                    uiManager.mostrarPopup('Configurações de privacidade salvas com sucesso!');
+                } else {
+                    throw new Error(resultado.error || 'Erro ao salvar privacidade');
+                }
+            } catch (error) {
+                console.error('❌ Erro ao salvar privacidade:', error);
+                uiManager.mostrarPopup(`Erro ao salvar: ${error.message}`);
             }
-
-            // Mostra mensagem de sucesso
-            uiManager.mostrarPopup('Configurações de privacidade salvas com sucesso!');
         });
     }
 });

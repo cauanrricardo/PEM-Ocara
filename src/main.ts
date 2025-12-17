@@ -113,6 +113,50 @@ function formatarCorpoEmailHTML(conteudo: string): string {
 // INITIALIZATION & BOOTSTRAP
 // ==========================================
 
+/**
+ * Verifica se a coluna 'privacidade' existe na tabela CASO
+ * Se não existir, cria a coluna automaticamente
+ */
+async function verificarAndCriarPrivacidadeColumn(pool: Pool): Promise<void> {
+  try {
+    Logger.info('🔍 Verificando se coluna privacidade existe na tabela CASO...');
+    
+    // Verificar se a coluna existe (case-insensitive)
+    const verificarQuery = `
+      SELECT column_name 
+      FROM information_schema.columns 
+      WHERE LOWER(table_name) = 'caso' AND LOWER(column_name) = 'privacidade'
+    `;
+    
+    const resultado = await pool.query(verificarQuery);
+    
+    if (resultado.rows.length > 0) {
+      Logger.info('✅ Coluna privacidade já existe na tabela CASO');
+      return;
+    }
+    
+    // Se não existe, criar a coluna
+    Logger.warn('⚠️  Coluna privacidade NÃO existe. Criando...');
+    const criarQuery = `
+      ALTER TABLE "CASO" 
+      ADD COLUMN privacidade TEXT DEFAULT ''
+    `;
+    
+    await pool.query(criarQuery);
+    Logger.info('✅ Coluna privacidade criada com sucesso!');
+    
+  } catch (error: any) {
+    // Se o erro for "coluna já existe", apenas log e continua
+    if (error.code === '42701') {
+      Logger.info('✅ Coluna privacidade já existe na tabela CASO (detectado pelo PostgreSQL)');
+      return;
+    }
+    
+    Logger.error('❌ Erro ao verificar/criar coluna privacidade:', error);
+    throw error;
+  }
+}
+
 function createMainWindow(): void {
   Logger.info('Criando janela principal...');
   
@@ -135,7 +179,10 @@ async function bootstrap(): Promise<void> {
   const postgresInitializer = dbInitializer as PostgresInitializer;
   const dbPool = postgresInitializer.pool(); // Pegamos o pool uma vez para usar em todos
 
-  // 3. Inicializar Repositórios (Injeção de Dependência)
+  // 3. Verificar e criar coluna privacidade se não existir
+  await verificarAndCriarPrivacidadeColumn(dbPool);
+
+  // 4. Inicializar Repositórios (Injeção de Dependência)
   casoRepository = new CasoRepositoryPostgres(dbPool);
   anexoRepository = new AnexoRepositorioPostgres(dbPool);
   casoRedeApoioContatoRepository = new CasoRedeApoioContatoRepository(dbPool);
@@ -149,7 +196,7 @@ async function bootstrap(): Promise<void> {
   const orgaoRepository = new PostgresOrgaoRepository(dbPool); 
   Logger.info('Repositories inicializados com sucesso!');
   
-  // 4. Inicializar Controllers
+  // 5. Inicializar Controllers
   assistidaController = new AssistidaController(casoRepository);
   const funcionarioService = new FuncionarioService(funcionarioRepository);
   const credencialService = new CredencialService(credencialRepository);
@@ -498,7 +545,6 @@ ipcMain.handle('caso:listarPorAssistida', async(_event, idAssistida: number) => 
 
 ipcMain.handle('caso:obterInformacoesGerais', async(_event, idCaso: number) => {
   try {
-    Logger.info('Requisição para obter informações gerais do caso:', idCaso);
     const infosCaso = await casoController.getInformacoesGeraisDoCaso(idCaso);
     return {
       success: true,
@@ -527,6 +573,53 @@ ipcMain.handle('caso:getCasoCompletoVisualizacao', async(_event, idCaso: number)
     return {
       success: false,
       error: error instanceof Error ? error.message : 'Erro desconhecido ao obter caso'
+    };
+  }
+});
+
+ipcMain.handle('caso:salvarPrivacidade', async(_event, dados: { idCaso: number; privacidade: string }) => {
+  try {
+    Logger.info('🔒 [IPC] Salvando privacidade para caso:', dados.idCaso, 'valor:', dados.privacidade);
+    console.log('📡 Dados recebidos:', JSON.stringify(dados));
+    
+    if (!dados.idCaso || typeof dados.idCaso !== 'number') {
+      throw new Error(`ID do caso inválido: ${dados.idCaso}`);
+    }
+    
+    if (typeof dados.privacidade !== 'string') {
+      throw new Error(`Valor de privacidade inválido: ${dados.privacidade}`);
+    }
+    
+    const success = await casoController.salvarPrivacidade(dados.idCaso, dados.privacidade);
+    Logger.info('✅ [IPC] Privacidade salva com sucesso para caso:', dados.idCaso);
+    console.log('✅ Resultado:', success);
+    
+    return {
+      success: true,
+      message: 'Privacidade salva com sucesso'
+    };
+  } catch (error) {
+    Logger.error('❌ [IPC] Erro ao salvar privacidade:', error);
+    console.error('❌ Stack:', error instanceof Error ? error.stack : String(error));
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao salvar privacidade'
+    };
+  }
+});
+
+ipcMain.handle('caso:obterPrivacidade', async(_event, idCaso: number) => {
+  try {
+    const privacidade = await casoController.obterPrivacidade(idCaso);
+    return {
+      success: true,
+      privacidade: privacidade
+    };
+  } catch (error) {
+    Logger.error('❌ [IPC] Erro ao obter privacidade:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Erro desconhecido ao obter privacidade'
     };
   }
 });
@@ -725,7 +818,6 @@ ipcMain.handle('caso:salvarBD', async(_event, dados: {
 
 ipcMain.handle('caso:recuperarAnexos', async(_event, { idCaso }: { idCaso: number }) => {
   try {
-    Logger.info(`Requisição para recuperar anexos do caso ${idCaso}`);
     
     const anexos = await casoController.handlerRecuperarAnexosDoCaso(idCaso);
     
@@ -742,7 +834,7 @@ ipcMain.handle('caso:recuperarAnexos', async(_event, { idCaso }: { idCaso: numbe
       };
     });
     
-    Logger.info(`${anexosConvertidos.length} anexo(s) recuperado(s) do caso ${idCaso}`);
+
     
     return {
       success: true,

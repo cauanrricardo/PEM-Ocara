@@ -418,7 +418,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
     const informacoesGerais = await window.api.getInformacoesGeraisDoCaso(Number(idCaso));
-    sessionStorage.removeItem('idCasoAtual');
+    // ⚠️ NÃO REMOVER: script.js precisa do idCasoAtual para salvar privacidade
+    // sessionStorage.removeItem('idCasoAtual');
 
     const fileManager = new FileManager();
     const uiManager = new UIManager();
