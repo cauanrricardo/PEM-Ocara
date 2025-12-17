@@ -311,18 +311,28 @@ class UIManager {
 
         listaModal.innerHTML = '';
 
-        const itens = [{ id: 'formulario', nome: 'Formulário', fixo: true }, ...todosArquivos.filter((a: any) => a.status === 'upado')];
+        const itens = todosArquivos.filter((a: any) => a.status === 'upado');
 
-        itens.forEach(item => {
+        // Remove seleções que não existem mais (como o antigo "Formulário")
+        const selecionadosValidos = selecionadosIds.filter((id: any) => itens.some((item: any) => item.id === id));
+        if (selecionadosValidos.length !== selecionadosIds.length) {
+            selecionadosIds.length = 0;
+            selecionadosValidos.forEach((id: any) => selecionadosIds.push(id));
+        }
+
+        if (itens.length === 0) {
+            if (labelNome) labelNome.textContent = 'Nenhum anexo disponível';
+            return;
+        }
+
+        itens.forEach((item: any) => {
             const div = document.createElement('div');
             div.className = 'anexo-item-modal';
             
             const isSelected = selecionadosIds.includes(item.id);
             if (isSelected) div.style.backgroundColor = '#F0E6F8';
 
-            const iconeHTML = item.fixo 
-                ? '<span class="material-symbols-outlined">attach_file</span>' 
-                : '<span class="material-symbols-outlined">description</span>';
+            const iconeHTML = '<span class="material-symbols-outlined">description</span>';
 
             div.innerHTML = `
                 <div class="anexo-nome-modal" title="${item.nome}">${Formatters.truncarNome(item.nome, 35)}</div>
