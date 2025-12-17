@@ -436,11 +436,11 @@ export class CasoService {
     /**
      * Salva um anexo no repositório de anexos
      */
-    async salvarAnexo(anexo: any, idCaso: number, idAssistida: number): Promise<boolean> {
+    async salvarAnexo(anexo: any, idCaso: number, idAssistida: number): Promise<number | null> {
         try {
             if (!this.anexoRepository) {
                 console.warn('AnexoRepository não inicializado');
-                return false;
+                return null;
             }
 
             const anexoObj = new Anexo(
@@ -455,11 +455,7 @@ export class CasoService {
             
             const idAnexoSalvo = await this.anexoRepository.salvar(anexoObj, idCaso, idAssistida, isRelatorio);
             
-            if (idAnexoSalvo) {
-                return true;
-            } else {
-                return false;
-            }
+            return idAnexoSalvo ?? null;
         } catch (error) {
             console.error('Erro ao salvar anexo:', error);
             throw error;
@@ -526,6 +522,28 @@ export class CasoService {
             return casoCompleto;
         } catch (error) {
             console.error('❌ [Service] Erro ao obter caso completo para visualização:', error);
+            throw error;
+        }
+    }
+
+    async salvarPrivacidade(idCaso: number, privacidade: string): Promise<boolean> {
+        try {
+            console.log(`🔒 [Service] Salvando privacidade para caso ${idCaso}:`, privacidade);
+            const success = await this.casoRepository.salvarPrivacidade(idCaso, privacidade);
+            console.log(`✅ [Service] Privacidade salva:`, success);
+            return success;
+        } catch (error) {
+            console.error('❌ [Service] Erro ao salvar privacidade:', error);
+            throw error;
+        }
+    }
+
+    async obterPrivacidade(idCaso: number): Promise<string> {
+        try {
+            const privacidade = await this.casoRepository.obterPrivacidade(idCaso);
+            return privacidade;
+        } catch (error) {
+            console.error('❌ [Service] Erro ao obter privacidade:', error);
             throw error;
         }
     }

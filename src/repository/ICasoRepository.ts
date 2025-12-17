@@ -97,4 +97,19 @@ export interface ICasoRepository {
      * @returns Promise<number> - Total filtrado
      */
     getTotalCasosFiltrado(regioes: string[], dataInicio?: string, dataFim?: string): Promise<number>;
+
+    /**
+     * Salva a privacidade do caso no banco (quais telas o juridico pode acessar)
+     * @param idCaso - ID do caso
+     * @param privacidade - String com IDs separados por vírgula (ex: "1,2,3" ou "1,3")
+     * @returns Promise<boolean> - True se salvo com sucesso
+     */
+    salvarPrivacidade(idCaso: number, privacidade: string): Promise<boolean>;
+
+    /**
+     * Obtém a privacidade de um caso
+     * @param idCaso - ID do caso
+     * @returns Promise<string> - String com IDs das telas públicas (ex: "1,2,3" ou vazio se tudo privado)
+     */
+    obterPrivacidade(idCaso: number): Promise<string>;
 }

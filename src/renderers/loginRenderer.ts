@@ -30,7 +30,7 @@ async function handleLogin() {
         return;
     }
 
-    const email = emailInput.value.trim();
+    const email = emailInput.value.trim().toLowerCase();
     const senha = senhaInput.value.trim();
 
     if (!email || !senha) {

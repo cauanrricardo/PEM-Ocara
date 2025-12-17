@@ -1330,4 +1330,48 @@ export class CasoRepositoryPostgres implements ICasoRepository {
         }
     }
 
+    /**
+     * Salva a privacidade do caso no banco (quais telas o juridico pode acessar)
+     * Formato: "1,2,3" onde 1=cadastro assistida, 2=cadastro caso, 3=outras informações
+     */
+    async salvarPrivacidade(idCaso: number, privacidade: string): Promise<boolean> {
+        const query = `
+            UPDATE CASO 
+            SET privacidade = $1 
+            WHERE id_caso = $2
+        `;
+
+        try {
+            const result = await this.pool.query(query, [privacidade || '', idCaso]);
+            console.log(`✅ [Repository] Privacidade salva para caso ${idCaso}:`, privacidade);
+            return (result.rowCount ?? 0) > 0;
+        } catch (error) {
+            console.error('❌ [Repository] Erro ao salvar privacidade:', error);
+            throw error;
+        }
+    }
+
+    /**
+     * Obtém a privacidade de um caso
+     * Retorna string como "1,2,3" ou vazio se tudo privado
+     */
+    async obterPrivacidade(idCaso: number): Promise<string> {
+        const query = `
+            SELECT privacidade
+            FROM CASO
+            WHERE id_caso = $1
+        `;
+
+        try {
+            const result = await this.pool.query(query, [idCaso]);
+            if (result.rows.length > 0) {
+                return result.rows[0].privacidade || '';
+            }
+            return '';
+        } catch (error) {
+            console.error('❌ [Repository] Erro ao obter privacidade:', error);
+            throw error;
+        }
+    }
+
 }
