@@ -233,6 +233,12 @@ export interface IElectronAPI {
     error?: string;
   }>;
 
+  getCasoCompletoVisualizacao: (idCaso: number) => Promise<{
+    success: boolean;
+    caso?: any;
+    error?: string;
+  }>;
+
   getTotalCasosNoAno: () => Promise<{
     success: boolean;
     totalCasos?: any[];
