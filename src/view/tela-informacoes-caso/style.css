@@ -1574,6 +1574,192 @@ body {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* --- Responsividade Específica --- */
+
+/* Para tela 1707 x 1067 */
+@media screen and (max-width: 1707px) and (max-height: 1067px) {
+    .main-content {
+        padding: 45px 72px;
+        max-width: 1600px;
+    }
+    
+    .sidebar-header h1 {
+        font-size: 44px;
+    }
+    
+    .sidebar-nav a {
+        font-size: 30px;
+        padding: 14px 36px;
+        gap: 18px;
+    }
+    
+    .sidebar-nav .material-symbols-outlined {
+        font-size: 38px;
+    }
+    
+    .title h1 {
+        font-size: 44px;
+    }
+    
+    .title-divider {
+        border-top: 4.5px solid #63468C;
+    }
+    
+    #acessar-form,
+    #editar-form,
+    #alterar-privacidade {
+        font-size: 22px;
+        height: 90px;
+    }
+    
+    .tabs button {
+        font-size: 22px;
+        padding: 13px 27px;
+    }
+    
+    .section-title h2 {
+        font-size: 30px;
+    }
+    
+    .info-row {
+        gap: 27px;
+    }
+    
+    .info-item label {
+        font-size: 20px;
+    }
+    
+    .info-item input,
+    .info-item textarea,
+    .info-item select {
+        font-size: 18px;
+        padding: 13px 18px;
+    }
+    
+    .checkbox-group label {
+        font-size: 20px;
+    }
+    
+    .action-buttons {
+        gap: 27px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        height: 52px;
+        font-size: 22px;
+        padding: 0 36px;
+    }
+    
+    .rodape p {
+        font-size: 15px;
+    }
+    
+    .logo-esquerda {
+        width: 100px;
+        height: 72px;
+    }
+    
+    .logo-direita {
+        width: 120px;
+        height: 90px;
+    }
+}
+
+/* Para tela 1440 x 900 */
+@media screen and (max-width: 1440px) and (max-height: 900px) {
+    .main-content {
+        padding: 40px 64px;
+        max-width: 1400px;
+    }
+    
+    .sidebar-header h1 {
+        font-size: 40px;
+    }
+    
+    .sidebar-nav a {
+        font-size: 28px;
+        padding: 12px 32px;
+        gap: 16px;
+    }
+    
+    .sidebar-nav .material-symbols-outlined {
+        font-size: 36px;
+    }
+    
+    .title h1 {
+        font-size: 40px;
+    }
+    
+    .title-divider {
+        border-top: 4px solid #63468C;
+    }
+    
+    #acessar-form,
+    #editar-form,
+    #alterar-privacidade {
+        font-size: 20px;
+        height: 80px;
+        border-radius: 20px;
+    }
+    
+    .tabs button {
+        font-size: 20px;
+        padding: 12px 24px;
+        border-radius: 8px;
+    }
+    
+    .section-title h2 {
+        font-size: 28px;
+    }
+    
+    .info-row {
+        gap: 24px;
+    }
+    
+    .info-item label {
+        font-size: 18px;
+    }
+    
+    .info-item input,
+    .info-item textarea,
+    .info-item select {
+        font-size: 16px;
+        padding: 12px 16px;
+        border-radius: 8px;
+    }
+    
+    .checkbox-group label {
+        font-size: 18px;
+    }
+    
+    .action-buttons {
+        gap: 24px;
+    }
+    
+    .btn-primary,
+    .btn-secondary {
+        height: 48px;
+        font-size: 20px;
+        padding: 0 32px;
+        border-radius: 8px;
+    }
+    
+    .rodape p {
+        font-size: 14px;
+    }
+    
+    .logo-esquerda {
+        width: 90px;
+        height: 64px;
+    }
+    
+    .logo-direita {
+        width: 108px;
+        height: 80px;
+    }
+}
+
 /* Responsividade para monitores grandes e ultrawide */
 @media screen and (min-width: 1921px) {
     .main-content {
@@ -1782,11 +1968,6 @@ body {
 
     .title h1 {
         font-size: 32px;
-    }
-
-    #acessar-form {
-        font-size: 36px;
-        height: 150px;
     }
 
     .infos,
